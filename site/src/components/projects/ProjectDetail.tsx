@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Star, Clock, Code } from 'lucide-react';
+import { Star, Clock, Code, Github, FileText, Image as ImageIcon } from 'lucide-react';
 import ScrollReveal from '../ui/ScrollReveal';
 import AnimatedDiagram from '../diagrams/AnimatedDiagram';
 import ExpandableSection from '../ui/ExpandableSection';
@@ -61,6 +61,57 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
           </div>
         </div>
       </motion.div>
+
+      {/* Preview Image */}
+      {project.previewImage && (
+        <ScrollReveal>
+          <div className="bg-white rounded-2xl p-8 shadow-lg">
+            <h2 className="text-3xl font-bold text-primary mb-6">项目预览</h2>
+            <div className="bg-gray-50 p-6 rounded-xl">
+              <img
+                src={project.previewImage}
+                alt={`${project.title} 预览`}
+                className="w-full rounded-lg shadow-xl border-2 border-gray-200 bg-white"
+              />
+            </div>
+          </div>
+        </ScrollReveal>
+      )}
+
+      {/* Project Links */}
+      {project.id === 'project-1' && (
+        <ScrollReveal>
+          <div className="bg-white rounded-2xl p-8 shadow-lg">
+            <h2 className="text-3xl font-bold text-primary mb-6">项目资源</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <a
+                href="https://github.com/tyrchen/geektime-bootcamp-ai/tree/master/w1/project-alpha"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-4 bg-bg-secondary rounded-xl hover:shadow-md transition-all group"
+              >
+                <Github className="text-accent group-hover:scale-110 transition-transform" size={24} />
+                <div>
+                  <div className="font-semibold text-primary">GitHub 仓库</div>
+                  <div className="text-sm text-text-secondary">查看完整源代码</div>
+                </div>
+              </a>
+              <a
+                href="https://github.com/tyrchen/geektime-bootcamp-ai/blob/master/specs/w1/0001-spec.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-4 bg-bg-secondary rounded-xl hover:shadow-md transition-all group"
+              >
+                <FileText className="text-accent group-hover:scale-110 transition-transform" size={24} />
+                <div>
+                  <div className="font-semibold text-primary">项目规格说明</div>
+                  <div className="text-sm text-text-secondary">详细需求和设计文档</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </ScrollReveal>
+      )}
 
       {/* Objectives */}
       <ScrollReveal>
@@ -128,6 +179,72 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
           </div>
         </div>
       </ScrollReveal>
+
+      {/* Feature Screenshots */}
+      {project.id === 'project-1' && (
+        <ScrollReveal>
+          <div className="bg-white rounded-2xl p-8 shadow-lg">
+            <h2 className="text-3xl font-bold text-primary mb-8 flex items-center gap-3">
+              <ImageIcon className="text-accent" size={32} />
+              功能截图
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <img
+                    src="/projects/project-1/screenshot-create.png"
+                    alt="创建 Ticket"
+                    className="w-full rounded-lg shadow-lg border border-gray-200 bg-white hover:shadow-xl transition-shadow"
+                  />
+                </div>
+                <p className="text-center text-text-secondary font-medium">创建 Ticket 对话框</p>
+              </div>
+              <div className="space-y-3">
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <img
+                    src="/projects/project-1/screenshot-tags.png"
+                    alt="标签管理"
+                    className="w-full rounded-lg shadow-lg border border-gray-200 bg-white hover:shadow-xl transition-shadow"
+                  />
+                </div>
+                <p className="text-center text-text-secondary font-medium">标签管理界面</p>
+              </div>
+              <div className="space-y-3">
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <img
+                    src="/projects/project-1/screenshot-filter.png"
+                    alt="标签过滤"
+                    className="w-full rounded-lg shadow-lg border border-gray-200 bg-white hover:shadow-xl transition-shadow"
+                  />
+                </div>
+                <p className="text-center text-text-secondary font-medium">标签过滤功能</p>
+              </div>
+              <div className="space-y-3">
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <img
+                    src="/projects/project-1/screenshot-edit.png"
+                    alt="编辑 Ticket"
+                    className="w-full rounded-lg shadow-lg border border-gray-200 bg-white hover:shadow-xl transition-shadow"
+                  />
+                </div>
+                <p className="text-center text-text-secondary font-medium">编辑 Ticket 界面</p>
+              </div>
+            </div>
+            <div className="mt-6">
+              <div className="space-y-3">
+                <div className="bg-gray-50 p-4 rounded-xl inline-block mx-auto">
+                  <img
+                    src="/projects/project-1/screenshot-mobile.png"
+                    alt="移动端响应式"
+                    className="max-w-md mx-auto rounded-lg shadow-lg border border-gray-200 bg-white hover:shadow-xl transition-shadow"
+                  />
+                </div>
+                <p className="text-center text-text-secondary font-medium">移动端响应式布局</p>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+      )}
 
       {/* Learning Points */}
       <ScrollReveal>

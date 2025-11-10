@@ -34,11 +34,13 @@ export default function ProjectCard({
       {/* Preview Image */}
       <div className="relative aspect-video bg-gradient-to-br from-accent to-accent-purple overflow-hidden">
         {previewImage ? (
-          <img
-            src={previewImage}
-            alt={title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+          <div className="w-full h-full p-6 flex items-center justify-center">
+            <img
+              src={previewImage}
+              alt={title}
+              className="max-w-full max-h-full object-contain rounded-xl shadow-2xl border-2 border-white/20 bg-white group-hover:scale-[1.02] transition-all duration-300"
+            />
+          </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <span className="text-6xl font-bold text-white opacity-30">

@@ -24,60 +24,227 @@ export const projects: ProjectData[] = [
   {
     id: 'project-1',
     number: 1,
-    title: 'AI 驱动的项目管理工具',
-    subtitle: '从零到一的快速开发体验',
+    title: 'Ticket 管理系统',
+    subtitle: '基于标签的任务追踪工具',
     difficulty: 2,
-    estimatedHours: 4,
+    estimatedHours: 8,
     weekNumber: 1,
     objectives: [
-      '快速掌握 AI 工具核心功能',
-      '体验 AI 辅助编码的高效率',
-      '完成实用的原型构建',
-      '理解基本的 Prompt Engineering',
+      '快速掌握 AI 工具的核心功能',
+      '将 AI 工具应用于实用的原型构建',
+      '体验 AI 辅助编码的效率',
+      '理解前后端分离的全栈架构',
     ],
-    techStack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS'],
+    techStack: [
+      'React',
+      'TypeScript',
+      'Vite',
+      'Tailwind CSS',
+      'Shadcn UI',
+      'Zustand',
+      'FastAPI',
+      'PostgreSQL',
+      'SQLAlchemy',
+      'Alembic',
+    ],
     architecture: `graph TB
-    A[用户界面] --> B[任务管理]
-    A --> C[项目视图]
-    B --> D[任务列表]
-    B --> E[任务详情]
-    B --> F[任务状态]
-    C --> G[看板视图]
-    C --> H[列表视图]
-    D --> I[本地存储]
-    E --> I
-    F --> I`,
+    subgraph "前端层"
+      A[React + TypeScript]
+      B[Shadcn UI 组件]
+      C[Zustand 状态管理]
+    end
+
+    subgraph "网络层"
+      D[Axios HTTP Client]
+    end
+
+    subgraph "后端层"
+      E[FastAPI]
+      F[Pydantic 验证]
+    end
+
+    subgraph "数据层"
+      G[SQLAlchemy ORM]
+      H[PostgreSQL]
+    end
+
+    subgraph "数据库表"
+      I[tickets 表]
+      J[tags 表]
+      K[ticket_tags 关联表]
+    end
+
+    A --> B
+    A --> C
+    A --> D
+    D --> E
+    E --> F
+    E --> G
+    G --> H
+    H --> I
+    H --> J
+    H --> K
+    I -.多对多.-> K
+    J -.多对多.-> K`,
     implementationSteps: [
       {
         stepNumber: 1,
-        title: '使用 Cursor 生成项目框架',
+        title: '数据库设计和迁移',
         description:
-          '通过 AI 对话快速搭建 React + TypeScript 项目结构',
-        codeExample: `// Prompt: 创建一个使用 React + TypeScript + Vite 的项目管理应用
-// 包含任务列表、添加任务、标记完成等功能`,
+          '设计 tickets、tags、ticket_tags 三张表，使用 Alembic 创建迁移脚本',
+        codeExample: `-- tickets 表
+CREATE TABLE tickets (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    completed_at TIMESTAMP WITH TIME ZONE
+);
+
+-- tags 表
+CREATE TABLE tags (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(50) UNIQUE NOT NULL,
+    color VARCHAR(7) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ticket_tags 关联表
+CREATE TABLE ticket_tags (
+    ticket_id BIGINT REFERENCES tickets(id) ON DELETE CASCADE,
+    tag_id BIGINT REFERENCES tags(id) ON DELETE CASCADE,
+    PRIMARY KEY (ticket_id, tag_id)
+);`,
       },
       {
         stepNumber: 2,
-        title: '实现核心功能',
-        description: '使用 Tab 补全快速实现任务 CRUD 操作',
+        title: '后端 API 开发',
+        description:
+          '使用 FastAPI 实现 RESTful API，包含 CRUD 操作、搜索、过滤等功能',
+        codeExample: `@router.get("", response_model=TicketListResponse)
+def list_tickets(
+    status: Optional[str] = Query(None),
+    tag_ids: Optional[str] = Query(None),
+    search: Optional[str] = Query(None),
+    sort_by: str = Query("created_at"),
+    order: str = Query("desc"),
+    db: Session = Depends(get_db)
+) -> TicketListResponse:
+    """获取 Ticket 列表，支持过滤、搜索和排序"""
+    tickets = crud.get_tickets(
+        db, status=status, tag_ids=tag_ids,
+        search=search, sort_by=sort_by, order=order
+    )
+    return TicketListResponse(tickets=tickets, total=len(tickets))`,
       },
       {
         stepNumber: 3,
-        title: '优化用户界面',
-        description: '让 AI 帮助优化 UI/UX 和响应式设计',
+        title: '前端状态管理',
+        description:
+          '使用 Zustand 管理全局状态，包含 tickets、tags、过滤条件等',
+        codeExample: `interface TicketStore {
+  tickets: Ticket[];
+  tags: Tag[];
+  statusFilter: 'all' | 'pending' | 'completed';
+  selectedTagIds: number[];
+  searchQuery: string;
+  sortBy: 'created_at' | 'updated_at' | 'title';
+  sortOrder: 'asc' | 'desc';
+
+  // Actions
+  fetchTickets: () => Promise<void>;
+  createTicket: (data: CreateTicketData) => Promise<void>;
+  updateTicket: (id: number, data: UpdateTicketData) => Promise<void>;
+  deleteTicket: (id: number) => Promise<void>;
+  toggleTicketStatus: (id: number) => Promise<void>;
+  setStatusFilter: (status: 'all' | 'pending' | 'completed') => void;
+  toggleTagFilter: (tagId: number) => void;
+  setSearchQuery: (query: string) => void;
+}`,
       },
       {
         stepNumber: 4,
-        title: '添加数据持久化',
-        description: '使用 localStorage 实现数据保存',
+        title: 'UI 组件开发',
+        description:
+          '使用 Shadcn UI 构建响应式界面，包含 Ticket 卡片、对话框、侧边栏等',
+        codeExample: `import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+
+// 创建 Ticket 对话框组件
+function CreateTicketDialog({ open, onOpenChange }) {
+  const createTicket = useTicketStore((state) => state.createTicket);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    await createTicket({ title, description, tagIds });
+    onOpenChange(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>创建 Ticket</DialogHeader>
+        <form onSubmit={handleSubmit}>
+          <Input placeholder="输入 Ticket 标题" />
+          <Textarea placeholder="输入描述（可选）" />
+          <Button type="submit">创建</Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}`,
+      },
+      {
+        stepNumber: 5,
+        title: '高级功能实现',
+        description:
+          '实现搜索防抖、批量操作、键盘快捷键等高级特性',
+        codeExample: `// 搜索防抖
+const debouncedSearch = useMemo(
+  () => debounce((query: string) => {
+    setSearchQuery(query);
+  }, 300),
+  []
+);
+
+// 批量操作
+const handleBatchComplete = () => {
+  const selectedIds = tickets
+    .filter((t) => selectedTicketIds.includes(t.id))
+    .map((t) => t.id);
+
+  Promise.all(selectedIds.map((id) => toggleTicketStatus(id)));
+};
+
+// 键盘快捷键 (Ctrl+K 打开搜索)
+useEffect(() => {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.ctrlKey && e.key === 'k') {
+      e.preventDefault();
+      searchInputRef.current?.focus();
+    }
+  };
+  window.addEventListener('keydown', handleKeyDown);
+  return () => window.removeEventListener('keydown', handleKeyDown);
+}, []);`,
       },
     ],
     learningPoints: [
-      '如何有效地向 AI 描述需求',
-      'Tab 补全的使用技巧',
-      '@符号上下文管理',
-      '代码重构和优化的方法',
+      '如何设计清晰的 RESTful API',
+      'FastAPI 的自动文档生成和类型验证',
+      'PostgreSQL 的多对多关系设计',
+      'Shadcn UI 组件的定制和使用',
+      'Zustand 轻量级状态管理',
+      '响应式布局的最佳实践',
+      '前后端协作的开发流程',
+      '使用 Alembic 管理数据库版本',
     ],
+    previewImage: '/projects/project-1/preview.png',
+    demoUrl: 'http://localhost:5173',
   },
   {
     id: 'project-2',

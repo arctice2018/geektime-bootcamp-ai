@@ -1,0 +1,1967 @@
+---
+layout: ../../layouts/MaterialLayout.astro
+title: Cursor Rules 完全指南
+description: 深入掌握 Cursor Rules 配置 - 从基础到进阶的完整教程
+category: 工具深度解析
+---
+
+import MetricCard from '../../components/materials/MetricCard';
+import Mermaid from '../../components/materials/Mermaid';
+import ScrollReveal from '../../components/ui/ScrollReveal';
+
+# Cursor Rules 完全指南
+
+**掌握 AI 编码助手的秘密武器**
+
+> **系统**: Project Rules (.cursor/rules/) + User Rules | **格式**: MDC (Markdown Components) | **应用**: 智能上下文注入
+
+---
+
+## 📊 Cursor Rules 核心数据
+
+export const rulesMetrics = [
+  { label: 'Rule 类型', value: 4, color: '#b3272c', icon: '📋' },
+  { label: '社区规则库', value: 1000, unit: '+', color: '#772d8b', icon: '📚' },
+  { label: 'MDC 元数据字段', value: 5, color: '#77a0a9', icon: '⚙️' },
+  { label: '应用方式', value: 3, color: '#d3f9b5', icon: '🎯' },
+  { label: '组织层级', value: 3, color: '#f5cbc5', icon: '📁' },
+  { label: '最佳实践条数', value: 10, color: '#772d8b', icon: '✅' }
+]
+
+<MetricCard title="Cursor Rules 数据概览" items={rulesMetrics} type="number" client:load />
+
+---
+
+## 🎯 什么是 Cursor Rules？
+
+Cursor Rules 是**项目特定的指令和指南**，告诉 Cursor AI 如何为你的项目生成代码。
+
+### 核心价值
+
+<Mermaid chart={`mindmap
+    root((Cursor Rules<br/>价值))
+        代码一致性
+            统一代码风格
+            遵循最佳实践
+            保持架构模式
+            规范命名约定
+        团队协作
+            共享知识库
+            统一工作流
+            新人快速上手
+            版本控制
+        AI 定制化
+            项目特定上下文
+            技术栈适配
+            避免常见错误
+            加速开发
+        质量保证
+            预防反模式
+            强制安全规范
+            自动化检查
+            提升可维护性
+`} client:load />
+
+---
+
+## 🏗️ Cursor Rules 系统架构
+
+### 整体架构图
+
+<Mermaid chart={`graph TB
+    subgraph "规则定义层"
+        ProjectRules[".cursor/rules/<br/>项目规则 (.mdc)"]
+        UserRules["Cursor Settings<br/>用户规则"]
+        LegacyRules[".cursorrules<br/>遗留规则 (已弃用)"]
+    end
+
+    subgraph "规则类型"
+        Always["Always<br/>始终应用"]
+        AutoAttach["Auto Attached<br/>模式匹配"]
+        AgentRequested["Agent Requested<br/>意图驱动"]
+        Manual["Manual<br/>手动附加"]
+    end
+
+    subgraph "应用层"
+        Composer["Composer<br/>多文件编辑"]
+        Chat["Chat<br/>对话交互"]
+        Inline["Inline Edit<br/>行内编辑"]
+    end
+
+    subgraph "上下文注入"
+        ModelContext["模型上下文"]
+        SystemPrompt["System Prompt"]
+        UserMessage["User Message"]
+    end
+
+    subgraph "代码生成"
+        AI["Cursor AI"]
+        CodeGen["代码生成"]
+        Validation["规则验证"]
+    end
+
+    ProjectRules --> Always
+    ProjectRules --> AutoAttach
+    ProjectRules --> AgentRequested
+    UserRules --> Always
+    LegacyRules -.已弃用.-> ProjectRules
+
+    Always --> Composer
+    AutoAttach --> Chat
+    AgentRequested --> Inline
+    Manual --> Composer
+
+    Composer --> ModelContext
+    Chat --> ModelContext
+    Inline --> ModelContext
+
+    ModelContext --> SystemPrompt
+    ModelContext --> UserMessage
+
+    SystemPrompt --> AI
+    UserMessage --> AI
+
+    AI --> CodeGen
+    CodeGen --> Validation
+    Validation --> Output["✅ 符合规则的代码"]
+
+    classDef darkRed fill:#b3272c,stroke:#b3272c,stroke-width:3px,color:#fff
+    classDef lightPink fill:#f5cbc5,stroke:#b3272c,stroke-width:2px,color:#1d1d1f
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class ProjectRules darkRed
+    class Always darkPurple
+    class ModelContext teal
+    class Output lightGreen
+`} client:load />
+
+---
+
+## 📁 规则类型详解
+
+### 1. 项目规则 (Project Rules)
+
+**存储位置：** `.cursor/rules/`
+
+**特点：**
+- ✅ 版本控制（Git 跟踪）
+- ✅ 团队共享
+- ✅ 项目特定
+- ✅ MDC 格式
+
+**结构：**
+
+```
+project/
+├── .cursor/
+│   └── rules/
+│       ├── base.mdc              # 基础规则
+│       ├── typescript.mdc        # TypeScript 规范
+│       ├── react.mdc             # React 最佳实践
+│       └── api-design.mdc        # API 设计规范
+├── backend/
+│   └── .cursor/rules/
+│       └── backend-specific.mdc  # 后端特定规则
+└── frontend/
+    └── .cursor/rules/
+        └── frontend-specific.mdc # 前端特定规则
+```
+
+### 2. 用户规则 (User Rules)
+
+**存储位置：** Cursor Settings → Rules
+
+**特点：**
+- ✅ 全局应用
+- ✅ 个人偏好
+- ✅ 跨项目使用
+- ❌ 不能版本控制
+
+**适用场景：**
+- 个人编码风格
+- 常用工具偏好
+- 通信方式设定
+
+### 3. 遗留规则 (.cursorrules)
+
+**存储位置：** 项目根目录 `.cursorrules`
+
+**状态：** ⚠️ **已弃用**，建议迁移到 Project Rules
+
+<Mermaid chart={`graph LR
+    subgraph "规则类型对比"
+        Project["项目规则<br/>.cursor/rules/"]
+        User["用户规则<br/>Settings"]
+        Legacy[".cursorrules<br/>(已弃用)"]
+    end
+
+    subgraph "特性对比"
+        VC["版本控制"]
+        Multi["多文件组织"]
+        Scope["作用域控制"]
+        Meta["元数据配置"]
+    end
+
+    subgraph "优先级"
+        P1["项目规则<br/>最高"]
+        P2["用户规则<br/>中等"]
+        P3["遗留规则<br/>最低"]
+    end
+
+    Project --> VC
+    Project --> Multi
+    Project --> Scope
+    Project --> Meta
+
+    User -.不支持.-> VC
+    User -.不支持.-> Multi
+    User --> Scope
+    User -.不支持.-> Meta
+
+    Legacy -.不支持.-> Multi
+    Legacy -.不支持.-> Meta
+
+    Project --> P1
+    User --> P2
+    Legacy --> P3
+
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightPink fill:#f5cbc5,stroke:#b3272c,stroke-width:2px,color:#1d1d1f
+
+    class Project darkPurple
+    class User teal
+    class Legacy lightPink
+`} client:load />
+
+---
+
+## 🎛️ 规则应用类型
+
+### 应用类型详解
+
+<Mermaid chart={`graph TB
+    subgraph "Always - 始终应用"
+        AlwaysDesc["无论提示内容<br/>总是包含"]
+        AlwaysUse["适用场景：<br/>框架规范<br/>语言规范<br/>编码标准"]
+    end
+
+    subgraph "Auto Attached - 自动附加"
+        AutoDesc["基于文件模式<br/>自动匹配"]
+        AutoUse["适用场景：<br/>特定文件类型<br/>目录范围<br/>命名模式"]
+    end
+
+    subgraph "Agent Requested - 智能请求"
+        AgentDesc["AI 根据意图<br/>智能选择"]
+        AgentUse["适用场景：<br/>复杂项目<br/>多种规范<br/>上下文相关"]
+    end
+
+    subgraph "Manual - 手动附加"
+        ManualDesc["用户显式<br/>指定规则"]
+        ManualUse["适用场景：<br/>特殊任务<br/>临时规范<br/>实验性规则"]
+    end
+
+    AlwaysDesc --> AlwaysUse
+    AutoDesc --> AutoUse
+    AgentDesc --> AgentUse
+    ManualDesc --> ManualUse
+
+    classDef darkRed fill:#b3272c,stroke:#b3272c,stroke-width:3px,color:#fff
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class AlwaysDesc darkRed
+    class AutoDesc darkPurple
+    class AgentDesc teal
+    class ManualDesc lightGreen
+`} client:load />
+
+### 应用类型选择决策树
+
+<Mermaid chart={`flowchart TD
+    Start{规则性质?} --> Framework[框架/语言规范]
+    Start --> FileType[文件类型特定]
+    Start --> Context[上下文相关]
+    Start --> Special[特殊任务]
+
+    Framework --> Always["使用 Always<br/>始终生效"]
+    FileType --> CheckPattern{有明确模式?}
+    Context --> AgentReq["使用 Agent Requested<br/>AI 智能判断"]
+    Special --> Manual["使用 Manual<br/>手动控制"]
+
+    CheckPattern -->|是| AutoAttach["使用 Auto Attached<br/>模式匹配"]
+    CheckPattern -->|否| AgentReq
+
+    Always --> Example1["例：TypeScript 规范<br/>React 最佳实践"]
+    AutoAttach --> Example2["例：*.test.ts → 测试规范<br/>api/**/* → API 规范"]
+    AgentReq --> Example3["例：性能优化建议<br/>安全审查规则"]
+    Manual --> Example4["例：实验性 AI 模型<br/>临时迁移指南"]
+
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class Always darkPurple
+    class AutoAttach teal
+    class AgentReq lightGreen
+`} client:load />
+
+---
+
+## 📝 MDC 格式详解
+
+### MDC 文件结构
+
+MDC (Markdown Components) 是 Cursor 项目规则的标准格式。
+
+<Mermaid chart={`graph TB
+    subgraph "MDC 文件结构"
+        Frontmatter["--- Frontmatter ---<br/>YAML 元数据"]
+        Content["Markdown 内容<br/>规则描述"]
+        Examples["代码示例<br/>最佳实践"]
+    end
+
+    subgraph "Frontmatter 字段"
+        Description["description<br/>规则描述"]
+        Globs["globs<br/>文件模式匹配"]
+        AlwaysApply["alwaysApply<br/>是否始终应用"]
+        Tags["tags<br/>分类标签"]
+        Priority["priority<br/>优先级"]
+    end
+
+    subgraph "内容组织"
+        Overview["概览说明"]
+        Rules["具体规则"]
+        Examples2["示例代码"]
+        AntiPatterns["反模式"]
+    end
+
+    Frontmatter --> Description
+    Frontmatter --> Globs
+    Frontmatter --> AlwaysApply
+
+    Content --> Overview
+    Content --> Rules
+    Content --> Examples2
+
+    Examples --> AntiPatterns
+
+    classDef lightPink fill:#f5cbc5,stroke:#b3272c,stroke-width:2px,color:#1d1d1f
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+
+    class Frontmatter lightPink
+    class Description darkPurple
+    class Overview teal
+`} client:load />
+
+### MDC 完整示例
+
+```markdown
+---
+description: TypeScript 最佳实践和编码规范
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+alwaysApply: true
+tags:
+  - typescript
+  - coding-standards
+priority: high
+---
+
+# TypeScript 编码规范
+
+## 核心原则
+
+1. **类型安全优先** - 避免使用 `any`
+2. **显式优于隐式** - 明确声明类型
+3. **函数式编程** - 优先使用不可变数据
+
+## 类型定义规则
+
+### ✅ 推荐做法
+
+\`\`\`typescript
+// 显式函数返回类型
+function calculateTotal(items: Item[]): number {
+  return items.reduce((sum, item) => sum + item.price, 0);
+}
+
+// 使用 interface 而非 type (除非需要联合类型)
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+// 使用 unknown 代替 any
+function parseJSON(json: string): unknown {
+  return JSON.parse(json);
+}
+\`\`\`
+
+### ❌ 避免的做法
+
+\`\`\`typescript
+// ❌ 隐式 any
+function process(data) {
+  return data.value;
+}
+
+// ❌ 使用 any 类型
+function handleEvent(event: any) {
+  console.log(event.target.value);
+}
+
+// ❌ 不声明返回类型
+function getUserName(user: User) {
+  return user.name;
+}
+\`\`\`
+
+## 命名约定
+
+- **变量**: camelCase - `userName`, `totalPrice`
+- **类型/接口**: PascalCase - `User`, `ApiResponse`
+- **常量**: UPPER_SNAKE_CASE - `MAX_RETRIES`, `API_URL`
+- **私有成员**: 前缀下划线 - `_internalState`
+
+## 错误处理
+
+始终使用类型安全的错误处理：
+
+\`\`\`typescript
+// ✅ 类型安全的错误处理
+type Result<T, E = Error> =
+  | { success: true; data: T }
+  | { success: false; error: E };
+
+async function fetchUser(id: string): Promise<Result<User>> {
+  try {
+    const response = await api.get(\`/users/\${id}\`);
+    return { success: true, data: response.data };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error : new Error('Unknown error')
+    };
+  }
+}
+\`\`\`
+
+## 常见陷阱
+
+1. **类型断言滥用** - 避免过度使用 `as` 断言
+2. **可选链误用** - 不要在明确非空的地方使用 `?.`
+3. **枚举 vs 联合类型** - 优先使用字面量联合类型
+
+## SDK 版本
+
+确保使用 TypeScript 5.3+ 的新特性。
+```
+
+---
+
+## 🚀 创建 Cursor Rules
+
+### 创建流程
+
+<Mermaid chart={`sequenceDiagram
+    participant Dev as 开发者
+    participant Dir as .cursor/rules/
+    participant File as rule.mdc
+    participant Cursor as Cursor AI
+    participant Code as 生成代码
+
+    Dev->>Dev: 1. 分析项目需求
+    Dev->>Dir: 2. 创建规则目录
+    Dev->>File: 3. 编写 MDC 文件
+
+    Note over File: 定义 frontmatter<br/>编写规则内容<br/>添加示例代码
+
+    Dev->>Cursor: 4. 测试规则
+    Cursor->>Cursor: 加载规则上下文
+    Cursor->>Code: 生成代码
+
+    Code-->>Dev: 5. 验证输出
+    Dev->>File: 6. 迭代优化
+
+    loop 持续改进
+        Dev->>Cursor: 测试边界情况
+        Cursor->>Code: 生成代码
+        Code-->>Dev: 验证质量
+        Dev->>File: 更新规则
+    end
+`} client:load />
+
+### 步骤详解
+
+#### 步骤 1: 创建规则目录
+
+```bash
+# 创建项目规则目录
+mkdir -p .cursor/rules
+
+# 创建子模块规则目录（可选）
+mkdir -p backend/.cursor/rules
+mkdir -p frontend/.cursor/rules
+```
+
+#### 步骤 2: 创建第一个规则
+
+```bash
+# 创建基础规则文件
+touch .cursor/rules/base.mdc
+```
+
+**基础模板：**
+
+```markdown
+---
+description: 项目基础编码规范
+alwaysApply: true
+---
+
+# 项目编码规范
+
+## 技术栈
+
+- TypeScript 5.3+
+- React 18+
+- Node.js 20+
+
+## 代码风格
+
+- 使用 2 空格缩进
+- 单引号优于双引号
+- 行尾不加分号
+- 使用 Prettier 格式化
+
+## 文件组织
+
+\`\`\`
+src/
+├── components/     # React 组件
+├── hooks/          # 自定义 Hooks
+├── utils/          # 工具函数
+├── types/          # TypeScript 类型
+└── services/       # API 服务
+\`\`\`
+
+## 导入顺序
+
+1. React 相关
+2. 第三方库
+3. 项目内部模块
+4. 样式文件
+
+\`\`\`typescript
+// ✅ 正确的导入顺序
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { Button } from '@/components/ui/Button';
+import styles from './Component.module.css';
+\`\`\`
+```
+
+#### 步骤 3: 创建特定规则
+
+**React 组件规则：**
+
+```bash
+cat > .cursor/rules/react.mdc << 'EOF'
+---
+description: React 组件开发规范
+globs:
+  - "**/*.tsx"
+  - "**/components/**/*.ts"
+alwaysApply: false
+tags:
+  - react
+  - components
+---
+
+# React 组件规范
+
+## 组件结构
+
+使用函数组件 + Hooks，避免类组件。
+
+### 标准组件模板
+
+\`\`\`typescript
+import React from 'react';
+
+interface UserCardProps {
+  user: {
+    name: string;
+    email: string;
+  };
+  onEdit?: () => void;
+}
+
+export function UserCard({ user, onEdit }: UserCardProps) {
+  return (
+    <div className="user-card">
+      <h3>{user.name}</h3>
+      <p>{user.email}</p>
+      {onEdit && <button onClick={onEdit}>Edit</button>}
+    </div>
+  );
+}
+\`\`\`
+
+## Hooks 使用规范
+
+1. **useState** - 简单状态
+2. **useReducer** - 复杂状态逻辑
+3. **useEffect** - 副作用（总是添加依赖数组）
+4. **useMemo** - 昂贵计算缓存
+5. **useCallback** - 函数引用稳定
+
+### ✅ 好的实践
+
+\`\`\`typescript
+// 正确的 useEffect
+useEffect(() => {
+  const subscription = api.subscribe(userId);
+  return () => subscription.unsubscribe();
+}, [userId]);
+
+// 正确的 useCallback
+const handleClick = useCallback(() => {
+  onItemClick(item.id);
+}, [item.id, onItemClick]);
+\`\`\`
+
+### ❌ 避免的做法
+
+\`\`\`typescript
+// ❌ 缺少依赖数组
+useEffect(() => {
+  fetchData();
+});
+
+// ❌ 不必要的 useCallback
+const handleClick = useCallback(() => {
+  console.log('clicked');
+}, []); // 简单函数不需要 useCallback
+\`\`\`
+
+## 性能优化
+
+- 使用 `React.memo` 优化纯组件
+- 使用 `useMemo` 缓存计算结果
+- 使用 `useCallback` 稳定函数引用
+- 避免在 render 中创建新对象/数组
+
+## 可访问性
+
+- 使用语义化 HTML 标签
+- 添加 ARIA 属性
+- 支持键盘导航
+- 提供 alt 文本
+
+\`\`\`typescript
+<button
+  aria-label="Delete item"
+  aria-pressed={isSelected}
+  onClick={handleDelete}
+>
+  <TrashIcon />
+</button>
+\`\`\`
+EOF
+```
+
+**API 设计规则：**
+
+```bash
+cat > .cursor/rules/api-design.mdc << 'EOF'
+---
+description: REST API 设计规范
+globs:
+  - "**/api/**/*.ts"
+  - "**/routes/**/*.ts"
+alwaysApply: false
+tags:
+  - api
+  - backend
+---
+
+# API 设计规范
+
+## RESTful 原则
+
+### 资源命名
+
+- 使用复数名词：`/users`, `/posts`
+- 使用小写字母和连字符：`/user-profiles`
+- 嵌套资源：`/users/:id/posts`
+
+### HTTP 方法
+
+- **GET** - 获取资源
+- **POST** - 创建资源
+- **PUT** - 完整更新资源
+- **PATCH** - 部分更新资源
+- **DELETE** - 删除资源
+
+### 状态码
+
+\`\`\`typescript
+// ✅ 正确使用状态码
+export const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  NO_CONTENT: 204,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  INTERNAL_SERVER_ERROR: 500,
+} as const;
+\`\`\`
+
+## 响应格式
+
+统一的 API 响应结构：
+
+\`\`\`typescript
+// 成功响应
+interface SuccessResponse<T> {
+  success: true;
+  data: T;
+  meta?: {
+    page?: number;
+    limit?: number;
+    total?: number;
+  };
+}
+
+// 错误响应
+interface ErrorResponse {
+  success: false;
+  error: {
+    code: string;
+    message: string;
+    details?: unknown;
+  };
+}
+
+type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
+\`\`\`
+
+## 错误处理
+
+\`\`\`typescript
+// ✅ 统一错误处理
+class ApiError extends Error {
+  constructor(
+    public statusCode: number,
+    public code: string,
+    message: string
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
+// 使用示例
+app.use((err: Error, req: Request, res: Response) => {
+  if (err instanceof ApiError) {
+    res.status(err.statusCode).json({
+      success: false,
+      error: {
+        code: err.code,
+        message: err.message,
+      },
+    });
+  } else {
+    res.status(500).json({
+      success: false,
+      error: {
+        code: 'INTERNAL_ERROR',
+        message: 'An unexpected error occurred',
+      },
+    });
+  }
+});
+\`\`\`
+
+## 验证
+
+使用 Zod 进行请求验证：
+
+\`\`\`typescript
+import { z } from 'zod';
+
+const createUserSchema = z.object({
+  name: z.string().min(1).max(100),
+  email: z.string().email(),
+  age: z.number().int().positive().optional(),
+});
+
+// 在路由中使用
+app.post('/users', async (req, res) => {
+  const result = createUserSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        code: 'VALIDATION_ERROR',
+        message: 'Invalid request data',
+        details: result.error.format(),
+      },
+    });
+  }
+
+  // 处理验证通过的数据
+  const user = await createUser(result.data);
+  res.status(201).json({
+    success: true,
+    data: user,
+  });
+});
+\`\`\`
+
+## 认证与授权
+
+\`\`\`typescript
+// JWT 认证中间件
+const authenticate = async (req: Request, res: Response, next: Function) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      error: {
+        code: 'UNAUTHORIZED',
+        message: 'Authentication required',
+      },
+    });
+  }
+
+  try {
+    const payload = verifyJWT(token);
+    req.user = payload;
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      error: {
+        code: 'INVALID_TOKEN',
+        message: 'Invalid or expired token',
+      },
+    });
+  }
+};
+\`\`\`
+EOF
+```
+
+---
+
+## 🎨 规则设计最佳实践
+
+### 10 条黄金法则
+
+<Mermaid chart={`mindmap
+    root((10条黄金法则))
+        1. 明确规则类型
+            Always - 框架规范
+            Auto - 文件模式
+            Agent - 智能选择
+            Manual - 手动控制
+        2. 高层级概述
+            清晰的目标
+            技术栈说明
+            核心原则
+        3. 指定必要元素
+            SDK 版本
+            导入语句
+            错误处理
+            文档标准
+        4. 标记废弃模式
+            显示旧代码
+            提供新方案
+            说明原因
+        5. 创建示例模式
+            完整代码
+            详细注释
+            实际用例
+        6. 包含验证步骤
+            通过/失败检查
+            后果说明
+            修复建议
+        7. 按类别组织
+            逻辑分组
+            多文件结构
+            清晰目录
+        8. 彻底测试
+            边界情况
+            错误场景
+            性能影响
+        9. 文档化陷阱
+            常见错误
+            解决方案
+            预防措施
+        10. 保持更新
+            框架升级
+            API 变更
+            团队反馈
+`} client:load />
+
+### 规则编写模板
+
+<Mermaid chart={`graph TB
+    subgraph "规则结构模板"
+        Section1["1. 概览 (Overview)<br/>30%"]
+        Section2["2. 规则 (Rules)<br/>40%"]
+        Section3["3. 示例 (Examples)<br/>20%"]
+        Section4["4. 陷阱 (Pitfalls)<br/>10%"]
+    end
+
+    Section1 --> Overview["• 技术栈<br/>• 核心原则<br/>• 适用范围"]
+    Section2 --> Rules["• 具体规则<br/>• 命名约定<br/>• 代码结构"]
+    Section3 --> Examples["• ✅ 好的实践<br/>• ❌ 避免的做法<br/>• 完整示例"]
+    Section4 --> Pitfalls["• 常见错误<br/>• 解决方案<br/>• 最佳实践"]
+
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+    classDef lightPink fill:#f5cbc5,stroke:#b3272c,stroke-width:2px,color:#1d1d1f
+
+    class Section1 darkPurple
+    class Section2 teal
+    class Section3 lightGreen
+    class Section4 lightPink
+`} client:load />
+
+---
+
+## 📚 实战示例库
+
+### 示例 1: Next.js + TypeScript 规则
+
+```markdown
+---
+description: Next.js 13+ App Router 开发规范
+globs:
+  - "**/app/**/*.tsx"
+  - "**/app/**/*.ts"
+alwaysApply: false
+tags:
+  - nextjs
+  - app-router
+---
+
+# Next.js App Router 规范
+
+## 版本要求
+
+- Next.js 14+
+- React 18+
+- TypeScript 5.3+
+
+## 文件约定
+
+### 特殊文件
+
+- `page.tsx` - 页面组件
+- `layout.tsx` - 布局组件
+- `loading.tsx` - 加载状态
+- `error.tsx` - 错误处理
+- `not-found.tsx` - 404 页面
+
+### 路由结构
+
+\`\`\`
+app/
+├── (auth)/
+│   ├── login/
+│   │   └── page.tsx
+│   └── layout.tsx
+├── (dashboard)/
+│   ├── users/
+│   │   ├── page.tsx
+│   │   └── [id]/
+│   │       └── page.tsx
+│   └── layout.tsx
+└── layout.tsx
+\`\`\`
+
+## Server Components 优先
+
+默认使用 Server Components，只在需要时使用 Client Components。
+
+### ✅ Server Component
+
+\`\`\`typescript
+// app/users/page.tsx
+async function UsersPage() {
+  const users = await fetchUsers(); // 直接在组件中获取数据
+
+  return (
+    <div>
+      {users.map(user => (
+        <UserCard key={user.id} user={user} />
+      ))}
+    </div>
+  );
+}
+
+export default UsersPage;
+\`\`\`
+
+### ✅ Client Component (需要交互)
+
+\`\`\`typescript
+'use client'; // 明确标记为 Client Component
+
+import { useState } from 'react';
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  );
+}
+\`\`\`
+
+## 数据获取
+
+### Server-side 数据获取
+
+\`\`\`typescript
+// ✅ 使用 fetch 并配置缓存
+async function getData() {
+  const res = await fetch('https://api.example.com/data', {
+    next: { revalidate: 3600 } // ISR: 每小时重新验证
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch data');
+  }
+
+  return res.json();
+}
+\`\`\`
+
+### Parallel 数据获取
+
+\`\`\`typescript
+// ✅ 并行获取多个数据源
+async function Page() {
+  const [users, posts] = await Promise.all([
+    fetchUsers(),
+    fetchPosts()
+  ]);
+
+  return <Dashboard users={users} posts={posts} />;
+}
+\`\`\`
+
+## Metadata
+
+\`\`\`typescript
+import type { Metadata } from 'next';
+
+// ✅ 静态 metadata
+export const metadata: Metadata = {
+  title: 'Users',
+  description: 'User management page',
+};
+
+// ✅ 动态 metadata
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const user = await fetchUser(params.id);
+
+  return {
+    title: user.name,
+    description: \`Profile of \${user.name}\`,
+  };
+}
+\`\`\`
+
+## 性能优化
+
+- 使用 `<Image>` 组件优化图片
+- 使用 `<Link>` 组件实现预加载
+- 利用 Suspense 实现流式渲染
+- 合理使用缓存策略
+
+\`\`\`typescript
+import Image from 'next/image';
+import Link from 'next/link';
+
+export function UserCard({ user }) {
+  return (
+    <Link href={\`/users/\${user.id}\`} prefetch={true}>
+      <Image
+        src={user.avatar}
+        alt={user.name}
+        width={200}
+        height={200}
+        priority={false}
+      />
+      <h3>{user.name}</h3>
+    </Link>
+  );
+}
+\`\`\`
+```
+
+### 示例 2: 测试规范
+
+```markdown
+---
+description: Jest + React Testing Library 测试规范
+globs:
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/__tests__/**"
+alwaysApply: false
+tags:
+  - testing
+  - jest
+  - rtl
+---
+
+# 测试规范
+
+## 测试金字塔
+
+1. **单元测试 (70%)** - 函数、Hooks、Utils
+2. **集成测试 (20%)** - 组件交互
+3. **E2E 测试 (10%)** - 关键用户流程
+
+## 命名约定
+
+\`\`\`typescript
+// 文件命名
+Component.test.tsx
+utils.test.ts
+hooks.test.ts
+
+// describe 块命名
+describe('ComponentName', () => {
+  describe('methodName', () => {
+    it('should do something when condition', () => {
+      // ...
+    });
+  });
+});
+\`\`\`
+
+## React Testing Library 原则
+
+### ✅ 推荐查询优先级
+
+1. **getByRole** - 可访问性优先
+2. **getByLabelText** - 表单元素
+3. **getByPlaceholderText** - 输入提示
+4. **getByText** - 非交互元素
+5. **getByTestId** - 最后选择
+
+\`\`\`typescript
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+describe('LoginForm', () => {
+  it('should submit form with valid credentials', async () => {
+    const user = userEvent.setup();
+    const handleSubmit = jest.fn();
+
+    render(<LoginForm onSubmit={handleSubmit} />);
+
+    // ✅ 使用 getByRole
+    const emailInput = screen.getByRole('textbox', { name: /email/i });
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /log in/i });
+
+    // 用户交互
+    await user.type(emailInput, 'user@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    // 断言
+    expect(handleSubmit).toHaveBeenCalledWith({
+      email: 'user@example.com',
+      password: 'password123',
+    });
+  });
+});
+\`\`\`
+
+### ❌ 避免实现细节测试
+
+\`\`\`typescript
+// ❌ 不要测试内部状态
+expect(component.state.count).toBe(1);
+
+// ❌ 不要测试 CSS 类
+expect(element.className).toContain('active');
+
+// ✅ 测试用户可见的行为
+expect(screen.getByText('Count: 1')).toBeInTheDocument();
+expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'true');
+\`\`\`
+
+## Hooks 测试
+
+\`\`\`typescript
+import { renderHook, waitFor } from '@testing-library/react';
+import { useAsync } from './useAsync';
+
+describe('useAsync', () => {
+  it('should handle async operations', async () => {
+    const mockFn = jest.fn().mockResolvedValue('result');
+
+    const { result } = renderHook(() => useAsync(mockFn));
+
+    // 初始状态
+    expect(result.current.loading).toBe(false);
+    expect(result.current.data).toBeNull();
+
+    // 执行异步操作
+    act(() => {
+      result.current.execute();
+    });
+
+    expect(result.current.loading).toBe(true);
+
+    // 等待完成
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
+
+    expect(result.current.data).toBe('result');
+    expect(mockFn).toHaveBeenCalledTimes(1);
+  });
+});
+\`\`\`
+
+## Mock 策略
+
+\`\`\`typescript
+// ✅ Mock 外部依赖
+jest.mock('@/services/api', () => ({
+  fetchUsers: jest.fn(),
+}));
+
+// ✅ Mock 模块
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    pathname: '/',
+  }),
+}));
+
+// ✅ 清理 mocks
+afterEach(() => {
+  jest.clearAllMocks();
+});
+\`\`\`
+
+## 覆盖率目标
+
+- **Statements**: > 80%
+- **Branches**: > 75%
+- **Functions**: > 80%
+- **Lines**: > 80%
+
+## 测试性能
+
+- 使用 `screen.queryBy*` 检查元素不存在
+- 使用 `waitFor` 等待异步更新
+- 避免不必要的 `act()` 包装
+- 使用 `userEvent` 替代 `fireEvent`
+```
+
+### 示例 3: 性能优化规则
+
+```markdown
+---
+description: Web 性能优化最佳实践
+alwaysApply: false
+tags:
+  - performance
+  - optimization
+---
+
+# 性能优化规范
+
+## Core Web Vitals 目标
+
+- **LCP** (Largest Contentful Paint): < 2.5s
+- **FID** (First Input Delay): < 100ms
+- **CLS** (Cumulative Layout Shift): < 0.1
+
+## 图片优化
+
+### ✅ 使用 Next.js Image
+
+\`\`\`typescript
+import Image from 'next/image';
+
+// ✅ 响应式图片
+<Image
+  src="/hero.jpg"
+  alt="Hero image"
+  width={1200}
+  height={600}
+  priority={true}  // 首屏图片
+  quality={90}
+  placeholder="blur"
+/>
+
+// ✅ 动态图片
+<Image
+  src={user.avatar}
+  alt={user.name}
+  fill
+  sizes="(max-width: 768px) 100vw, 33vw"
+  style={{ objectFit: 'cover' }}
+/>
+\`\`\`
+
+### 图片格式选择
+
+- **WebP** - 通用场景 (节省 25-35%)
+- **AVIF** - 最新浏览器 (节省 50%)
+- **SVG** - 图标和简单图形
+- **PNG** - 需要透明度
+
+## 代码分割
+
+### ✅ 动态导入
+
+\`\`\`typescript
+// ✅ 路由级别分割
+const AdminPanel = dynamic(() => import('@/components/AdminPanel'), {
+  loading: () => <Skeleton />,
+  ssr: false, // 仅客户端
+});
+
+// ✅ 条件加载
+function Dashboard() {
+  const [showChart, setShowChart] = useState(false);
+  const Chart = showChart
+    ? dynamic(() => import('@/components/Chart'))
+    : null;
+
+  return (
+    <div>
+      <button onClick={() => setShowChart(true)}>Show Chart</button>
+      {Chart && <Chart />}
+    </div>
+  );
+}
+\`\`\`
+
+## React 性能
+
+### ✅ Memoization
+
+\`\`\`typescript
+// ✅ React.memo - 纯组件
+const UserCard = React.memo(({ user }) => {
+  return <div>{user.name}</div>;
+}, (prevProps, nextProps) => {
+  return prevProps.user.id === nextProps.user.id;
+});
+
+// ✅ useMemo - 昂贵计算
+const sortedUsers = useMemo(() => {
+  return users.sort((a, b) => a.name.localeCompare(b.name));
+}, [users]);
+
+// ✅ useCallback - 稳定函数引用
+const handleClick = useCallback((id: string) => {
+  onItemClick(id);
+}, [onItemClick]);
+\`\`\`
+
+### ❌ 过度优化
+
+\`\`\`typescript
+// ❌ 简单计算不需要 useMemo
+const fullName = useMemo(() => \`\${first} \${last}\`, [first, last]);
+
+// ✅ 直接计算
+const fullName = \`\${first} \${last}\`;
+\`\`\`
+
+## Bundle 优化
+
+### 分析 Bundle 大小
+
+\`\`\`bash
+# 分析工具
+npm run build -- --analyze
+
+# 检查大型依赖
+npx webpack-bundle-analyzer .next/analyze/client.html
+\`\`\`
+
+### Tree Shaking
+
+\`\`\`typescript
+// ✅ 具名导入
+import { debounce } from 'lodash-es';
+
+// ❌ 默认导入 (包含整个库)
+import _ from 'lodash';
+
+// ✅ 使用 ES Modules 版本
+import debounce from 'lodash-es/debounce';
+\`\`\`
+
+## 网络优化
+
+### ✅ Prefetch & Preload
+
+\`\`\`typescript
+// ✅ 预加载关键资源
+<link rel="preload" href="/fonts/main.woff2" as="font" crossorigin />
+
+// ✅ DNS 预解析
+<link rel="dns-prefetch" href="https://api.example.com" />
+
+// ✅ Link prefetch
+<Link href="/dashboard" prefetch={true}>
+  Dashboard
+</Link>
+\`\`\`
+
+### 数据获取优化
+
+\`\`\`typescript
+// ✅ 并行请求
+const [users, posts] = await Promise.all([
+  fetchUsers(),
+  fetchPosts()
+]);
+
+// ✅ SWR / React Query 缓存
+import useSWR from 'swr';
+
+function Profile() {
+  const { data, error, isLoading } = useSWR('/api/user', fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 60000, // 60秒内去重
+  });
+}
+\`\`\`
+
+## 性能监控
+
+\`\`\`typescript
+// ✅ Web Vitals 监控
+import { getCLS, getFID, getLCP } from 'web-vitals';
+
+getCLS(console.log);
+getFID(console.log);
+getLCP(console.log);
+
+// ✅ Performance API
+const start = performance.now();
+// ... 操作
+const duration = performance.now() - start;
+console.log(\`Operation took \${duration}ms\`);
+\`\`\`
+```
+
+---
+
+## 🔄 规则应用流程
+
+### 规则加载与应用
+
+<Mermaid chart={`sequenceDiagram
+    participant User as 用户
+    participant Cursor as Cursor IDE
+    participant Rules as Rules Engine
+    participant Context as Context Manager
+    participant AI as AI Model
+
+    User->>Cursor: 发起请求 (Composer/Chat)
+    Cursor->>Rules: 请求加载规则
+
+    alt Always 规则
+        Rules->>Rules: 加载所有 alwaysApply: true
+        Rules->>Context: 注入到上下文
+    end
+
+    alt Auto Attached 规则
+        Rules->>Rules: 检查文件模式 (globs)
+        Rules->>Rules: 匹配当前文件
+        Rules->>Context: 注入匹配的规则
+    end
+
+    alt Agent Requested 规则
+        Rules->>AI: 分析用户意图
+        AI-->>Rules: 返回相关规则列表
+        Rules->>Context: 注入相关规则
+    end
+
+    alt Manual 规则
+        User->>Cursor: 手动选择规则
+        Cursor->>Rules: 加载指定规则
+        Rules->>Context: 注入选定规则
+    end
+
+    Context->>AI: 发送完整上下文
+    Note over Context,AI: System Prompt<br/>+ Rules<br/>+ User Message
+
+    AI->>AI: 生成代码
+    AI-->>Cursor: 返回结果
+    Cursor-->>User: 展示代码
+
+    User->>Cursor: 验证规则遵守情况
+    Cursor->>Rules: 检查合规性
+    Rules-->>User: ✅ 符合规则 / ⚠️ 建议调整
+`} client:load />
+
+---
+
+## 🎓 高级技巧
+
+### 技巧 1: 规则层次化
+
+<Mermaid chart={`graph TB
+    subgraph "基础层 - 始终应用"
+        Base["base.mdc<br/>• 技术栈<br/>• 编码风格<br/>• 文件组织"]
+    end
+
+    subgraph "框架层 - 框架特定"
+        React["react.mdc<br/>• 组件规范<br/>• Hooks 规则"]
+        Next["nextjs.mdc<br/>• App Router<br/>• Server Components"]
+    end
+
+    subgraph "领域层 - 业务特定"
+        Auth["auth.mdc<br/>• 认证流程<br/>• 权限控制"]
+        API["api-design.mdc<br/>• RESTful 规范<br/>• 错误处理"]
+    end
+
+    subgraph "工具层 - 工具特定"
+        Test["testing.mdc<br/>• Jest 配置<br/>• RTL 实践"]
+        Perf["performance.mdc<br/>• 优化策略<br/>• 监控指标"]
+    end
+
+    Base --> React
+    Base --> Next
+    React --> Next
+
+    Next --> Auth
+    Next --> API
+
+    Test --> Auth
+    Test --> API
+    Perf --> Next
+
+    classDef darkRed fill:#b3272c,stroke:#b3272c,stroke-width:3px,color:#fff
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class Base darkRed
+    class React darkPurple
+    class Auth teal
+    class Test lightGreen
+`} client:load />
+
+### 技巧 2: 使用标签组织
+
+```markdown
+---
+description: React Hooks 规范
+tags:
+  - react
+  - hooks
+  - frontend
+  - level:intermediate
+  - category:component
+---
+```
+
+### 技巧 3: 规则版本管理
+
+```markdown
+---
+description: API 设计规范 v2.0
+tags:
+  - api
+  - version:2.0
+  - updated:2025-11-09
+---
+
+# API 设计规范
+
+> **版本**: 2.0
+> **更新日期**: 2025-11-09
+> **变更**: 添加 GraphQL 支持
+
+## 变更历史
+
+### v2.0 (2025-11-09)
+- ✅ 添加 GraphQL API 规范
+- ✅ 更新错误码体系
+- ✅ 新增速率限制指南
+
+### v1.0 (2025-01-01)
+- 初始版本
+```
+
+### 技巧 4: 条件规则
+
+```markdown
+---
+description: TypeScript 严格模式
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "!**/*.test.ts"  # 排除测试文件
+  - "!**/__mocks__/**"  # 排除 mocks
+alwaysApply: false
+---
+
+# TypeScript 严格模式
+
+仅在生产代码中应用严格类型检查。
+
+测试代码可以使用更宽松的类型规则。
+```
+
+### 技巧 5: 规则引用
+
+```markdown
+---
+description: 完整的 React 规范
+---
+
+# React 开发规范
+
+本规范综合了以下规则：
+
+- 📋 **基础规范**: 参见 `base.mdc`
+- ⚛️ **React 规范**: 参见 `react.mdc`
+- 🧪 **测试规范**: 参见 `testing.mdc`
+- 🚀 **性能优化**: 参见 `performance.mdc`
+
+## 规则优先级
+
+当规则冲突时，遵循以下优先级：
+
+1. 性能优化规则 (最高)
+2. 安全规范
+3. 框架最佳实践
+4. 代码风格规则 (最低)
+```
+
+---
+
+## 🔍 规则测试与验证
+
+### 测试流程
+
+<Mermaid chart={`flowchart TD
+    Start([创建/修改规则]) --> Write[编写规则内容]
+    Write --> Test1[测试场景 1:<br/>标准用例]
+
+    Test1 --> Check1{生成代码<br/>符合规则?}
+    Check1 -->|是| Test2[测试场景 2:<br/>边界情况]
+    Check1 -->|否| Debug1[调试规则]
+    Debug1 --> Write
+
+    Test2 --> Check2{处理<br/>边界情况?}
+    Check2 -->|是| Test3[测试场景 3:<br/>错误输入]
+    Check2 -->|否| Debug2[调整规则]
+    Debug2 --> Write
+
+    Test3 --> Check3{正确拒绝<br/>错误模式?}
+    Check3 -->|是| Validate[验证规则质量]
+    Check3 -->|否| Debug3[完善规则]
+    Debug3 --> Write
+
+    Validate --> Metrics{评估指标}
+    Metrics -->|准确性| Score1[> 90%]
+    Metrics -->|覆盖率| Score2[> 80%]
+    Metrics -->|一致性| Score3[> 95%]
+
+    Score1 --> Pass{全部通过?}
+    Score2 --> Pass
+    Score3 --> Pass
+
+    Pass -->|是| Deploy[部署规则]
+    Pass -->|否| Improve[改进规则]
+    Improve --> Write
+
+    Deploy --> Monitor[监控效果]
+    Monitor --> Feedback[收集反馈]
+    Feedback --> Iterate[迭代优化]
+    Iterate --> Write
+
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+
+    class Test1 teal
+    class Validate darkPurple
+    class Deploy lightGreen
+`} client:load />
+
+### 测试清单
+
+```markdown
+## 规则测试清单
+
+### 功能测试
+- [ ] 规则在预期场景下正确应用
+- [ ] 生成的代码符合规则要求
+- [ ] 规则不干扰非相关代码
+
+### 边界测试
+- [ ] 处理空输入
+- [ ] 处理极大输入
+- [ ] 处理特殊字符
+- [ ] 处理嵌套结构
+
+### 错误测试
+- [ ] 正确识别反模式
+- [ ] 提供有用的错误提示
+- [ ] 不产生误报
+
+### 性能测试
+- [ ] 规则加载时间 < 100ms
+- [ ] 不显著影响 AI 响应速度
+- [ ] 上下文大小合理 (< 10KB)
+
+### 集成测试
+- [ ] 与其他规则兼容
+- [ ] 不产生冲突规则
+- [ ] 优先级正确
+
+### 用户体验
+- [ ] 规则描述清晰
+- [ ] 示例代码完整
+- [ ] 错误信息有帮助
+```
+
+---
+
+## 📦 规则管理
+
+### 团队协作
+
+```
+.cursor/
+├── rules/
+│   ├── README.md           # 规则文档
+│   ├── base.mdc
+│   ├── frontend/
+│   │   ├── react.mdc
+│   │   ├── nextjs.mdc
+│   │   └── styling.mdc
+│   ├── backend/
+│   │   ├── api-design.mdc
+│   │   ├── database.mdc
+│   │   └── security.mdc
+│   └── testing/
+│       ├── unit-tests.mdc
+│       └── e2e-tests.mdc
+└── .gitignore
+```
+
+**.cursor/rules/README.md:**
+
+```markdown
+# 项目 Cursor Rules
+
+## 概览
+
+本目录包含项目的 Cursor AI 规则配置。
+
+## 规则列表
+
+### 基础规则 (Always)
+- `base.mdc` - 项目基础规范，始终应用
+
+### 前端规则 (Auto Attached)
+- `frontend/react.mdc` - React 组件规范
+- `frontend/nextjs.mdc` - Next.js App Router 规范
+- `frontend/styling.mdc` - 样式规范
+
+### 后端规则 (Auto Attached)
+- `backend/api-design.mdc` - REST API 设计规范
+- `backend/database.mdc` - 数据库操作规范
+- `backend/security.mdc` - 安全最佳实践
+
+### 测试规则 (Auto Attached)
+- `testing/unit-tests.mdc` - 单元测试规范
+- `testing/e2e-tests.mdc` - E2E 测试规范
+
+## 使用指南
+
+1. **Always 规则**: 自动应用于所有文件
+2. **Auto Attached**: 根据文件路径自动应用
+3. **手动附加**: 在 Composer 中使用 `@rules` 选择
+
+## 更新规则
+
+1. 创建新分支
+2. 修改规则文件
+3. 测试规则效果
+4. 提交 PR 并附上测试结果
+5. 团队审查后合并
+
+## 规则优先级
+
+当规则冲突时：
+1. 安全规则 > 性能规则 > 代码风格
+2. 项目规则 > 用户规则
+3. 具体规则 > 通用规则
+
+## 反馈
+
+如有问题或建议，请在 #ai-tools 频道讨论。
+```
+
+---
+
+## 🚀 最佳实践总结
+
+### Dos ✅
+
+1. ✅ **明确版本** - 指定框架和库的版本
+2. ✅ **提供示例** - 包含完整的代码示例
+3. ✅ **标记废弃** - 明确指出过时的模式
+4. ✅ **解释原因** - 说明为什么推荐某种做法
+5. ✅ **保持更新** - 随项目演进更新规则
+6. ✅ **组织清晰** - 使用层次结构和标签
+7. ✅ **测试充分** - 覆盖各种场景
+8. ✅ **文档完善** - 添加 README 和注释
+9. ✅ **版本控制** - 提交到 Git 便于追踪
+10. ✅ **团队协作** - 通过 PR 审查规则
+
+### Don'ts ❌
+
+1. ❌ **过度冗长** - 避免规则文件超过 500 行
+2. ❌ **模糊描述** - 不要使用含糊的语言
+3. ❌ **缺少示例** - 仅有规则没有示例
+4. ❌ **忽略测试** - 未验证规则效果
+5. ❌ **单一文件** - 所有规则塞在一个文件
+6. ❌ **缺少上下文** - 不说明适用场景
+7. ❌ **过时信息** - 包含已废弃的做法
+8. ❌ **冲突规则** - 规则之间相互矛盾
+9. ❌ **忽视性能** - 规则过大影响响应速度
+10. ❌ **单打独斗** - 不与团队讨论规则
+
+---
+
+## 📚 学习资源
+
+### 官方资源
+
+- 🌐 [Cursor 官方文档](https://docs.cursor.com/context/rules)
+- 📖 [Cursor Rules for AI](https://docs.cursor.com/context/rules-for-ai)
+
+### 社区资源
+
+- 📄 [Awesome Cursor Rules](https://github.com/PatrickJS/awesome-cursorrules) - 1000+ 社区规则
+- 🎯 [Cursor Directory](https://cursor.directory/) - 规则模板库
+- 📝 [DotCursorRules](https://dotcursorrules.com/) - 规则生成器
+- 🤖 [CursorRules.org](https://cursorrules.org) - 免费 AI 生成器
+
+### 技术文章
+
+- [How to Write Great Cursor Rules](https://trigger.dev/blog/cursor-rules) - Trigger.dev
+- [Getting Better Results from Cursor AI](https://medium.com/@aashari/getting-better-results-from-cursor-ai-with-simple-rules-cbc87346ad88)
+- [Mastering Cursor Configuration](https://www.hubermann.com/en/blog/mastering-cursor-configuration-a-comprehensive-guide-to-project-rules-and-settings)
+
+---
+
+## 🎯 下一步行动
+
+### 快速开始
+
+1. **创建规则目录**
+   ```bash
+   mkdir -p .cursor/rules
+   ```
+
+2. **从模板开始**
+   - 访问 [cursor.directory](https://cursor.directory/)
+   - 选择适合的技术栈模板
+   - 下载并定制化
+
+3. **测试规则**
+   ```
+   在 Composer 中输入: "根据项目规则创建一个 React 组件"
+   ```
+
+4. **迭代优化**
+   - 收集团队反馈
+   - 分析 AI 生成质量
+   - 持续改进规则
+
+### 进阶路线
+
+<Mermaid chart={`graph LR
+    Beginner[初学者] --> Basic["创建基础规则<br/>base.mdc"]
+    Basic --> Framework["添加框架规则<br/>react.mdc"]
+    Framework --> Domain["领域特定规则<br/>api-design.mdc"]
+    Domain --> Advanced["高级技巧<br/>多层次组织"]
+    Advanced --> Expert[Rules 专家]
+
+    classDef darkRed fill:#b3272c,stroke:#b3272c,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class Beginner darkRed
+    class Expert lightGreen
+`} client:load />
+
+---
+
+## 💡 总结
+
+Cursor Rules 是 AI 编码助手的**秘密武器**：
+
+**核心价值：**
+- 🎯 **代码一致性** - 统一团队编码风格
+- 🚀 **开发效率** - AI 生成符合规范的代码
+- 📚 **知识共享** - 将最佳实践编码化
+- 🛡️ **质量保证** - 预防常见错误
+
+**三大规则类型：**
+1. **项目规则** - .cursor/rules/ (版本控制，团队共享)
+2. **用户规则** - Settings (个人偏好，全局应用)
+3. **遗留规则** - .cursorrules (已弃用，建议迁移)
+
+**四种应用方式：**
+- **Always** - 始终应用
+- **Auto Attached** - 模式匹配
+- **Agent Requested** - 智能选择
+- **Manual** - 手动附加
+
+**开始使用 Cursor Rules，让 AI 真正理解你的项目！** 🚀
+
+---
+
+<div style="text-align: center; margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #772d8b 0%, #77a0a9 100%); border-radius: 1rem;">
+  <p style="color: white; font-size: 1.2rem; margin: 0;">
+    ✨ <strong>准备好定制你的 AI 编码助手了吗？</strong> ✨
+  </p>
+  <p style="color: rgba(255,255,255,0.9); margin: 1rem 0 0 0;">
+    创建第一个 Cursor Rule，开启高效编程之旅
+  </p>
+</div>

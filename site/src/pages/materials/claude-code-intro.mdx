@@ -1,0 +1,1842 @@
+---
+layout: ../../layouts/MaterialLayout.astro
+title: Claude Code 完全学习指南
+description: 深入剖析 Claude Code 架构、设计、组件与工作流程 - Hooks、Commands 和 Agents 实战指南
+category: 工具深度解析
+---
+
+import MetricCard from '../../components/materials/MetricCard';
+import Mermaid from '../../components/materials/Mermaid';
+import ScrollReveal from '../../components/ui/ScrollReveal';
+
+# Claude Code 完全学习指南
+
+**Anthropic 官方 AI 编程助手深度解析**
+
+> **当前版本**: Claude Code 2.0 (2025) | **核心模型**: Claude Sonnet 4.5 | **上下文**: 1M tokens
+
+---
+
+## 📊 Claude Code 核心指标
+
+export const claudeCodeMetrics = [
+  { label: 'System Prompts', value: 16, color: '#b3272c', icon: '📝' },
+  { label: '可用工具数', value: 400, unit: '+', color: '#772d8b', icon: '🛠️' },
+  { label: '上下文窗口', value: 1, unit: 'M', color: '#77a0a9', icon: '🧠' },
+  { label: '日发布次数', value: 1, color: '#d3f9b5', icon: '🚀' },
+  { label: '内部发布/天', value: 100, color: '#f5cbc5', icon: '⚡' },
+  { label: 'PR 数/工程师/天', value: 5, color: '#772d8b', icon: '👨‍💻' }
+]
+
+<MetricCard title="Claude Code 核心数据" items={claudeCodeMetrics} type="number" client:load />
+
+---
+
+## 🏗️ Claude Code 整体架构
+
+### 系统架构全景图
+
+<Mermaid chart={`graph TB
+    subgraph "用户界面层"
+        CLI["Claude Code CLI<br/>Terminal/VSCode"]
+        UI["React + Ink<br/>交互式命令行"]
+        Yoga["Yoga Layout<br/>Meta 约束布局"]
+    end
+
+    subgraph "核心引擎层"
+        Router["消息路由器<br/>任务分发"]
+        MainPrompt["主 System Prompt<br/>3.7KB 核心指令"]
+        PermissionSystem["权限系统<br/>多层级审批"]
+    end
+
+    subgraph "Agent 编排层"
+        CoreAgents["核心 Agents<br/>3个"]
+        MetaAgents["元 Agents<br/>3个"]
+        UtilityAgents["实用 Agents<br/>10个"]
+        SubAgents["自定义 Subagents<br/>用户定义"]
+    end
+
+    subgraph "工具系统层"
+        FileTools["文件操作<br/>Read/Write/Edit"]
+        SearchTools["搜索工具<br/>Glob/Grep"]
+        ExecTools["执行工具<br/>Bash/Python"]
+        GitTools["Git 工具<br/>版本控制"]
+        WebTools["网络工具<br/>WebFetch/Search"]
+        MCPTools["MCP 工具<br/>外部集成"]
+    end
+
+    subgraph "扩展系统层"
+        Hooks["Hooks 钩子<br/>9种事件"]
+        Commands["Slash Commands<br/>自定义命令"]
+        Plugins["Plugin System<br/>插件生态"]
+    end
+
+    subgraph "模型层"
+        Sonnet45["Claude Sonnet 4.5<br/>主力模型"]
+        Opus["Claude Opus<br/>复杂任务"]
+        Haiku["Claude Haiku<br/>快速响应"]
+    end
+
+    CLI --> UI
+    UI --> Yoga
+    UI --> Router
+    Router --> PermissionSystem
+    Router --> MainPrompt
+
+    MainPrompt --> CoreAgents
+    MainPrompt --> MetaAgents
+    MainPrompt --> UtilityAgents
+    MainPrompt --> SubAgents
+
+    CoreAgents --> FileTools
+    CoreAgents --> SearchTools
+    MetaAgents --> ExecTools
+    SubAgents --> GitTools
+    SubAgents --> WebTools
+    SubAgents --> MCPTools
+
+    Hooks --> Router
+    Commands --> Router
+    Plugins --> Hooks
+    Plugins --> Commands
+    Plugins --> SubAgents
+
+    CoreAgents --> Sonnet45
+    MetaAgents --> Opus
+    UtilityAgents --> Haiku
+    SubAgents --> Sonnet45
+
+    classDef darkRed fill:#b3272c,stroke:#b3272c,stroke-width:3px,color:#fff
+    classDef lightPink fill:#f5cbc5,stroke:#b3272c,stroke-width:2px,color:#1d1d1f
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class CLI darkRed
+    class Router darkPurple
+    class CoreAgents teal
+    class Hooks lightPink
+    class Sonnet45 lightGreen
+`} client:load />
+
+---
+
+## 🎨 核心设计理念
+
+### 1. Radical Simplicity - 激进的简洁性
+
+Claude Code 团队奉行"**极简主义哲学**"：
+
+<Mermaid chart={`mindmap
+    root((Radical Simplicity))
+        最小化代码
+            围绕模型的轻量外壳
+            每次模型升级删代码
+            90% 代码由 AI 生成
+        简化架构
+            本地执行无虚拟化
+            不用 Docker 容器
+            不用云环境
+        精简工具
+            持续删除工具
+            持续实验新工具
+            保持工具集小而精
+        减少提示词
+            尽量少的业务逻辑
+            让模型自己决策
+            信任模型能力
+`} client:load />
+
+**关键原则：**
+
+| 原则 | 传统方法 | Claude Code 方法 |
+|------|----------|------------------|
+| **代码量** | 复杂脚手架，大量业务逻辑 | 最小化外壳，模型主导 |
+| **执行环境** | Docker/容器化/云端 | 本地直接执行 |
+| **工具策略** | 添加更多功能 | 持续删减优化 |
+| **提示词工程** | 详细指令和约束 | 信任模型智能 |
+| **开发方式** | 人工编写为主 | AI 自己构建自己 |
+
+### 2. On-Distribution 技术栈
+
+选择 Claude 已经精通的技术：
+
+<Mermaid chart={`graph LR
+    subgraph "前端技术"
+        TS["TypeScript<br/>类型安全"]
+        React["React<br/>组件化"]
+        Ink["Ink<br/>终端 UI"]
+    end
+
+    subgraph "构建工具"
+        Bun["Bun<br/>极速构建"]
+        NPM["npm<br/>分发渠道"]
+    end
+
+    subgraph "布局引擎"
+        Yoga["Yoga<br/>Meta 布局系统"]
+        Terminal["终端兼容性"]
+    end
+
+    subgraph "选择原因"
+        Familiar["Claude 熟悉"]
+        Speed["构建速度快"]
+        Simple["架构简单"]
+    end
+
+    TS --> Familiar
+    React --> Familiar
+    Bun --> Speed
+    Yoga --> Simple
+
+    Familiar --> Result["Claude 能构建<br/>Claude Code"]
+    Speed --> Result
+    Simple --> Result
+
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class TS darkPurple
+    class Bun teal
+    class Result lightGreen
+`} client:load />
+
+### 3. 极致开发速度
+
+<Mermaid chart={`graph TB
+    subgraph "发布节奏"
+        External["外部发布<br/>1 次/天"]
+        Internal["内部发布<br/>60-100 次/天"]
+        PR["PR 产出<br/>5 个/工程师/天"]
+    end
+
+    subgraph "速度来源"
+        AIGenerated["90% AI 生成"]
+        MinimalLogic["最少业务逻辑"]
+        FastBuild["Bun 快速构建"]
+        TrustModel["信任模型能力"]
+    end
+
+    subgraph "对比传统"
+        Traditional["传统科技公司<br/>1-2 PR/工程师/天"]
+        ClaudeCode["Claude Code<br/>5 PR/工程师/天"]
+        Speedup["2.5-5x<br/>生产力提升"]
+    end
+
+    AIGenerated --> External
+    MinimalLogic --> Internal
+    FastBuild --> PR
+
+    External --> ClaudeCode
+    Internal --> ClaudeCode
+    PR --> ClaudeCode
+
+    Traditional --> Speedup
+    ClaudeCode --> Speedup
+
+    classDef lightPink fill:#f5cbc5,stroke:#b3272c,stroke-width:2px,color:#1d1d1f
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+    classDef darkRed fill:#b3272c,stroke:#b3272c,stroke-width:3px,color:#fff
+
+    class Internal lightPink
+    class ClaudeCode lightGreen
+    class Speedup darkRed
+`} client:load />
+
+---
+
+## 🔧 核心组件详解
+
+### Component 1: Agent 系统 (16个 System Prompts)
+
+<Mermaid chart={`graph TB
+    subgraph "核心 Agents (3个)"
+        GP["general-purpose<br/>1.4KB<br/>通用任务处理器"]
+        Explore["Explore<br/>931B<br/>代码库快速搜索"]
+        Plan["Plan<br/>任务规划器"]
+    end
+
+    subgraph "元 Agents (3个) - 最强大"
+        AA["Agent Architect<br/>5.0KB<br/>创建其他 Agents"]
+        SR["Security Review<br/>10.8KB<br/>三阶段安全审查"]
+        CR["Code Reviewer<br/>862B<br/>PR 代码审查"]
+    end
+
+    subgraph "实用 Agents (10个)"
+        SL["statusline-setup<br/>3.2KB<br/>Shell 配置"]
+        BA["Bash Analyzer<br/>2.7KB<br/>输出智能总结"]
+        GC["Git Comment Fetcher<br/>1.3KB<br/>PR 评论"]
+        GH["Git History<br/>451B<br/>核心文件分析"]
+        TG["Title Generator<br/>674B<br/>会话标题"]
+        ED["Educational Mode<br/>490B<br/>教育助手"]
+    end
+
+    subgraph "工具访问权限"
+        AllTools["全部工具<br/>400+"]
+        ReadOnly["只读工具<br/>Read/Glob/Grep"]
+        LimitedTools["受限工具<br/>特定场景"]
+    end
+
+    GP --> AllTools
+    AA --> AllTools
+    SR --> AllTools
+
+    Explore --> ReadOnly
+    Plan --> ReadOnly
+
+    SL --> LimitedTools
+    BA --> LimitedTools
+    CR --> LimitedTools
+
+    classDef darkRed fill:#b3272c,stroke:#b3272c,stroke-width:3px,color:#fff
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class GP darkRed
+    class AA darkPurple
+    class Explore teal
+    class AllTools lightGreen
+`} client:load />
+
+**Agent 层次结构：**
+
+1. **general-purpose** - 最常用，处理 80% 的任务
+2. **Agent Architect** - 唯一能创建 Agent 的 Agent（元编程）
+3. **Security Review** - 最大的 Prompt (10.8KB)，最复杂的审查逻辑
+4. **Explore** - Plan 模式专用，避免无限嵌套
+
+### Component 2: 工具系统 (400+ 工具)
+
+<Mermaid chart={`graph LR
+    subgraph "文件操作"
+        Read["Read<br/>读取文件"]
+        Write["Write<br/>写入文件"]
+        Edit["Edit<br/>精确编辑"]
+        Glob["Glob<br/>文件匹配"]
+    end
+
+    subgraph "搜索工具"
+        GrepTool["Grep<br/>内容搜索"]
+        CodeSearch["代码搜索<br/>语义理解"]
+    end
+
+    subgraph "执行工具"
+        Bash["Bash<br/>Shell 命令"]
+        Python["Python<br/>脚本执行"]
+    end
+
+    subgraph "版本控制"
+        GitStatus["git status"]
+        GitDiff["git diff"]
+        GitCommit["git commit"]
+    end
+
+    subgraph "网络工具"
+        WebFetch["WebFetch<br/>获取网页"]
+        WebSearch["WebSearch<br/>搜索引擎"]
+    end
+
+    subgraph "AI 增强"
+        Task["Task<br/>启动 Subagent"]
+        Skill["Skill<br/>专业技能"]
+    end
+
+    subgraph "工具设计原则"
+        Minimal["最小化数量<br/>持续删减"]
+        Focused["单一职责<br/>专注明确"]
+        Reliable["可靠执行<br/>错误处理"]
+    end
+
+    Read --> Minimal
+    Bash --> Focused
+    Task --> Reliable
+
+    classDef lightPink fill:#f5cbc5,stroke:#b3272c,stroke-width:2px,color:#1d1d1f
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+
+    class Read lightPink
+    class Task darkPurple
+    class WebFetch teal
+`} client:load />
+
+### Component 3: 权限系统
+
+Claude Code 中最复杂的组件：
+
+<Mermaid chart={`flowchart TD
+    Action[工具调用请求] --> Check{检查操作类型}
+
+    Check -->|读取操作| Auto[自动允许]
+    Check -->|写入操作| Review[审查影响范围]
+    Check -->|执行操作| Dangerous[危险操作检测]
+
+    Review --> Small{影响范围?}
+    Small -->|小范围| UserApproval[用户确认]
+    Small -->|大范围| DetailReview[详细审查]
+
+    Dangerous --> Critical{不可逆?}
+    Critical -->|是| MultiLevel[多层级审批]
+    Critical -->|否| UserApproval
+
+    subgraph "权限层级"
+        Project["项目级<br/>.claude/settings.json"]
+        User["用户级<br/>~/.claude/settings.json"]
+        Org["组织级<br/>企业策略"]
+    end
+
+    MultiLevel --> Project
+    MultiLevel --> User
+    MultiLevel --> Org
+
+    UserApproval --> Execute[执行工具]
+    DetailReview --> Execute
+    MultiLevel --> Execute
+    Auto --> Execute
+
+    Execute --> Log[记录审计日志]
+
+    classDef darkRed fill:#b3272c,stroke:#b3272c,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class Dangerous darkRed
+    class MultiLevel teal
+    class Execute lightGreen
+`} client:load />
+
+---
+
+## 🔄 工作流程解析
+
+### Workflow 1: 标准任务执行流程
+
+<Mermaid chart={`sequenceDiagram
+    participant User as 👤 用户
+    participant CLI as Claude Code CLI
+    participant Router as 消息路由器
+    participant Agent as general-purpose
+    participant Tools as 工具系统
+    participant Model as Claude Sonnet 4.5
+
+    User->>CLI: 输入任务
+    CLI->>Router: 解析意图
+
+    Router->>Router: 加载 System Prompt (3.7KB)
+    Router->>Agent: 分配任务
+
+    Agent->>Model: 发送上下文 + 任务
+    Model-->>Agent: 生成工具调用计划
+
+    loop 工具执行循环
+        Agent->>Tools: 调用工具 (如 Read)
+        Tools-->>Agent: 返回结果
+        Agent->>Model: 发送结果 + 继续推理
+        Model-->>Agent: 下一步工具调用
+    end
+
+    Agent->>Tools: 最后的工具调用 (如 Edit)
+    Tools-->>Agent: 执行完成
+
+    Agent-->>Router: 任务完成
+    Router-->>CLI: 格式化输出
+    CLI-->>User: 展示结果
+`} client:load />
+
+### Workflow 2: Subagent 委派流程
+
+<Mermaid chart={`sequenceDiagram
+    participant Main as 主 Agent
+    participant Router as 路由器
+    participant Sub1 as Subagent 1<br/>代码审查
+    participant Sub2 as Subagent 2<br/>测试生成
+    participant Tools as 工具系统
+
+    Main->>Router: "审查并测试这段代码"
+    Router->>Router: 任务分解
+
+    par 并行执行
+        Router->>Sub1: 委派审查任务
+        Router->>Sub2: 委派测试任务
+    end
+
+    Sub1->>Tools: 读取代码文件
+    Sub1->>Tools: 分析代码质量
+    Sub1-->>Router: 审查报告
+
+    Sub2->>Tools: 分析代码结构
+    Sub2->>Tools: 生成测试用例
+    Sub2-->>Router: 测试文件
+
+    Router->>Router: 合并结果
+    Router-->>Main: 完整输出
+
+    Note over Main,Tools: Subagents 有独立上下文<br/>避免上下文污染
+`} client:load />
+
+### Workflow 3: Plan 模式工作流程
+
+<Mermaid chart={`flowchart TD
+    Start([用户按 Shift+Tab 两次]) --> PlanMode[进入 Plan 模式]
+
+    PlanMode --> ReadOnly[只读环境]
+    ReadOnly --> Explore[Explore Agent 启动]
+
+    Explore --> Search1[搜索代码库结构]
+    Search1 --> Read1[读取关键文件]
+    Read1 --> Analyze[分析架构模式]
+
+    Analyze --> Understanding[构建代码库理解]
+    Understanding --> Strategy[制定实施策略]
+
+    Strategy --> Plan[生成详细计划]
+    Plan --> Present[展示给用户]
+
+    Present --> UserReview{用户审查}
+    UserReview -->|批准| Execute[退出 Plan 模式<br/>开始执行]
+    UserReview -->|修改| Refine[调整计划]
+    Refine --> Plan
+
+    Execute --> Implementation[实际修改代码]
+
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+
+    class PlanMode teal
+    class Understanding lightGreen
+    class Execute darkPurple
+`} client:load />
+
+**Plan 模式特点：**
+- ✅ **只读探索** - 不会修改任何文件
+- ✅ **深度理解** - 全面分析代码库架构
+- ✅ **策略优先** - 先规划后执行
+- ✅ **避免嵌套** - 使用特殊的 Explore Agent
+
+---
+
+## 🪝 Hooks 深度指南
+
+### Hooks 概述
+
+Hooks 是在 Claude Code 生命周期各个点执行的 Shell 命令，提供**确定性控制**。
+
+<Mermaid chart={`graph TB
+    subgraph "Hook 事件类型 (9种)"
+        Pre["PreToolUse<br/>工具调用前<br/>可阻止执行"]
+        Post["PostToolUse<br/>工具调用后<br/>自动处理"]
+        UserPrompt["UserPromptSubmit<br/>用户提交前<br/>预处理"]
+        Notify["Notification<br/>通知时<br/>系统提醒"]
+        Stop["Stop<br/>响应完成后<br/>清理工作"]
+        SubStop["SubagentStop<br/>子任务完成<br/>状态收集"]
+        PreCompact["PreCompact<br/>压缩前<br/>备份保存"]
+        Start["SessionStart<br/>会话开始<br/>初始化"]
+        End["SessionEnd<br/>会话结束<br/>资源释放"]
+    end
+
+    subgraph "配置位置"
+        User["~/.claude/settings.json<br/>用户级 - 全局"]
+        Project[".claude/settings.json<br/>项目级 - 共享"]
+        Local[".claude/settings.local.json<br/>本地 - 不提交"]
+    end
+
+    subgraph "应用场景"
+        Format["自动格式化<br/>PostToolUse"]
+        Log["操作日志<br/>所有事件"]
+        Block["文件保护<br/>PreToolUse"]
+        Alert["系统通知<br/>Notification"]
+    end
+
+    Pre --> Format
+    Post --> Format
+    Pre --> Block
+    Notify --> Alert
+
+    User --> Pre
+    Project --> Post
+    Local --> UserPrompt
+
+    classDef darkRed fill:#b3272c,stroke:#b3272c,stroke-width:3px,color:#fff
+    classDef lightPink fill:#f5cbc5,stroke:#b3272c,stroke-width:2px,color:#1d1d1f
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+
+    class Pre darkRed
+    class Post lightPink
+    class Format darkPurple
+`} client:load />
+
+### Hook 配置格式
+
+**基本结构：**
+
+```json
+{
+  "hooks": [
+    {
+      "event": "PostToolUse",
+      "matcher": "Edit:**/*.ts",
+      "command": {
+        "type": "Bash",
+        "command": "prettier --write \"$FILE_PATH\""
+      }
+    }
+  ]
+}
+```
+
+**配置字段：**
+
+| 字段 | 说明 | 示例 |
+|------|------|------|
+| `event` | Hook 事件类型 | `PreToolUse`, `PostToolUse` |
+| `matcher` | 工具名称匹配模式 | `Edit:**/*.ts`, `Bash:*` |
+| `command.type` | 命令类型 | `Bash` |
+| `command.command` | 要执行的命令 | `prettier --write "$FILE_PATH"` |
+
+### 实战示例
+
+#### 示例 1: 自动代码格式化
+
+```json
+{
+  "hooks": [
+    {
+      "event": "PostToolUse",
+      "matcher": "Edit:**/*.ts",
+      "command": {
+        "type": "Bash",
+        "command": "prettier --write \"$FILE_PATH\" && echo '✅ Formatted TypeScript file'"
+      }
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": "Edit:**/*.go",
+      "command": {
+        "type": "Bash",
+        "command": "gofmt -w \"$FILE_PATH\" && echo '✅ Formatted Go file'"
+      }
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": "Edit:**/*.py",
+      "command": {
+        "type": "Bash",
+        "command": "black \"$FILE_PATH\" && echo '✅ Formatted Python file'"
+      }
+    }
+  ]
+}
+```
+
+#### 示例 2: 操作审计日志
+
+```json
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "matcher": "*",
+      "command": {
+        "type": "Bash",
+        "command": "echo \"$(date): $TOOL_NAME\" | tee -a ~/.claude/audit.log | jq -R '{timestamp: ., tool: \"$TOOL_NAME\"}' >> ~/.claude/audit.json"
+      }
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": "Bash:*",
+      "command": {
+        "type": "Bash",
+        "command": "echo \"[$(date)] Executed: $TOOL_INPUT\" >> ~/.claude/bash_history.log"
+      }
+    }
+  ]
+}
+```
+
+#### 示例 3: 文件保护
+
+```json
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "matcher": "Edit:**/production/**",
+      "command": {
+        "type": "Bash",
+        "command": "echo '❌ Cannot modify production files!' && exit 1"
+      }
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": "Write:**/.env",
+      "command": {
+        "type": "Bash",
+        "command": "echo '⚠️  Warning: Modifying .env file!' && read -p 'Continue? (y/n) ' -n 1 -r && echo && [[ $REPLY =~ ^[Yy]$ ]]"
+      }
+    }
+  ]
+}
+```
+
+#### 示例 4: Git 自动提交
+
+```json
+{
+  "hooks": [
+    {
+      "event": "Stop",
+      "matcher": "*",
+      "command": {
+        "type": "Bash",
+        "command": "git diff --quiet || (git add -A && git commit -m '🤖 Auto-commit by Claude Code' && echo '✅ Changes committed')"
+      }
+    }
+  ]
+}
+```
+
+#### 示例 5: 系统通知
+
+```json
+{
+  "hooks": [
+    {
+      "event": "Notification",
+      "matcher": "*",
+      "command": {
+        "type": "Bash",
+        "command": "osascript -e 'display notification \"$NOTIFICATION_TEXT\" with title \"Claude Code\"'"
+      }
+    },
+    {
+      "event": "SessionEnd",
+      "matcher": "*",
+      "command": {
+        "type": "Bash",
+        "command": "say 'Claude Code session ended' && osascript -e 'display notification \"Session completed\" with title \"Claude Code\"'"
+      }
+    }
+  ]
+}
+```
+
+### Hook 最佳实践
+
+<Mermaid chart={`mindmap
+    root((Hooks 最佳实践))
+        安全第一
+            审查所有命令
+            避免敏感数据泄露
+            限制权限范围
+            使用沙箱测试
+        性能优化
+            快速执行命令
+            避免阻塞操作
+            异步处理日志
+            缓存结果
+        可维护性
+            清晰命名
+            添加注释
+            版本控制
+            文档化配置
+        错误处理
+            优雅失败
+            提供反馈
+            日志记录
+            回滚机制
+`} client:load />
+
+### Hook 安全警告
+
+⚠️ **重要安全提醒：**
+
+- 🔒 Hooks 执行**任意 Shell 命令**，具有完全系统访问权限
+- 🔒 恶意 Hook 可以**窃取数据**、**删除文件**、**执行恶意代码**
+- 🔒 始终**审查第三方 Hooks**
+- 🔒 使用 `.claude/settings.local.json` 存储敏感配置（不要提交到 Git）
+- 🔒 测试 Hooks 前先备份重要数据
+
+---
+
+## 💻 Slash Commands 完全指南
+
+### Commands 概述
+
+Slash Commands 将常用提示词保存为 Markdown 文件，快速复用。
+
+<Mermaid chart={`graph LR
+    subgraph "命令类型"
+        Project[".claude/commands/<br/>项目命令<br/>(project)"]
+        User["~/.claude/commands/<br/>个人命令<br/>(user)"]
+        Plugin["plugin/commands/<br/>插件命令<br/>(plugin)"]
+    end
+
+    subgraph "命令特性"
+        Args["参数支持<br/>$1, $2, $ARGUMENTS"]
+        Namespace["命名空间<br/>子目录组织"]
+        BashExec["Bash 执行<br/>!\\`command\\`"]
+        FileRef["文件引用<br/>@file"]
+    end
+
+    subgraph "高级配置"
+        Frontmatter["YAML Frontmatter<br/>元数据配置"]
+        Tools["工具权限<br/>allowed-tools"]
+        Model["模型选择<br/>sonnet/opus/haiku"]
+    end
+
+    Project --> Args
+    User --> Namespace
+    Plugin --> BashExec
+
+    Args --> Frontmatter
+    BashExec --> Tools
+    FileRef --> Frontmatter
+
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class Project darkPurple
+    class Args teal
+    class Frontmatter lightGreen
+`} client:load />
+
+### 创建 Slash Commands
+
+#### 基本命令
+
+**创建项目命令：**
+
+```bash
+mkdir -p .claude/commands
+cat > .claude/commands/optimize.md << 'EOF'
+分析这段代码的性能问题，并提供优化建议。
+重点关注：
+- 时间复杂度
+- 空间复杂度
+- 可读性
+- 最佳实践
+EOF
+```
+
+**使用：** `/optimize`
+
+**创建用户命令：**
+
+```bash
+mkdir -p ~/.claude/commands
+cat > ~/.claude/commands/security-review.md << 'EOF'
+---
+description: 安全漏洞审查
+---
+
+检查这段代码的安全漏洞，包括：
+- SQL 注入
+- XSS 攻击
+- CSRF 漏洞
+- 敏感信息泄露
+- 认证和授权问题
+EOF
+```
+
+**使用：** `/security-review`
+
+#### 带参数的命令
+
+```markdown
+---
+description: 修复 GitHub issue
+argument-hint: <issue-number> <priority>
+---
+
+修复 GitHub issue #$1
+
+优先级：$2
+要求：
+- 分析问题根因
+- 提供解决方案
+- 编写单元测试
+- 更新文档
+```
+
+**使用：** `/fix-issue 123 high`
+
+#### 命名空间组织
+
+```bash
+.claude/commands/
+├── frontend/
+│   ├── component.md        # /component (project:frontend)
+│   ├── style.md            # /style (project:frontend)
+│   └── test.md             # /test (project:frontend)
+├── backend/
+│   ├── api.md              # /api (project:backend)
+│   ├── database.md         # /database (project:backend)
+│   └── migration.md        # /migration (project:backend)
+└── docs/
+    ├── readme.md           # /readme (project:docs)
+    └── api-docs.md         # /api-docs (project:docs)
+```
+
+#### 使用 Bash 执行
+
+```markdown
+---
+description: Git 状态报告
+allowed-tools: Bash(git status:*), Bash(git diff:*)
+---
+
+当前 Git 状态：
+!`git status`
+
+未提交的更改：
+!`git diff --stat`
+
+最近的提交：
+!`git log -5 --oneline`
+```
+
+**使用：** `/git-status`
+
+#### 文件引用
+
+```markdown
+---
+description: 代码审查
+---
+
+审查以下文件的代码质量：
+
+@src/components/UserProfile.tsx
+@src/services/authService.ts
+@tests/auth.test.ts
+
+重点检查：
+- 代码规范
+- 错误处理
+- 测试覆盖率
+```
+
+**使用：** `/review`
+
+### 高级命令示例
+
+#### 示例 1: 完整的 Feature 开发
+
+```markdown
+---
+description: 创建新功能
+argument-hint: <feature-name>
+allowed-tools: Bash(git:*), Write, Edit, Read
+model: sonnet
+---
+
+# 创建新功能: $1
+
+## Step 1: 创建功能分支
+!`git checkout -b feature/$1`
+
+## Step 2: 分析需求
+请描述这个功能的详细需求，我会：
+1. 设计架构方案
+2. 创建必要的文件结构
+3. 实现核心功能
+4. 编写单元测试
+5. 更新文档
+
+## Step 3: 相关文件
+@docs/architecture.md
+@src/types/index.ts
+
+准备好了吗？请提供功能需求描述。
+```
+
+#### 示例 2: 数据库迁移
+
+```markdown
+---
+description: 生成数据库迁移
+argument-hint: <migration-name>
+allowed-tools: Bash(ls:*), Bash(cat:*), Write
+---
+
+# 数据库迁移: $1
+
+## 当前数据库模式
+!`ls -la migrations/`
+
+## 最新迁移
+!`ls migrations/ | tail -1`
+
+我将创建一个新的迁移文件，包括：
+- Up migration（应用更改）
+- Down migration（回滚更改）
+- 时间戳命名
+
+请描述数据库更改需求。
+```
+
+#### 示例 3: 测试生成器
+
+```markdown
+---
+description: 为文件生成测试
+allowed-tools: Read
+model: sonnet
+---
+
+# 生成单元测试
+
+分析目标文件并生成完整的测试套件。
+
+测试要求：
+- 覆盖所有公共方法
+- 包含边界情况
+- 测试错误处理
+- 使用项目的测试框架
+
+当前项目使用的测试配置：
+@package.json
+@jest.config.js
+
+请指定要测试的文件。
+```
+
+#### 示例 4: PR 描述生成
+
+```markdown
+---
+description: 生成 PR 描述
+allowed-tools: Bash(git:*)
+disable-model-invocation: false
+---
+
+# Pull Request 描述生成器
+
+## 当前分支
+!`git branch --show-current`
+
+## 提交历史
+!`git log main..HEAD --oneline`
+
+## 文件更改
+!`git diff main..HEAD --stat`
+
+## 详细更改
+!`git diff main..HEAD`
+
+基于以上更改，我将生成：
+
+### 标题
+简洁描述主要更改
+
+### 描述
+- 更改原因
+- 解决的问题
+- 实现方法
+- 测试计划
+
+### Checklist
+- [ ] 代码审查
+- [ ] 测试通过
+- [ ] 文档更新
+```
+
+### Frontmatter 完整配置
+
+```markdown
+---
+# 命令描述（显示在 /help 中）
+description: 命令的简短描述
+
+# 参数提示
+argument-hint: <arg1> [arg2]
+
+# 允许使用的工具（逗号分隔）
+allowed-tools: Bash(git:*), Read, Write, Edit
+
+# 指定使用的模型
+model: sonnet  # 可选：sonnet, opus, haiku, inherit
+
+# 禁止 SlashCommand 工具自动调用
+disable-model-invocation: true
+---
+
+命令内容...
+```
+
+### SlashCommand 工具
+
+Claude 可以自动调用你的自定义命令：
+
+```typescript
+// Claude 内部使用 SlashCommand 工具
+await slashCommand({
+  command: "/optimize src/utils/heavy-calculation.ts"
+});
+```
+
+**特性：**
+- ✅ 自动识别适合的命令
+- ✅ 在对话中智能调用
+- ✅ 只支持自定义命令（不支持内置命令如 /compact）
+
+---
+
+## 🤖 Agents & Subagents 完全指南
+
+### Subagents 概述
+
+Subagents 是**专业化的 AI 助手**，拥有独立的上下文窗口。
+
+<Mermaid chart={`graph TB
+    subgraph "Subagent 特性"
+        Context["独立上下文<br/>避免污染"]
+        Prompt["自定义提示词<br/>专业人格"]
+        Tools["工具权限<br/>精确控制"]
+        Model["模型选择<br/>按需配置"]
+    end
+
+    subgraph "配置位置"
+        ProjectAgents[".claude/agents/<br/>项目 Agents"]
+        UserAgents["~/.claude/agents/<br/>全局 Agents"]
+        PluginAgents["plugin/agents/<br/>插件 Agents"]
+    end
+
+    subgraph "调用方式"
+        Auto["自动匹配<br/>描述驱动"]
+        Explicit["显式调用<br/>'使用 X agent'"]
+        Chain["链式调用<br/>顺序执行"]
+    end
+
+    subgraph "并行能力"
+        Parallel["最多 10 个<br/>并行任务"]
+        Isolation["完全隔离<br/>独立执行"]
+    end
+
+    Context --> ProjectAgents
+    Prompt --> Auto
+    Tools --> Explicit
+    Model --> Parallel
+
+    classDef darkRed fill:#b3272c,stroke:#b3272c,stroke-width:3px,color:#fff
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+
+    class Context darkRed
+    class Auto darkPurple
+    class Parallel teal
+`} client:load />
+
+### Subagent 配置格式
+
+**基本结构：**
+
+```markdown
+---
+name: agent-identifier
+description: When to use this agent (used for automatic matching)
+tools: Tool1, Tool2, Tool3
+model: sonnet
+---
+
+You are a specialized [role] agent.
+
+Your responsibilities:
+- Responsibility 1
+- Responsibility 2
+- Responsibility 3
+
+Guidelines:
+- Guideline 1
+- Guideline 2
+
+Always:
+- Best practice 1
+- Best practice 2
+```
+
+**配置字段：**
+
+| 字段 | 必需 | 说明 | 示例 |
+|------|------|------|------|
+| `name` | ✅ | 小写标识符，使用连字符 | `code-reviewer`, `test-generator` |
+| `description` | ✅ | 何时使用此 Agent | `Reviews code for quality and best practices` |
+| `tools` | ❌ | 允许的工具列表，省略则继承全部 | `Read, Grep, Glob` |
+| `model` | ❌ | 模型选择 | `sonnet`, `opus`, `haiku`, `inherit` |
+
+### 实战 Subagents 示例
+
+#### 示例 1: 代码审查 Agent
+
+```markdown
+---
+name: code-reviewer
+description: Reviews code for quality, security, and best practices
+tools: Read, Grep, Glob
+model: sonnet
+---
+
+You are an expert code reviewer with 15+ years of experience.
+
+Your mission: Provide thorough, constructive code reviews.
+
+Review checklist:
+- ✅ Code quality and readability
+- ✅ Performance considerations
+- ✅ Security vulnerabilities
+- ✅ Error handling
+- ✅ Test coverage
+- ✅ Documentation
+- ✅ Best practices adherence
+
+Output format:
+1. Summary (2-3 sentences)
+2. Critical Issues (🔴)
+3. Important Issues (🟡)
+4. Suggestions (🟢)
+5. Positive Highlights (⭐)
+
+Be specific, cite line numbers, and provide examples.
+```
+
+**使用：**
+```
+请使用 code-reviewer agent 审查 src/auth/login.ts
+```
+
+#### 示例 2: 测试生成 Agent
+
+```markdown
+---
+name: test-generator
+description: Generates comprehensive unit and integration tests
+tools: Read, Write, Glob
+model: sonnet
+---
+
+You are a testing specialist who creates thorough, maintainable tests.
+
+Test generation principles:
+- Cover happy paths and edge cases
+- Test error conditions
+- Use descriptive test names
+- Follow AAA pattern (Arrange, Act, Assert)
+- Mock external dependencies
+- Aim for >80% coverage
+
+Test structure:
+```typescript
+describe('ComponentName', () => {
+  describe('methodName', () => {
+    it('should handle expected case', () => {
+      // Arrange
+      // Act
+      // Assert
+    });
+
+    it('should handle edge case', () => {
+      // ...
+    });
+
+    it('should throw error for invalid input', () => {
+      // ...
+    });
+  });
+});
+```
+
+Always include:
+- Setup and teardown
+- Data fixtures
+- Mock configurations
+```
+
+**使用：**
+```
+用 test-generator agent 为 src/utils/payment.ts 生成测试
+```
+
+#### 示例 3: 文档生成 Agent
+
+```markdown
+---
+name: doc-writer
+description: Creates comprehensive technical documentation
+tools: Read, Write, Grep, Glob
+model: sonnet
+---
+
+You are a technical writer who creates clear, comprehensive documentation.
+
+Documentation standards:
+- Use Markdown format
+- Include code examples
+- Provide real-world use cases
+- Add diagrams where helpful (Mermaid)
+- Keep it concise yet complete
+
+Structure:
+# Title
+
+## Overview
+Brief description and purpose
+
+## Installation
+```bash
+npm install package-name
+```
+
+## Quick Start
+Minimal working example
+
+## API Reference
+Detailed API documentation
+
+## Examples
+Real-world usage examples
+
+## Best Practices
+Recommended patterns
+
+## Troubleshooting
+Common issues and solutions
+
+## Contributing
+How to contribute
+
+Target audience: Developers with intermediate experience
+```
+
+**使用：**
+```
+让 doc-writer agent 为 src/api/client.ts 生成 API 文档
+```
+
+#### 示例 4: 重构专家 Agent
+
+```markdown
+---
+name: refactor-expert
+description: Refactors code for better architecture and maintainability
+tools: Read, Edit, Grep, Glob
+model: opus
+---
+
+You are a software architect specializing in code refactoring.
+
+Refactoring principles:
+- Keep changes small and focused
+- Maintain existing functionality
+- Improve code quality iteratively
+- Extract reusable patterns
+- Reduce complexity
+- Enhance testability
+
+Refactoring patterns:
+1. Extract Method
+2. Extract Class
+3. Introduce Parameter Object
+4. Replace Conditional with Polymorphism
+5. Move Method/Field
+6. Rename for Clarity
+
+Process:
+1. Analyze current code structure
+2. Identify code smells
+3. Propose refactoring strategy
+4. Apply changes incrementally
+5. Verify functionality preserved
+
+Code smells to detect:
+- Long methods (>50 lines)
+- Large classes (>300 lines)
+- Duplicate code
+- Deep nesting (>3 levels)
+- Long parameter lists (>4 params)
+- Feature envy
+- Data clumps
+
+Always explain WHY you're refactoring.
+```
+
+#### 示例 5: 性能优化 Agent
+
+```markdown
+---
+name: performance-optimizer
+description: Analyzes and optimizes code performance
+tools: Read, Edit, Bash
+model: sonnet
+---
+
+You are a performance engineering specialist.
+
+Optimization areas:
+- Algorithm efficiency (Big O analysis)
+- Memory usage
+- Database queries (N+1 problems)
+- Caching strategies
+- Async/await patterns
+- Bundle size (frontend)
+
+Analysis process:
+1. Profile current performance
+2. Identify bottlenecks
+3. Calculate optimization impact
+4. Implement improvements
+5. Measure results
+
+Performance metrics:
+- Time complexity: O(n) → O(log n)
+- Memory: Reduce allocations
+- Network: Minimize requests
+- Render: Reduce re-renders
+
+Optimization techniques:
+- Memoization
+- Lazy loading
+- Virtual scrolling
+- Worker threads
+- Database indexing
+- Query optimization
+- Asset compression
+
+Always provide before/after comparisons.
+```
+
+#### 示例 6: 安全审计 Agent
+
+```markdown
+---
+name: security-auditor
+description: Performs security vulnerability assessment
+tools: Read, Grep, WebSearch
+model: opus
+---
+
+You are a cybersecurity expert specializing in application security.
+
+Security checklist (OWASP Top 10):
+1. ✅ Injection (SQL, NoSQL, Command)
+2. ✅ Broken Authentication
+3. ✅ Sensitive Data Exposure
+4. ✅ XML External Entities (XXE)
+5. ✅ Broken Access Control
+6. ✅ Security Misconfiguration
+7. ✅ Cross-Site Scripting (XSS)
+8. ✅ Insecure Deserialization
+9. ✅ Using Components with Known Vulnerabilities
+10. ✅ Insufficient Logging & Monitoring
+
+Audit process:
+1. Code review for vulnerabilities
+2. Dependency vulnerability scan
+3. Authentication/Authorization review
+4. Input validation check
+5. Output encoding verification
+6. Cryptography review
+7. Configuration assessment
+
+Output format:
+## Critical Vulnerabilities (P0)
+- [CVE/CWE] Description
+- Impact: ...
+- Remediation: ...
+
+## High Priority (P1)
+...
+
+## Medium Priority (P2)
+...
+
+## Best Practice Recommendations
+...
+
+Search for latest CVEs and security patches.
+```
+
+### Subagent 编排模式
+
+<Mermaid chart={`sequenceDiagram
+    participant User as 用户
+    participant Main as 主 Agent
+    participant Review as code-reviewer
+    participant Test as test-generator
+    participant Doc as doc-writer
+
+    User->>Main: "开发并完善登录功能"
+    Main->>Main: 分析任务
+
+    Main->>Main: 实现登录功能
+    Note over Main: 编写核心代码
+
+    par 并行审查和测试
+        Main->>Review: 审查登录代码
+        Main->>Test: 生成测试用例
+    end
+
+    Review-->>Main: 审查报告
+    Test-->>Main: 测试文件
+
+    Main->>Main: 应用审查建议
+    Main->>Main: 运行测试验证
+
+    Main->>Doc: 生成 API 文档
+    Doc-->>Main: 文档完成
+
+    Main-->>User: 功能完整交付
+`} client:load />
+
+### Subagent 最佳实践
+
+<Mermaid chart={`mindmap
+    root((Subagent<br/>最佳实践))
+        单一职责
+            一个 Agent 一个任务
+            避免功能重叠
+            清晰的边界
+        详细提示词
+            明确角色定位
+            具体指导原则
+            输出格式规范
+        工具权限
+            最小权限原则
+            只授予必要工具
+            安全优先
+        上下文管理
+            保持独立性
+            避免信息泄露
+            清晰的输入输出
+        可测试性
+            提供测试场景
+            验证输出质量
+            迭代改进
+        版本控制
+            提交到 Git
+            团队共享
+            文档化配置
+`} client:load />
+
+---
+
+## 🔌 Plugin System
+
+### Plugin 概述
+
+Plugins 是打包的**命令 + Agents + Hooks + MCP 服务器**集合。
+
+<Mermaid chart={`graph LR
+    subgraph "Plugin 组成"
+        Commands["Slash Commands<br/>可复用工作流"]
+        Agents["Subagents<br/>专业助手"]
+        Hooks["Hooks<br/>自动化任务"]
+        MCP["MCP Servers<br/>外部集成"]
+    end
+
+    subgraph "Plugin 管理"
+        Install["/plugin install<br/>安装插件"]
+        List["/plugin list<br/>查看已安装"]
+        Update["/plugin update<br/>更新插件"]
+        Remove["/plugin remove<br/>卸载插件"]
+    end
+
+    subgraph "应用场景"
+        Team["团队协作<br/>统一工作流"]
+        Share["社区共享<br/>最佳实践"]
+        Custom["企业定制<br/>特定需求"]
+    end
+
+    Commands --> Install
+    Agents --> Install
+    Hooks --> Install
+    MCP --> Install
+
+    Install --> Team
+    List --> Share
+    Update --> Custom
+
+    classDef lightPink fill:#f5cbc5,stroke:#b3272c,stroke-width:2px,color:#1d1d1f
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+
+    class Commands lightPink
+    class Install darkPurple
+    class Team teal
+`} client:load />
+
+**使用插件：**
+
+```bash
+# 安装插件
+/plugin install github:username/plugin-name
+
+# 查看已安装的插件
+/plugin list
+
+# 更新插件
+/plugin update plugin-name
+
+# 卸载插件
+/plugin remove plugin-name
+```
+
+---
+
+## 🚀 最佳实践总结
+
+### 开发工作流建议
+
+<Mermaid chart={`flowchart TD
+    Start([新任务]) --> Plan{需要规划?}
+
+    Plan -->|是| PlanMode["Shift+Tab 两次<br/>进入 Plan 模式"]
+    Plan -->|否| Direct[直接执行]
+
+    PlanMode --> Explore[Explore Agent 分析]
+    Explore --> Strategy[生成策略]
+    Strategy --> Review[用户审查]
+
+    Review -->|批准| Execute[执行任务]
+    Review -->|修改| Strategy
+
+    Direct --> Execute
+
+    Execute --> Subagents{需要专业化?}
+    Subagents -->|是| Delegate[委派 Subagents]
+    Subagents -->|否| MainAgent[主 Agent 处理]
+
+    Delegate --> Parallel[并行执行]
+    Parallel --> Review2[审查结果]
+
+    MainAgent --> Tools[调用工具]
+    Tools --> Hooks[触发 Hooks]
+    Hooks --> Verify[验证结果]
+
+    Review2 --> Verify
+    Verify --> Done([✅ 完成])
+
+    classDef teal fill:#77a0a9,stroke:#77a0a9,stroke-width:3px,color:#fff
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class PlanMode teal
+    class Delegate darkPurple
+    class Done lightGreen
+`} client:load />
+
+### 配置优先级
+
+```
+1. 本地项目配置 (.claude/settings.local.json) - 最高优先级
+2. 项目配置 (.claude/settings.json) - 团队共享
+3. 用户配置 (~/.claude/settings.json) - 个人偏好
+4. 组织配置 (企业部署) - 全局策略
+```
+
+### 文件组织建议
+
+```
+project/
+├── .claude/
+│   ├── settings.json                 # 项目配置
+│   ├── settings.local.json          # 本地配置（不提交）
+│   ├── commands/                    # 项目命令
+│   │   ├── frontend/
+│   │   │   ├── component.md
+│   │   │   └── test.md
+│   │   ├── backend/
+│   │   │   ├── api.md
+│   │   │   └── migration.md
+│   │   └── common/
+│   │       ├── optimize.md
+│   │       └── refactor.md
+│   ├── agents/                      # 项目 Agents
+│   │   ├── code-reviewer.md
+│   │   ├── test-generator.md
+│   │   ├── doc-writer.md
+│   │   └── security-auditor.md
+│   └── README.md                    # 使用说明
+├── .gitignore                       # 排除 settings.local.json
+└── docs/
+    └── claude-code-guide.md         # 团队指南
+```
+
+**.gitignore 配置：**
+
+```gitignore
+# Claude Code 本地配置（包含敏感信息）
+.claude/settings.local.json
+
+# 审计日志（可选）
+.claude/audit.log
+.claude/audit.json
+```
+
+### 团队协作建议
+
+<Mermaid chart={`graph TB
+    subgraph "共享资源（提交到 Git）"
+        ProjectCommands[".claude/commands/<br/>团队命令"]
+        ProjectAgents[".claude/agents/<br/>团队 Agents"]
+        ProjectSettings[".claude/settings.json<br/>团队配置"]
+        Docs["docs/<br/>使用指南"]
+    end
+
+    subgraph "个人配置（不提交）"
+        LocalSettings[".claude/settings.local.json<br/>个人 Hooks"]
+        UserCommands["~/.claude/commands/<br/>个人命令"]
+        UserAgents["~/.claude/agents/<br/>个人 Agents"]
+    end
+
+    subgraph "协作流程"
+        PR["Pull Request<br/>审查配置更改"]
+        Doc["文档更新<br/>说明新功能"]
+        Review["团队审查<br/>验证有效性"]
+    end
+
+    ProjectCommands --> PR
+    ProjectAgents --> PR
+    PR --> Doc
+    Doc --> Review
+
+    classDef lightPink fill:#f5cbc5,stroke:#b3272c,stroke-width:2px,color:#1d1d1f
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+    classDef darkPurple fill:#772d8b,stroke:#772d8b,stroke-width:3px,color:#fff
+
+    class ProjectCommands lightPink
+    class LocalSettings lightGreen
+    class Review darkPurple
+`} client:load />
+
+---
+
+## 📚 学习资源
+
+### 官方资源
+
+- 🌐 [Claude Code 官网](https://www.anthropic.com/claude/code)
+- 📖 [Claude Code 文档](https://code.claude.com/docs)
+- 💬 [官方 Discord](https://discord.gg/anthropic)
+- 🐦 [Anthropic Twitter](https://twitter.com/AnthropicAI)
+
+### 社区资源
+
+- 📄 [Awesome Claude Code](https://github.com/hesreallyhim/awesome-claude-code) - 精选资源集合
+- 📦 [Claude Command Suite](https://github.com/qdhenry/Claude-Command-Suite) - 专业命令集
+- 🤖 [Awesome Subagents](https://github.com/VoltAgent/awesome-claude-code-subagents) - 100+ Subagents
+- 🔧 [Claude Code Hooks Mastery](https://github.com/disler/claude-code-hooks-mastery) - Hooks 完全指南
+
+### 技术深度文章
+
+- [How Claude Code is Built](https://newsletter.pragmaticengineer.com/p/how-claude-code-is-built) - 技术架构深度解析
+- [Claude Code Plan Mode](https://lord.technology/2025/07/03/understanding-claude-code-plan-mode-and-the-architecture-of-intent.html) - Plan 模式详解
+- [Context Engineering](https://thomaslandgraf.substack.com/p/context-engineering-for-claude-code) - 上下文工程
+
+---
+
+## 🎯 下一步行动
+
+### 快速开始
+
+1. **安装 Claude Code**
+   ```bash
+   npm install -g @anthropic-ai/claude-code
+   # 或
+   brew install claude-code
+   ```
+
+2. **初始化项目**
+   ```bash
+   cd your-project
+   /init
+   ```
+
+3. **创建第一个命令**
+   ```bash
+   mkdir -p .claude/commands
+   echo "审查这段代码的质量" > .claude/commands/review.md
+   ```
+
+4. **创建第一个 Agent**
+   ```bash
+   mkdir -p .claude/agents
+   cat > .claude/agents/reviewer.md << 'EOF'
+   ---
+   name: reviewer
+   description: Code quality reviewer
+   tools: Read, Grep
+   ---
+
+   You are a code quality expert.
+   Review code for best practices.
+   EOF
+   ```
+
+5. **配置第一个 Hook**
+   ```bash
+   cat > .claude/settings.json << 'EOF'
+   {
+     "hooks": [
+       {
+         "event": "PostToolUse",
+         "matcher": "Edit:**/*.ts",
+         "command": {
+           "type": "Bash",
+           "command": "prettier --write \"$FILE_PATH\""
+         }
+       }
+     ]
+   }
+   EOF
+   ```
+
+### 进阶学习路径
+
+<Mermaid chart={`graph LR
+    Beginner[初学者] --> Basic["掌握基础<br/>CLI + 基本命令"]
+    Basic --> Hooks["配置 Hooks<br/>自动化工作流"]
+    Hooks --> Commands["创建 Commands<br/>可复用提示词"]
+    Commands --> Agents["开发 Agents<br/>专业化助手"]
+    Agents --> Advanced["高级技巧<br/>编排 + 插件"]
+    Advanced --> Expert[Claude Code 专家]
+
+    classDef darkRed fill:#b3272c,stroke:#b3272c,stroke-width:3px,color:#fff
+    classDef lightGreen fill:#d3f9b5,stroke:#772d8b,stroke-width:2px,color:#1d1d1f
+
+    class Beginner darkRed
+    class Expert lightGreen
+`} client:load />
+
+---
+
+## 💡 总结
+
+Claude Code 通过 **Radical Simplicity** 设计理念，将 AI 能力融入开发工作流：
+
+**核心优势：**
+- ⚡ **极速开发** - 5 PR/工程师/天，2.5-5x 生产力提升
+- 🧠 **智能编排** - 16 个 System Prompts + 400+ 工具
+- 🔧 **高度可扩展** - Hooks + Commands + Agents + Plugins
+- 🎯 **简洁架构** - 本地执行，最小化业务逻辑
+
+**三大扩展系统：**
+1. **Hooks** - 确定性控制，自动化任务
+2. **Slash Commands** - 可复用工作流
+3. **Subagents** - 专业化 AI 助手
+
+**开始使用 Claude Code，让 AI 成为你的超级编程伙伴！** 🚀
+
+---
+
+<div style="text-align: center; margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #b3272c 0%, #772d8b 100%); border-radius: 1rem;">
+  <p style="color: white; font-size: 1.2rem; margin: 0;">
+    ✨ <strong>准备好用 AI 重新定义开发方式了吗？</strong> ✨
+  </p>
+  <p style="color: rgba(255,255,255,0.9); margin: 1rem 0 0 0;">
+    开始你的 Claude Code 之旅
+  </p>
+</div>

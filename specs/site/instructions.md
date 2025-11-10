@@ -197,3 +197,15 @@ Now add a section "学习资料" after "实战项目", and help me port mdx docs
 ## 构建 cursor 的完整的学习资料
 
 深度思考，查阅网上资料，帮我撰写一个 ./site/src/pages/materials/cursor-intro.mdx 文件，内容为 cursor 的完整的学习资料，包括 cursor 的架构，设计，组件，流程等，使用 mermaid 绘制架构，设计，组件，流程等图表并详细说明。然后再介绍 cursor 的 rules 和 agent 的用法。
+
+## 构建 claude code 的完整的学习资料
+
+深度思考，查阅网上资料，帮我撰写一个 ./site/src/pages/materials/claude-code-intro.mdx 文件，内容为 claude code 的完整的学习资料，包括 claude code 的架构，设计，组件，流程等，使用 mermaid 绘制架构，设计，组件，流程等图表并详细说明。然后再介绍 claude code 的 hooks, command 和 agent 的用法。
+
+## 详细介绍如何添加 cursor rules
+
+深度思考，查阅网上资料，帮我撰写一个 ./site/src/pages/materials/cursor-rules-guide.mdx 文件，内容为如何添加 cursor rules，包括 cursor rules 的结构，设计，组件，流程等，使用 mermaid 绘制架构，设计，组件，流程等图表并详细说明。然后再介绍 cursor rules 的用法。
+
+## 更新项目 1
+
+深度学习 ./site，根据 ./w1/project-alpha 的 specs 深度了解项目 1，并更新 ./site 里跟项目 1 相关的内容。项目的截图使用 playwright 生成，并保存到 ./site/public/images/projects/project-1/ 目录下。
