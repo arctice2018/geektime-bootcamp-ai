@@ -29,14 +29,14 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t-2 border-graphite bg-cloud mt-space-12">
-      <div className="md-container py-space-12">
-        <div className="grid grid-cols-1 gap-space-2 md:grid-cols-4 mb-space-12">
+    <footer className="border-t-2 border-graphite bg-cloud mt-12">
+      <div className="md-container py-12">
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-4 mb-12">
           <div className="md:col-span-1">
-            <h3 className="text-h3 font-bold uppercase tracking-[0.08em] bg-gradient-to-tr from-sunbeam to-sky text-transparent bg-clip-text mb-space-6">
+            <h3 className="text-h3 font-bold uppercase tracking-[0.08em] bg-gradient-to-tr from-sunbeam to-sky text-transparent bg-clip-text mb-6">
               陈天 AI 训练营
             </h3>
-            <p className="text-body text-slate mb-space-6">
+            <p className="text-body text-slate mb-6">
               让 AI 成为你的编程超能力
             </p>
             <span className="md-badge">✨ 8周精通 AI 编程</span>
@@ -44,10 +44,10 @@ export default function Footer() {
 
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
-              <h4 className="text-body font-bold uppercase tracking-[0.08em] text-ink mb-space-6">
+              <h4 className="text-body font-bold uppercase tracking-[0.08em] text-ink mb-6">
                 {category}
               </h4>
-              <ul className="flex flex-col gap-space-5 text-body text-slate">
+              <ul className="flex flex-col gap-5 text-body text-slate">
                 {links.map((link) => (
                   <li key={link.href}>
                     <a
@@ -63,9 +63,9 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="flex flex-col items-center border-t-2 gap-space-8 border-graphite pt-space-10 text-ui text-slate md:flex-row md:justify-between">
+        <div className="flex flex-col items-center border-t-2 gap-8 border-graphite pt-space-10 text-ui text-slate md:flex-row md:justify-between">
           <p>© {currentYear} 陈天极客时间 AI 训练营 • All rights reserved.</p>
-          <div className="flex items-center gap-space-8">
+          <div className="flex items-center gap-8">
             {socialLinks.map((social) => {
               const Icon = social.icon;
               return (
@@ -75,7 +75,7 @@ export default function Footer() {
                   aria-label={social.label}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="border-2 transition-transform duration-150 border-graphite rounded-micro p-space-2 text-ink hover:-translate-y-1 hover:bg-softBlue"
+                  className="border-2 transition-transform duration-150 border-graphite rounded-micro p-2 text-ink hover:-translate-y-1 hover:bg-softBlue"
                 >
                   <Icon size={20} />
                 </a>

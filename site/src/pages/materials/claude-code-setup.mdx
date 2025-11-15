@@ -8,6 +8,8 @@ category: 工具深度解析
 import ComparisonCard from '../../components/materials/ComparisonCard';
 import MetricCard from '../../components/materials/MetricCard';
 import Mermaid from '../../components/materials/Mermaid';
+import NextSteps from '../../components/materials/NextSteps';
+import ExampleCode from '../../components/materials/ExampleCode';
 
 # Claude Code 2.0 安装配置指南
 
@@ -342,27 +344,28 @@ aws cloudwatch get-metric-statistics \
 
 ---
 
-## 📚 下一步
+export const nextStepLinks = [
+  {
+    title: '架构深度分析',
+    description: '理解 Claude Code 内部原理',
+    icon: '🏗️',
+    href: '/materials/claude-code-architecture'
+  },
+  {
+    title: '第 3 周课程',
+    description: '深入学习 Claude Code',
+    icon: '📖',
+    href: '/curriculum/week-3'
+  },
+  {
+    title: 'Claude Code 工具页',
+    description: '查看功能和使用场景',
+    icon: '🔧',
+    href: '/tools/claude-code'
+  }
+];
 
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', margin: '2rem 0' }}>
-  <a href="/materials/claude-code-architecture" style={{ padding: '1.5rem', background: 'white', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', textDecoration: 'none', color: 'inherit' }}>
-    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🏗️</div>
-    <div style={{ fontWeight: 'bold', color: '#0071e3', marginBottom: '0.5rem' }}>架构深度分析</div>
-    <div style={{ fontSize: '0.9rem', color: '#86868b' }}>理解 Claude Code 内部原理</div>
-  </a>
-
-  <a href="/curriculum/week-3" style={{ padding: '1.5rem', background: 'white', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', textDecoration: 'none', color: 'inherit' }}>
-    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📖</div>
-    <div style={{ fontWeight: 'bold', color: '#0071e3', marginBottom: '0.5rem' }}>第 3 周课程</div>
-    <div style={{ fontSize: '0.9rem', color: '#86868b' }}>深入学习 Claude Code</div>
-  </a>
-
-  <a href="/tools/claude-code" style={{ padding: '1.5rem', background: 'white', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', textDecoration: 'none', color: 'inherit' }}>
-    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🔧</div>
-    <div style={{ fontWeight: 'bold', color: '#0071e3', marginBottom: '0.5rem' }}>Claude Code 工具页</div>
-    <div style={{ fontSize: '0.9rem', color: '#86868b' }}>查看功能和使用场景</div>
-  </a>
-</div>
+<NextSteps links={nextStepLinks} client:load />
 
 ---
 

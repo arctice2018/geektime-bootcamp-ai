@@ -55,7 +55,7 @@ export default function TicketCard({
           />
         )}
 
-        <div className="flex-1 space-y-3 min-w-0">
+        <div className="flex-1 py-3 min-w-0">
           <div className="flex items-start justify-between gap-4">
             <h3
               className={cn(

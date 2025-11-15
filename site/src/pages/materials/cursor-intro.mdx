@@ -8,6 +8,8 @@ category: 工具深度解析
 import MetricCard from '../../components/materials/MetricCard';
 import Mermaid from '../../components/materials/Mermaid';
 import ScrollReveal from '../../components/ui/ScrollReveal';
+import CallToAction from '../../components/materials/CallToAction';
+import ExampleCode from '../../components/materials/ExampleCode';
 
 # Cursor 2.0 完全学习指南
 
@@ -654,10 +656,12 @@ interface ApiResponse<T> {
 
 ### 用户规则配置
 
-**设置路径**: `Cursor Settings → Rules → User Rules`
+**设置路径**: \`Cursor Settings → Rules → User Rules\`
 
-```markdown
-# 我的全局编码偏好
+<ExampleCode
+  title="用户全局规则示例"
+  language="markdown"
+  code={`# 我的全局编码偏好
 
 ## 通信风格
 - 用简洁的中文回复
@@ -672,8 +676,9 @@ interface ApiResponse<T> {
 ## 工具偏好
 - 使用 pnpm 而非 npm
 - 测试框架使用 Vitest
-- 格式化工具使用 Prettier
-```
+- 格式化工具使用 Prettier`}
+  client:load
+/>
 
 ### Rules 最佳实践
 
@@ -1114,11 +1119,8 @@ Cursor 2.0 通过 **Agent-Centric** 设计、**Multi-Agent 并行**、**Composer
 
 ---
 
-<div style="text-align: center; margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 1rem;">
-  <p style="color: white; font-size: 1.2rem; margin: 0;">
-    ✨ <strong>准备好体验未来的编程方式了吗？</strong> ✨
-  </p>
-  <p style="color: rgba(255,255,255,0.9); margin: 1rem 0 0 0;">
-    下载 Cursor，开启你的 AI 编程之旅
-  </p>
-</div>
+<CallToAction
+  title="准备好体验未来的编程方式了吗？"
+  subtitle="下载 Cursor，开启你的 AI 编程之旅"
+  client:load
+/>

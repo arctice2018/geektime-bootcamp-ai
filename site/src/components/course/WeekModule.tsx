@@ -48,12 +48,12 @@ export default function WeekModule({
     >
       {/* Header */}
       <div
-        className="text-white p-space-9"
+        className="text-white p-10"
         style={{
           background: 'linear-gradient(135deg, var(--md-sky) 0%, var(--md-sky-strong) 100%)',
         }}
       >
-        <div className="flex items-center gap-space-4 mb-space-6">
+        <div className="flex items-center gap-4 mb-8">
           <span className="font-bold md-badge text-ui" style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', color: 'var(--md-cloud)' }}>
             第 {weekNumber} 周
           </span>
@@ -62,22 +62,22 @@ export default function WeekModule({
           </span>
         </div>
 
-        <h1 className="font-bold text-h1 mb-space-3">
+        <h1 className="font-bold text-h1 mb-4">
           {title}
         </h1>
-        <p className="mb-0 text-body" style={{ opacity: 0.9, lineHeight: '1.6' }}>
+        <p className="mb-0 text-body" style={{ opacity: 0.9, lineHeight: '1.7', fontSize: '17px' }}>
           {subtitle}
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="border-b-2 border-graphite px-space-9">
-        <div className="flex gap-space-9">
+      <div className="border-b-2 border-graphite px-10">
+        <div className="flex gap-10">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`py-space-4 text-ui font-bold border-b-2 transition-all duration-200 ${activeTab === tab.id ? 'border-sky text-sky' : 'border-transparent text-slate'
+              className={`py-4 text-ui font-bold border-b-2 transition-all duration-200 ${activeTab === tab.id ? 'border-sky text-sky' : 'border-transparent text-slate'
                 }`}
             >
               {tab.label}
@@ -87,7 +87,7 @@ export default function WeekModule({
       </div>
 
       {/* Content */}
-      <div className="p-space-9">
+      <div className="p-10">
         {activeTab === 'objectives' && (
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -96,11 +96,11 @@ export default function WeekModule({
             {objectives.map((objective, index) => (
               <div
                 key={index}
-                className="flex gap-space-4"
-                style={{ marginBottom: index < objectives.length - 1 ? 'var(--space-4)' : 0 }}
+                className="flex gap-5"
+                style={{ marginBottom: index < objectives.length - 1 ? 'var(--space-5)' : 0 }}
               >
                 <span className="text-xl text-garden">✓</span>
-                <p className="flex-1 mb-0 text-body text-ink" style={{ lineHeight: '1.6' }}>
+                <p className="flex-1 mb-0 text-body text-ink" style={{ lineHeight: '1.7', fontSize: '17px' }}>
                   {objective}
                 </p>
               </div>
@@ -119,7 +119,7 @@ export default function WeekModule({
                 style={{ marginBottom: index < keyPoints.length - 1 ? 'var(--space-4)' : 0 }}
               >
                 <ExpandableSection title={point.title}>
-                  <p className="text-body text-slate mb-space-4" style={{ lineHeight: '1.6' }}>
+                  <p className="text-body text-slate mb-4" style={{ lineHeight: '1.6' }}>
                     {point.description}
                   </p>
                   {point.diagram && <AnimatedDiagram code={point.diagram} />}
@@ -137,11 +137,11 @@ export default function WeekModule({
             {practicalContent.map((content, index) => (
               <div
                 key={index}
-                className="flex gap-space-4"
-                style={{ marginBottom: index < practicalContent.length - 1 ? 'var(--space-4)' : 0 }}
+                className="flex gap-5"
+                style={{ marginBottom: index < practicalContent.length - 1 ? 'var(--space-5)' : 0 }}
               >
                 <span className="font-bold text-watermelon">{index + 1}.</span>
-                <p className="flex-1 mb-0 text-body text-ink" style={{ lineHeight: '1.6' }}>
+                <p className="flex-1 mb-0 text-body text-ink" style={{ lineHeight: '1.7', fontSize: '17px' }}>
                   {content}
                 </p>
               </div>
@@ -152,11 +152,11 @@ export default function WeekModule({
 
       {/* Related Tools */}
       {relatedTools.length > 0 && (
-        <div className="pt-0 px-space-9 pb-space-9">
-          <h3 className="font-bold text-ui text-slate mb-space-4">
+        <div className="pt-0 px-10 pb-10">
+          <h3 className="font-bold text-body text-slate mb-5">
             相关工具
           </h3>
-          <div className="flex flex-wrap gap-space-1">
+          <div className="flex flex-wrap gap-3">
             {relatedTools.map((tool) => (
               <a
                 key={tool}

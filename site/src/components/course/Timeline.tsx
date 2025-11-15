@@ -18,7 +18,7 @@ export default function Timeline({ items }: TimelineProps) {
     <div className="mx-auto max-w-4xl">
       {items.map((item, index) => (
         <ScrollReveal key={item.weekNumber} delay={index * 0.1}>
-          <div className="flex relative gap-space-1" style={{ paddingBottom: index < items.length - 1 ? 'var(--space-10)' : 0 }}>
+          <div className="flex relative gap-1" style={{ paddingBottom: index < items.length - 1 ? 'var(--space-10)' : 0 }}>
             {/* Timeline line */}
             <div className="flex relative flex-col items-center">
               <motion.div
@@ -47,15 +47,15 @@ export default function Timeline({ items }: TimelineProps) {
             <div className="flex-1 group">
               <a
                 href={item.href || getUrl(`curriculum/week-${item.weekNumber}`)}
-                className="block md-card md-card-interactive p-space-6"
+                className="block p-6 md-card md-card-interactive"
               >
-                <div className="flex items-center gap-space-4 mb-space-3">
+                <div className="flex gap-4 items-center mb-3">
                   <span className="font-bold text-ui text-sky">
                     第 {item.weekNumber} 周
                   </span>
                   <span className="text-eyebrow text-slate">→</span>
                 </div>
-                <h3 className="font-bold transition-colors text-h3 text-ink mb-space-3 group-hover:text-sky">
+                <h3 className="mb-3 font-bold transition-colors text-h3 text-ink group-hover:text-sky">
                   {item.title}
                 </h3>
                 <p className="mb-0 text-body text-slate" style={{ lineHeight: '1.6' }}>

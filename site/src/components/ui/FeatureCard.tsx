@@ -23,14 +23,14 @@ export default function FeatureCard({
       className="md-card md-card-interactive group"
     >
       <div
-        className="text-5xl transition-transform duration-300 group-hover:scale-110 mb-space-6"
+        className="text-5xl transition-transform duration-300 group-hover:scale-110 mb-6"
         style={{
           filter: 'drop-shadow(0 4px 6px rgba(255, 113, 105, 0.2))',
         }}
       >
         {typeof icon === 'string' ? icon : icon}
       </div>
-      <h3 className="text-h3 font-bold text-ink mb-space-4">
+      <h3 className="text-h3 font-bold text-ink mb-4">
         {title}
       </h3>
       <p className="text-body text-slate mb-0" style={{ lineHeight: '1.6' }}>

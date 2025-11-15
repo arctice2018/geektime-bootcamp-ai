@@ -32,9 +32,8 @@ export default function ToolShowcase({
 }: ToolShowcaseProps) {
   return (
     <div
-      className={`flex flex-col ${
-        reverse ? 'md:flex-row-reverse' : 'md:flex-row'
-      } gap-space-12 items-center md-card`}
+      className={`flex flex-col ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'
+        } gap-12 items-center md-card`}
       style={{ backgroundColor: 'var(--md-cloud)', padding: 'var(--space-10)' }}
     >
       {/* Image/Icon */}
@@ -94,12 +93,12 @@ export default function ToolShowcase({
         className="flex-1"
       >
         <div>
-          <div className="mb-space-8">
-            <h2 className="text-h2 font-bold text-ink mb-space-4">
+          <div className="mb-8">
+            <h2 className="text-h2 font-bold text-ink mb-4">
               {name}
             </h2>
 
-            <p className="text-h3 text-sky mb-space-5" style={{ lineHeight: '1.4' }}>
+            <p className="text-h3 text-sky mb-5" style={{ lineHeight: '1.4' }}>
               {tagline}
             </p>
 
@@ -109,8 +108,8 @@ export default function ToolShowcase({
           </div>
 
           {/* Features */}
-          <div className="mb-space-8">
-            <h3 className="text-body font-bold text-ink mb-space-5">
+          <div className="mb-8">
+            <h3 className="text-body font-bold text-ink mb-5">
               核心功能：
             </h3>
 
@@ -124,12 +123,12 @@ export default function ToolShowcase({
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="flex p-space-5 transition-all duration-200 hover:translate-x-2 gap-space-4"
+                  className="flex p-5 transition-all duration-200 hover:translate-x-2 gap-4"
                   style={{ backgroundColor: 'var(--md-fog)', borderRadius: 0, border: '2px solid var(--md-graphite)' }}
                 >
                   <span className="text-3xl">{feature.icon}</span>
                   <div className="flex-1">
-                    <h4 className="text-body font-bold text-ink mb-space-3">
+                    <h4 className="text-body font-bold text-ink mb-3">
                       {feature.title}
                     </h4>
                     <p className="text-body text-slate mb-0" style={{ lineHeight: '1.6' }}>
@@ -142,7 +141,7 @@ export default function ToolShowcase({
           </div>
 
           {/* CTA */}
-          <div className="mt-space-8">
+          <div className="mt-8">
             <a
               href={href || getUrl(`tools/${id}`)}
               className="md-btn md-btn-secondary inline-flex"

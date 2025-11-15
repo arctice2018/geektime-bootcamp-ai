@@ -16,23 +16,34 @@ const { title, description, category } = Astro.props;
 
 <BaseLayout title={title} description={description}>
   <Navigation client:load />
-  <main class="pt-16 min-h-screen bg-bg-primary">
+  <main
+    style="padding-top: var(--header-desktop); background-color: var(--md-cream);"
+  >
     {
       category && (
-        <div class="border-b border-gray-200 bg-bg-secondary">
-          <div class="py-4 md-container">
-            <div class="flex gap-3 items-center text-sm">
-              <a href={getUrl("materials")} class="text-accent hover:underline">
+        <div
+          class="border-b-2 border-graphite"
+          style="background-color: var(--md-cloud);"
+        >
+          <div
+            class="md-container"
+            style="padding-top: var(--space-5); padding-bottom: var(--space-5);"
+          >
+            <div class="flex gap-3 items-center text-body">
+              <a href={getUrl("materials")} class="text-sky hover:underline">
                 学习资料
               </a>
-              <span class="text-text-secondary">/</span>
-              <span class="text-text-secondary">{category}</span>
+              <span class="text-slate">/</span>
+              <span class="text-slate">{category}</span>
             </div>
           </div>
         </div>
       )
     }
-    <div class="py-12 md-container">
+    <div
+      class="md-container"
+      style="padding-top: var(--space-12); padding-bottom: var(--space-12);"
+    >
       <div class="mx-auto prose prose-lg prose-slate mdx-content">
         <slot />
       </div>

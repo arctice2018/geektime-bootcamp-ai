@@ -31,7 +31,7 @@ export default function TicketList({ onEdit, onDelete }: TicketListProps) {
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="py-4">
         {[1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-40 w-full rounded-2xl bg-white/50" />
         ))}
@@ -79,7 +79,7 @@ export default function TicketList({ onEdit, onDelete }: TicketListProps) {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
+    <div className="py-6 max-w-4xl mx-auto">
       {/* Toolbar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ export default function TicketList({ onEdit, onDelete }: TicketListProps) {
       )}
 
       {/* Ticket List */}
-      <div className="space-y-3">
+      <div className="py-3">
         {tickets.map((ticket) => (
           <TicketCard
             key={ticket.id}

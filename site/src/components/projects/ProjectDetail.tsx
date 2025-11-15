@@ -12,7 +12,7 @@ interface ProjectDetailProps {
 
 export default function ProjectDetail({ project }: ProjectDetailProps) {
   return (
-    <div className="space-y-16">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-12)' }}>
       {/* Hero */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -66,9 +66,9 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
       {/* Preview Image */}
       {project.previewImage && (
         <ScrollReveal>
-          <div className="bg-white rounded-2xl p-8 shadow-lg">
-            <h2 className="text-3xl font-bold text-primary mb-6">项目预览</h2>
-            <div className="bg-gray-50 p-6 rounded-xl">
+          <div className="md-card p-10">
+            <h2 className="text-h2 font-bold text-ink mb-8">项目预览</h2>
+            <div style={{ backgroundColor: 'var(--md-fog)', padding: 'var(--space-8)', borderRadius: 0 }}>
               <img
                 src={project.previewImage}
                 alt={`${project.title} 预览`}
@@ -116,9 +116,9 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
 
       {/* Objectives */}
       <ScrollReveal>
-        <div className="bg-white rounded-2xl p-8 shadow-lg">
-          <h2 className="text-3xl font-bold text-primary mb-8">项目目标</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="md-card p-10">
+          <h2 className="text-h2 font-bold text-ink mb-10">项目目标</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {project.objectives.map((objective, index) => (
               <div key={index} className="flex gap-3 p-4 bg-bg-secondary rounded-xl">
                 <span className="text-accent text-xl font-bold">
@@ -133,9 +133,9 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
 
       {/* Tech Stack */}
       <ScrollReveal>
-        <div className="bg-white rounded-2xl p-8 shadow-lg">
-          <h2 className="text-3xl font-bold text-primary mb-8">技术栈</h2>
-          <div className="flex flex-wrap gap-3">
+        <div className="md-card p-10">
+          <h2 className="text-h2 font-bold text-ink mb-10">技术栈</h2>
+          <div className="flex flex-wrap gap-4">
             {project.techStack.map((tech) => (
               <div
                 key={tech}
@@ -151,17 +151,17 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
 
       {/* Architecture */}
       <ScrollReveal>
-        <div className="bg-white rounded-2xl p-8 shadow-lg">
-          <h2 className="text-3xl font-bold text-primary mb-8">技术架构</h2>
+        <div className="md-card p-10">
+          <h2 className="text-h2 font-bold text-ink mb-10">技术架构</h2>
           <AnimatedDiagram code={project.architecture} client:load />
         </div>
       </ScrollReveal>
 
       {/* Implementation Steps */}
       <ScrollReveal>
-        <div className="bg-white rounded-2xl p-8 shadow-lg">
-          <h2 className="text-3xl font-bold text-primary mb-8">实现步骤</h2>
-          <div className="space-y-4">
+        <div className="md-card p-10">
+          <h2 className="text-h2 font-bold text-ink mb-10">实现步骤</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
             {project.implementationSteps.map((step, index) => (
               <ExpandableSection
                 key={index}
@@ -190,7 +190,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
               功能截图
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
+              <div className="py-3">
                 <div className="bg-gray-50 p-4 rounded-xl">
                   <img
                     src={getImageUrl('projects/project-1/screenshot-create.png')}
@@ -200,7 +200,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
                 </div>
                 <p className="text-center text-text-secondary font-medium">创建 Ticket 对话框</p>
               </div>
-              <div className="space-y-3">
+              <div className="py-3">
                 <div className="bg-gray-50 p-4 rounded-xl">
                   <img
                     src={getImageUrl('projects/project-1/screenshot-tags.png')}
@@ -210,7 +210,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
                 </div>
                 <p className="text-center text-text-secondary font-medium">标签管理界面</p>
               </div>
-              <div className="space-y-3">
+              <div className="py-3">
                 <div className="bg-gray-50 p-4 rounded-xl">
                   <img
                     src={getImageUrl('projects/project-1/screenshot-filter.png')}
@@ -220,7 +220,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
                 </div>
                 <p className="text-center text-text-secondary font-medium">标签过滤功能</p>
               </div>
-              <div className="space-y-3">
+              <div className="py-3">
                 <div className="bg-gray-50 p-4 rounded-xl">
                   <img
                     src={getImageUrl('projects/project-1/screenshot-edit.png')}
@@ -232,7 +232,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
               </div>
             </div>
             <div className="mt-6">
-              <div className="space-y-3">
+              <div className="py-3">
                 <div className="bg-gray-50 p-4 rounded-xl inline-block mx-auto">
                   <img
                     src={getImageUrl('projects/project-1/screenshot-mobile.png')}
@@ -249,9 +249,9 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
 
       {/* Learning Points */}
       <ScrollReveal>
-        <div className="bg-white rounded-2xl p-8 shadow-lg">
-          <h2 className="text-3xl font-bold text-primary mb-8">学习要点</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="md-card p-10">
+          <h2 className="text-h2 font-bold text-ink mb-10">学习要点</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {project.learningPoints.map((point, index) => (
               <div key={index} className="flex gap-3 items-start">
                 <span className="text-success text-2xl">✓</span>
@@ -264,20 +264,42 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
 
       {/* CTA */}
       <ScrollReveal>
-        <div className="bg-gradient-to-r from-accent to-accent-purple rounded-2xl p-8 text-white text-center">
-          <h2 className="text-3xl font-bold mb-4">准备好开始这个项目了吗？</h2>
-          <p className="text-lg mb-6 opacity-90">
+        <div
+          className="md-card text-center"
+          style={{
+            background: 'linear-gradient(135deg, var(--md-sky) 0%, var(--md-sky-strong) 100%)',
+            padding: 'var(--space-10)',
+            border: '2px solid var(--md-graphite)'
+          }}
+        >
+          <h2
+            className="text-h2 font-bold text-graphite"
+            style={{ marginBottom: 'var(--space-6)' }}
+          >
+            准备好开始这个项目了吗？
+          </h2>
+          <p
+            className="text-body text-graphite"
+            style={{
+              marginBottom: 'var(--space-8)',
+              opacity: 0.9,
+              lineHeight: '1.6'
+            }}
+          >
             在第 {project.weekNumber} 周的课程中，跟随教程一步步完成这个项目
           </p>
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="md-cta-stack justify-center">
             <a
               href={getUrl(`curriculum/week-${project.weekNumber}`)}
-              className="md-btn md-btn-secondary"
+              className="md-btn"
             >
               前往第 {project.weekNumber} 周
             </a>
-            <a href={getUrl('projects')} className="px-6 py-3 bg-white text-accent rounded-full font-medium hover:bg-opacity-90 transition-all">
-              查看所有项目
+            <a
+              href={getUrl('projects')}
+              className="md-btn md-btn-secondary"
+            >
+              ← 返回所有项目
             </a>
           </div>
         </div>

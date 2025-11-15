@@ -36,18 +36,18 @@ const knowledge = tools.filter((t) => t.category === "knowledge");
   >
     <div class="md-container">
       <ScrollReveal client:load>
-        <h2 class="font-bold text-center text-h2 text-ink mb-space-6">
+        <h2 class="font-bold text-center text-h2 text-ink mb-6">
           AI 代码编辑器
         </h2>
         <p
-          class="mx-auto max-w-2xl text-center mb-space-12 text-body text-ink"
+          class="mx-auto max-w-2xl text-center mb-12 text-body text-ink"
           style="line-height: 1.6;"
         >
           新一代 AI 原生开发工具，让编程变得更智能、更高效
         </p>
       </ScrollReveal>
 
-      <div class="space-y-12">
+      <div class="py-12">
         {
           editors.map((tool, index) => (
             <ToolShowcase
@@ -73,18 +73,18 @@ const knowledge = tools.filter((t) => t.category === "knowledge");
   >
     <div class="md-container">
       <ScrollReveal client:load>
-        <h2 class="font-bold text-center text-h2 text-graphite mb-space-6">
+        <h2 class="font-bold text-center text-h2 text-graphite mb-6">
           大语言模型
         </h2>
         <p
-          class="mx-auto max-w-2xl text-center mb-space-12 text-body text-graphite"
+          class="mx-auto max-w-2xl text-center mb-12 text-body text-graphite"
           style="line-height: 1.6;"
         >
           强大的 AI 模型，为编程工具提供智能支持
         </p>
       </ScrollReveal>
 
-      <div class="space-y-12">
+      <div class="py-12">
         {
           models.map((tool, index) => (
             <ToolShowcase
@@ -110,18 +110,16 @@ const knowledge = tools.filter((t) => t.category === "knowledge");
   >
     <div class="md-container">
       <ScrollReveal client:load>
-        <h2 class="font-bold text-center text-h2 text-ink mb-space-6">
-          协议与生态
-        </h2>
+        <h2 class="font-bold text-center text-h2 text-ink mb-6">协议与生态</h2>
         <p
-          class="mx-auto max-w-2xl text-center mb-space-12 text-body text-slate"
+          class="mx-auto max-w-2xl text-center mb-12 text-body text-slate"
           style="line-height: 1.6;"
         >
           开放协议和生态系统，扩展 AI 的能力边界
         </p>
       </ScrollReveal>
 
-      <div class="space-y-12">
+      <div class="py-12">
         {
           protocols.map((tool, index) => (
             <ToolShowcase
@@ -149,18 +147,18 @@ const knowledge = tools.filter((t) => t.category === "knowledge");
       >
         <div class="md-container">
           <ScrollReveal client:load>
-            <h2 class="font-bold text-center text-h2 text-ink mb-space-6">
+            <h2 class="font-bold text-center text-h2 text-ink mb-6">
               知识管理
             </h2>
             <p
-              class="mx-auto max-w-2xl text-center mb-space-12 text-body text-slate"
+              class="mx-auto max-w-2xl text-center mb-12 text-body text-slate"
               style="line-height: 1.6;"
             >
               智能化的知识管理和学习辅助工具
             </p>
           </ScrollReveal>
 
-          <div class="space-y-12">
+          <div class="py-12">
             {knowledge.map((tool, index) => (
               <ToolShowcase
                 id={tool.id}

@@ -39,18 +39,18 @@ export default function Navigation() {
         >
           <h2><a
             href={getUrl('')}
-            className="text-h1 font-bold uppercase tracking-[0.08em] transition-all duration-200 inline-block hover:shadow-[-6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:-translate-y-0.5 px-space-3 py-space-2"
+            className="text-h1 font-bold uppercase tracking-[0.08em] transition-all duration-200 inline-block hover:shadow-[-6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:-translate-y-0.5 px-3 py-2"
             style={{ color: 'var(--md-graphite)', border: '2px solid var(--md-graphite)' }}
           >
             陈天 AI 训练营
           </a></h2>
 
-          <nav className=" flex items-center gap-space-2 text-xl font-bold uppercase tracking-[0.08em]">
+          <nav className=" flex items-center gap-2 text-xl font-bold uppercase tracking-[0.08em]">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="relative transition-transform duration-150 group hover:-translate-y-1 px-space-3"
+                className="relative transition-transform duration-150 group hover:-translate-y-1 px-3"
                 style={{ color: 'var(--md-graphite)' }}
               >
                 {item.label}
@@ -75,12 +75,12 @@ export default function Navigation() {
           }`}
         style={{ backgroundColor: 'var(--md-sunbeam)' }}
       >
-        <div className="flex flex-col md-container gap-space-8 py-space-8">
+        <div className="flex flex-col md-container gap-8 py-8">
           {navItems.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="text-body font-bold uppercase tracking-[0.08em] border-b-2 border-transparent pb-space-3 px-space-2 transition-all duration-150"
+              className="text-body font-bold uppercase tracking-[0.08em] border-b-2 border-transparent pb-3 px-2 transition-all duration-150"
               style={{ color: 'var(--md-graphite)' }}
               onClick={() => setIsOpen(false)}
             >

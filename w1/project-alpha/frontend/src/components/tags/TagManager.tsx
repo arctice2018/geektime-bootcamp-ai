@@ -85,9 +85,9 @@ export default function TagManager() {
             </DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-6 px-8 pb-8">
+          <div className="py-6 px-8 pb-8">
             {/* Create New Tag */}
-            <div className="space-y-3">
+            <div className="py-3">
               <Label className="text-[15px] font-medium text-[#1d1d1f]">
                 创建新标签
               </Label>
@@ -115,11 +115,11 @@ export default function TagManager() {
             </div>
 
             {/* Tags List */}
-            <div className="space-y-3">
+            <div className="py-3">
               <Label className="text-[15px] font-medium text-[#1d1d1f]">
                 现有标签 ({tags.length})
               </Label>
-              <div className="max-h-64 overflow-y-auto space-y-2 border-0 rounded-xl bg-[#f5f5f7] p-4">
+              <div className="max-h-64 overflow-y-auto py-2 border-0 rounded-xl bg-[#f5f5f7] p-4">
                 {tags.length === 0 ? (
                   <p className="text-[15px] text-[#86868b] text-center py-8">
                     暂无标签

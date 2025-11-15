@@ -59,7 +59,7 @@
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
   color: var(--color-accent);
-  font-size: 0.9em;
+  font-size: 1.25em;
   border: 1px solid #e5e5e5;
   font-family: var(--font-family-mono);
 }
@@ -681,6 +681,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -931,6 +932,7 @@
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -999,8 +1001,10 @@
 
 .modal-body {
   cursor: grab;
-  overflow: hidden; /* Hide overflow when dragging */
-  user-select: none; /* Prevent text selection during drag */
+  overflow: hidden;
+  /* Hide overflow when dragging */
+  user-select: none;
+  /* Prevent text selection during drag */
 }
 
 .modal-body.dragging {
@@ -1008,7 +1012,8 @@
 }
 
 .modal-body.dragging * {
-  pointer-events: none; /* Prevent interference during drag */
+  pointer-events: none;
+  /* Prevent interference during drag */
 }
 
 /* Better scrollbars for modal */

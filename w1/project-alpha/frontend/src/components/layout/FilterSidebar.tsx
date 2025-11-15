@@ -51,13 +51,13 @@ export default function FilterSidebar({
           </Button>
         </div>
       )}
-      <div className="space-y-8">
+      <div className="py-8">
         {/* Status Filter */}
         <div>
           <h3 className="mb-4 text-[13px] font-semibold text-[#86868b] uppercase tracking-wide">
             状态
           </h3>
-          <div className="space-y-1.5">
+          <div className="py-1.5">
             <button
               onClick={() => setStatusFilter("all")}
               className={cn(
@@ -102,7 +102,7 @@ export default function FilterSidebar({
           <h3 className="mb-4 text-[13px] font-semibold text-[#86868b] uppercase tracking-wide">
             标签
           </h3>
-          <div className="space-y-1.5 max-h-96 overflow-y-auto pr-2">
+          <div className="py-1.5 max-h-96 overflow-y-auto pr-2">
             {tags.map((tag) => (
               <button
                 key={tag.id}

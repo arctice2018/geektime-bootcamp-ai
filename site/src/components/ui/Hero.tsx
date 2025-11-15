@@ -18,10 +18,10 @@ export default function Hero({
 }: HeroProps) {
   const sectionStyle = backgroundImage
     ? {
-        backgroundImage: `linear-gradient(135deg, rgba(255, 222, 0, 0.4) 0%, rgba(111, 194, 255, 0.25) 100%), url(${backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }
+      backgroundImage: `linear-gradient(135deg, rgba(255, 222, 0, 0.4) 0%, rgba(111, 194, 255, 0.25) 100%), url(${backgroundImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }
     : {};
 
   return (
@@ -36,7 +36,7 @@ export default function Hero({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-hero font-bold uppercase tracking-[0.08em] mb-space-7"
+            className="text-hero font-bold uppercase tracking-[0.08em] mb-7"
             style={{
               color: 'var(--md-ink)',
               textShadow: '2px 2px 4px rgba(255, 255, 255, 0.8), -1px -1px 2px rgba(255, 255, 255, 0.5)',
@@ -50,7 +50,7 @@ export default function Hero({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mx-auto max-w-3xl text-body mb-space-9"
+              className="mx-auto max-w-3xl text-body mb-9"
               style={{
                 color: 'var(--md-ink)',
                 fontSize: '18px',

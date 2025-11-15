@@ -8,6 +8,7 @@ category: 工具深度解析
 import MetricCard from '../../components/materials/MetricCard';
 import Mermaid from '../../components/materials/Mermaid';
 import ScrollReveal from '../../components/ui/ScrollReveal';
+import ExampleCode from '../../components/materials/ExampleCode';
 
 # Claude Code 完全学习指南
 
@@ -600,15 +601,17 @@ Hooks 是在 Claude Code 生命周期各个点执行的 Shell 命令，提供**�
 
 #### 示例 1: 自动代码格式化
 
-```json
-{
+<ExampleCode
+  title="自动代码格式化 Hook 配置"
+  language="json"
+  code={`{
   "hooks": [
     {
       "event": "PostToolUse",
       "matcher": "Edit:**/*.ts",
       "command": {
         "type": "Bash",
-        "command": "prettier --write \"$FILE_PATH\" && echo '✅ Formatted TypeScript file'"
+        "command": "prettier --write \\"\$FILE_PATH\\" && echo '✅ Formatted TypeScript file'"
       }
     },
     {
@@ -616,7 +619,7 @@ Hooks 是在 Claude Code 生命周期各个点执行的 Shell 命令，提供**�
       "matcher": "Edit:**/*.go",
       "command": {
         "type": "Bash",
-        "command": "gofmt -w \"$FILE_PATH\" && echo '✅ Formatted Go file'"
+        "command": "gofmt -w \\"\$FILE_PATH\\" && echo '✅ Formatted Go file'"
       }
     },
     {
@@ -624,24 +627,27 @@ Hooks 是在 Claude Code 生命周期各个点执行的 Shell 命令，提供**�
       "matcher": "Edit:**/*.py",
       "command": {
         "type": "Bash",
-        "command": "black \"$FILE_PATH\" && echo '✅ Formatted Python file'"
+        "command": "black \\"\$FILE_PATH\\" && echo '✅ Formatted Python file'"
       }
     }
   ]
-}
-```
+}`}
+  client:load
+/>
 
 #### 示例 2: 操作审计日志
 
-```json
-{
+<ExampleCode
+  title="操作审计日志 Hook 配置"
+  language="json"
+  code={`{
   "hooks": [
     {
       "event": "PreToolUse",
       "matcher": "*",
       "command": {
         "type": "Bash",
-        "command": "echo \"$(date): $TOOL_NAME\" | tee -a ~/.claude/audit.log | jq -R '{timestamp: ., tool: \"$TOOL_NAME\"}' >> ~/.claude/audit.json"
+        "command": "echo \\"\\$(date): \\$TOOL_NAME\\" | tee -a ~/.claude/audit.log | jq -R '{timestamp: ., tool: \\"\\$TOOL_NAME\\"}' >> ~/.claude/audit.json"
       }
     },
     {
@@ -649,17 +655,20 @@ Hooks 是在 Claude Code 生命周期各个点执行的 Shell 命令，提供**�
       "matcher": "Bash:*",
       "command": {
         "type": "Bash",
-        "command": "echo \"[$(date)] Executed: $TOOL_INPUT\" >> ~/.claude/bash_history.log"
+        "command": "echo \\"[\\$(date)] Executed: \\$TOOL_INPUT\\" >> ~/.claude/bash_history.log"
       }
     }
   ]
-}
-```
+}`}
+  client:load
+/>
 
 #### 示例 3: 文件保护
 
-```json
-{
+<ExampleCode
+  title="文件保护 Hook 配置"
+  language="json"
+  code={`{
   "hooks": [
     {
       "event": "PreToolUse",
@@ -674,12 +683,13 @@ Hooks 是在 Claude Code 生命周期各个点执行的 Shell 命令，提供**�
       "matcher": "Write:**/.env",
       "command": {
         "type": "Bash",
-        "command": "echo '⚠️  Warning: Modifying .env file!' && read -p 'Continue? (y/n) ' -n 1 -r && echo && [[ $REPLY =~ ^[Yy]$ ]]"
+        "command": "echo '⚠️  Warning: Modifying .env file!' && read -p 'Continue? (y/n) ' -n 1 -r && echo && [[ \\$REPLY =~ ^[Yy]\\$ ]]"
       }
     }
   ]
-}
-```
+}`}
+  client:load
+/>
 
 #### 示例 4: Git 自动提交
 
@@ -700,15 +710,17 @@ Hooks 是在 Claude Code 生命周期各个点执行的 Shell 命令，提供**�
 
 #### 示例 5: 系统通知
 
-```json
-{
+<ExampleCode
+  title="系统通知 Hook 配置"
+  language="json"
+  code={`{
   "hooks": [
     {
       "event": "Notification",
       "matcher": "*",
       "command": {
         "type": "Bash",
-        "command": "osascript -e 'display notification \"$NOTIFICATION_TEXT\" with title \"Claude Code\"'"
+        "command": "osascript -e 'display notification \\"\\$NOTIFICATION_TEXT\\" with title \\"Claude Code\\"'"
       }
     },
     {
@@ -716,12 +728,13 @@ Hooks 是在 Claude Code 生命周期各个点执行的 Shell 命令，提供**�
       "matcher": "*",
       "command": {
         "type": "Bash",
-        "command": "say 'Claude Code session ended' && osascript -e 'display notification \"Session completed\" with title \"Claude Code\"'"
+        "command": "say 'Claude Code session ended' && osascript -e 'display notification \\"Session completed\\" with title \\"Claude Code\\"'"
       }
     }
   ]
-}
-```
+}`}
+  client:load
+/>
 
 ### Hook 最佳实践
 
@@ -926,18 +939,20 @@ description: 代码审查
 
 #### 示例 1: 完整的 Feature 开发
 
-```markdown
----
+<ExampleCode
+  title="Feature 开发 Command 示例"
+  language="markdown"
+  code={`---
 description: 创建新功能
 argument-hint: <feature-name>
 allowed-tools: Bash(git:*), Write, Edit, Read
 model: sonnet
 ---
 
-# 创建新功能: $1
+# 创建新功能: \\$1
 
 ## Step 1: 创建功能分支
-!`git checkout -b feature/$1`
+!\\\`git checkout -b feature/\\$1\\\`
 
 ## Step 2: 分析需求
 请描述这个功能的详细需求，我会：
@@ -951,38 +966,44 @@ model: sonnet
 @docs/architecture.md
 @src/types/index.ts
 
-准备好了吗？请提供功能需求描述。
-```
+准备好了吗？请提供功能需求描述。`}
+  client:load
+/>
 
 #### 示例 2: 数据库迁移
 
-```markdown
----
+<ExampleCode
+  title="数据库迁移 Command 示例"
+  language="markdown"
+  code={`---
 description: 生成数据库迁移
 argument-hint: <migration-name>
 allowed-tools: Bash(ls:*), Bash(cat:*), Write
 ---
 
-# 数据库迁移: $1
+# 数据库迁移: \\$1
 
 ## 当前数据库模式
-!`ls -la migrations/`
+!\\\`ls -la migrations/\\\`
 
 ## 最新迁移
-!`ls migrations/ | tail -1`
+!\\\`ls migrations/ | tail -1\\\`
 
 我将创建一个新的迁移文件，包括：
 - Up migration（应用更改）
 - Down migration（回滚更改）
 - 时间戳命名
 
-请描述数据库更改需求。
-```
+请描述数据库更改需求。`}
+  client:load
+/>
 
 #### 示例 3: 测试生成器
 
-```markdown
----
+<ExampleCode
+  title="测试生成器 Command 示例"
+  language="markdown"
+  code={`---
 description: 为文件生成测试
 allowed-tools: Read
 model: sonnet
@@ -1002,13 +1023,16 @@ model: sonnet
 @package.json
 @jest.config.js
 
-请指定要测试的文件。
-```
+请指定要测试的文件。`}
+  client:load
+/>
 
 #### 示例 4: PR 描述生成
 
-```markdown
----
+<ExampleCode
+  title="PR 描述生成器 Command 示例"
+  language="markdown"
+  code={`---
 description: 生成 PR 描述
 allowed-tools: Bash(git:*)
 disable-model-invocation: false
@@ -1017,16 +1041,16 @@ disable-model-invocation: false
 # Pull Request 描述生成器
 
 ## 当前分支
-!`git branch --show-current`
+!\\\`git branch --show-current\\\`
 
 ## 提交历史
-!`git log main..HEAD --oneline`
+!\\\`git log main..HEAD --oneline\\\`
 
 ## 文件更改
-!`git diff main..HEAD --stat`
+!\\\`git diff main..HEAD --stat\\\`
 
 ## 详细更改
-!`git diff main..HEAD`
+!\\\`git diff main..HEAD\\\`
 
 基于以上更改，我将生成：
 
@@ -1042,13 +1066,16 @@ disable-model-invocation: false
 ### Checklist
 - [ ] 代码审查
 - [ ] 测试通过
-- [ ] 文档更新
-```
+- [ ] 文档更新`}
+  client:load
+/>
 
 ### Frontmatter 完整配置
 
-```markdown
----
+<ExampleCode
+  title="Frontmatter 完整配置示例"
+  language="markdown"
+  code={`---
 # 命令描述（显示在 /help 中）
 description: 命令的简短描述
 
@@ -1065,8 +1092,9 @@ model: sonnet  # 可选：sonnet, opus, haiku, inherit
 disable-model-invocation: true
 ---
 
-命令内容...
-```
+命令内容...`}
+  client:load
+/>
 
 ### SlashCommand 工具
 
@@ -1135,8 +1163,10 @@ Subagents 是**专业化的 AI 助手**，拥有独立的上下文窗口。
 
 **基本结构：**
 
-```markdown
----
+<ExampleCode
+  title="Subagent 配置基本结构"
+  language="markdown"
+  code={`---
 name: agent-identifier
 description: When to use this agent (used for automatic matching)
 tools: Tool1, Tool2, Tool3
@@ -1156,8 +1186,9 @@ Guidelines:
 
 Always:
 - Best practice 1
-- Best practice 2
-```
+- Best practice 2`}
+  client:load
+/>
 
 **配置字段：**
 
@@ -1172,8 +1203,10 @@ Always:
 
 #### 示例 1: 代码审查 Agent
 
-```markdown
----
+<ExampleCode
+  title="代码审查 Agent 配置"
+  language="markdown"
+  code={`---
 name: code-reviewer
 description: Reviews code for quality, security, and best practices
 tools: Read, Grep, Glob
@@ -1200,8 +1233,9 @@ Output format:
 4. Suggestions (🟢)
 5. Positive Highlights (⭐)
 
-Be specific, cite line numbers, and provide examples.
-```
+Be specific, cite line numbers, and provide examples.`}
+  client:load
+/>
 
 **使用：**
 ```
@@ -1210,8 +1244,10 @@ Be specific, cite line numbers, and provide examples.
 
 #### 示例 2: 测试生成 Agent
 
-```markdown
----
+<ExampleCode
+  title="测试生成器 Agent 配置"
+  language="markdown"
+  code={`---
 name: test-generator
 description: Generates comprehensive unit and integration tests
 tools: Read, Write, Glob
@@ -1229,7 +1265,7 @@ Test generation principles:
 - Aim for >80% coverage
 
 Test structure:
-```typescript
+\\\`\\\`\\\`typescript
 describe('ComponentName', () => {
   describe('methodName', () => {
     it('should handle expected case', () => {
@@ -1247,13 +1283,14 @@ describe('ComponentName', () => {
     });
   });
 });
-```
+\\\`\\\`\\\`
 
 Always include:
 - Setup and teardown
 - Data fixtures
-- Mock configurations
-```
+- Mock configurations`}
+  client:load
+/>
 
 **使用：**
 ```
@@ -1262,8 +1299,10 @@ Always include:
 
 #### 示例 3: 文档生成 Agent
 
-```markdown
----
+<ExampleCode
+  title="文档生成器 Agent 配置"
+  language="markdown"
+  code={`---
 name: doc-writer
 description: Creates comprehensive technical documentation
 tools: Read, Write, Grep, Glob
@@ -1286,9 +1325,9 @@ Structure:
 Brief description and purpose
 
 ## Installation
-```bash
+\\\`\\\`\\\`bash
 npm install package-name
-```
+\\\`\\\`\\\`
 
 ## Quick Start
 Minimal working example
@@ -1308,8 +1347,9 @@ Common issues and solutions
 ## Contributing
 How to contribute
 
-Target audience: Developers with intermediate experience
-```
+Target audience: Developers with intermediate experience`}
+  client:load
+/>
 
 **使用：**
 ```
@@ -1318,8 +1358,10 @@ Target audience: Developers with intermediate experience
 
 #### 示例 4: 重构专家 Agent
 
-```markdown
----
+<ExampleCode
+  title="重构专家 Agent 配置"
+  language="markdown"
+  code={`---
 name: refactor-expert
 description: Refactors code for better architecture and maintainability
 tools: Read, Edit, Grep, Glob
@@ -1360,13 +1402,16 @@ Code smells to detect:
 - Feature envy
 - Data clumps
 
-Always explain WHY you're refactoring.
-```
+Always explain WHY you're refactoring.`}
+  client:load
+/>
 
 #### 示例 5: 性能优化 Agent
 
-```markdown
----
+<ExampleCode
+  title="性能优化 Agent 配置"
+  language="markdown"
+  code={`---
 name: performance-optimizer
 description: Analyzes and optimizes code performance
 tools: Read, Edit, Bash
@@ -1405,8 +1450,9 @@ Optimization techniques:
 - Query optimization
 - Asset compression
 
-Always provide before/after comparisons.
-```
+Always provide before/after comparisons.`}
+  client:load
+/>
 
 #### 示例 6: 安全审计 Agent
 

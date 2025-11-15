@@ -8,6 +8,7 @@ category: 工具深度解析
 import MetricCard from '../../components/materials/MetricCard';
 import Mermaid from '../../components/materials/Mermaid';
 import ScrollReveal from '../../components/ui/ScrollReveal';
+import ExampleCode from '../../components/materials/ExampleCode';
 
 # Cursor Rules 完全指南
 
@@ -360,8 +361,10 @@ MDC (Markdown Components) 是 Cursor 项目规则的标准格式。
 
 ### MDC 完整示例
 
-```markdown
----
+<ExampleCode
+  title="TypeScript 编码规范 - 完整 MDC 示例"
+  language="markdown"
+  code={`---
 description: TypeScript 最佳实践和编码规范
 globs:
   - "**/*.ts"
@@ -377,7 +380,7 @@ priority: high
 
 ## 核心原则
 
-1. **类型安全优先** - 避免使用 `any`
+1. **类型安全优先** - 避免使用 \\\`any\\\`
 2. **显式优于隐式** - 明确声明类型
 3. **函数式编程** - 优先使用不可变数据
 
@@ -385,7 +388,7 @@ priority: high
 
 ### ✅ 推荐做法
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // 显式函数返回类型
 function calculateTotal(items: Item[]): number {
   return items.reduce((sum, item) => sum + item.price, 0);
@@ -402,11 +405,11 @@ interface User {
 function parseJSON(json: string): unknown {
   return JSON.parse(json);
 }
-\`\`\`
+\\\`\\\`\\\`
 
 ### ❌ 避免的做法
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ❌ 隐式 any
 function process(data) {
   return data.value;
@@ -421,20 +424,20 @@ function handleEvent(event: any) {
 function getUserName(user: User) {
   return user.name;
 }
-\`\`\`
+\\\`\\\`\\\`
 
 ## 命名约定
 
-- **变量**: camelCase - `userName`, `totalPrice`
-- **类型/接口**: PascalCase - `User`, `ApiResponse`
-- **常量**: UPPER_SNAKE_CASE - `MAX_RETRIES`, `API_URL`
-- **私有成员**: 前缀下划线 - `_internalState`
+- **变量**: camelCase - \\\`userName\\\`, \\\`totalPrice\\\`
+- **类型/接口**: PascalCase - \\\`User\\\`, \\\`ApiResponse\\\`
+- **常量**: UPPER_SNAKE_CASE - \\\`MAX_RETRIES\\\`, \\\`API_URL\\\`
+- **私有成员**: 前缀下划线 - \\\`_internalState\\\`
 
 ## 错误处理
 
 始终使用类型安全的错误处理：
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ 类型安全的错误处理
 type Result<T, E = Error> =
   | { success: true; data: T }
@@ -442,7 +445,7 @@ type Result<T, E = Error> =
 
 async function fetchUser(id: string): Promise<Result<User>> {
   try {
-    const response = await api.get(\`/users/\${id}\`);
+    const response = await api.get(\\\`/users/\\\${id}\\\`);
     return { success: true, data: response.data };
   } catch (error) {
     return {
@@ -451,18 +454,20 @@ async function fetchUser(id: string): Promise<Result<User>> {
     };
   }
 }
-\`\`\`
+\\\`\\\`\\\`
 
 ## 常见陷阱
 
-1. **类型断言滥用** - 避免过度使用 `as` 断言
-2. **可选链误用** - 不要在明确非空的地方使用 `?.`
+1. **类型断言滥用** - 避免过度使用 \\\`as\\\` 断言
+2. **可选链误用** - 不要在明确非空的地方使用 \\\`?.\\\`
 3. **枚举 vs 联合类型** - 优先使用字面量联合类型
 
 ## SDK 版本
 
-确保使用 TypeScript 5.3+ 的新特性。
-```
+确保使用 TypeScript 5.3+ 的新特性。`}
+  previewLines={10}
+  client:load
+/>
 
 ---
 
@@ -520,8 +525,10 @@ touch .cursor/rules/base.mdc
 
 **基础模板：**
 
-```markdown
----
+<ExampleCode
+  title="项目基础编码规范 - base.mdc"
+  language="markdown"
+  code={`---
 description: 项目基础编码规范
 alwaysApply: true
 ---
@@ -543,14 +550,14 @@ alwaysApply: true
 
 ## 文件组织
 
-\`\`\`
+\\\`\\\`\\\`
 src/
 ├── components/     # React 组件
 ├── hooks/          # 自定义 Hooks
 ├── utils/          # 工具函数
 ├── types/          # TypeScript 类型
 └── services/       # API 服务
-\`\`\`
+\\\`\\\`\\\`
 
 ## 导入顺序
 
@@ -559,21 +566,24 @@ src/
 3. 项目内部模块
 4. 样式文件
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ 正确的导入顺序
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/Button';
 import styles from './Component.module.css';
-\`\`\`
-```
+\\\`\\\`\\\``}
+  client:load
+/>
 
 #### 步骤 3: 创建特定规则
 
 **React 组件规则：**
 
-```bash
-cat > .cursor/rules/react.mdc << 'EOF'
+<ExampleCode
+  title="React 组件开发规范 - react.mdc"
+  language="bash"
+  code={`cat > .cursor/rules/react.mdc << 'EOF'
 ---
 description: React 组件开发规范
 globs:
@@ -593,7 +603,7 @@ tags:
 
 ### 标准组件模板
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 import React from 'react';
 
 interface UserCardProps {
@@ -613,7 +623,7 @@ export function UserCard({ user, onEdit }: UserCardProps) {
     </div>
   );
 }
-\`\`\`
+\\\`\\\`\\\`
 
 ## Hooks 使用规范
 
@@ -625,7 +635,7 @@ export function UserCard({ user, onEdit }: UserCardProps) {
 
 ### ✅ 好的实践
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // 正确的 useEffect
 useEffect(() => {
   const subscription = api.subscribe(userId);
@@ -636,11 +646,11 @@ useEffect(() => {
 const handleClick = useCallback(() => {
   onItemClick(item.id);
 }, [item.id, onItemClick]);
-\`\`\`
+\\\`\\\`\\\`
 
 ### ❌ 避免的做法
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ❌ 缺少依赖数组
 useEffect(() => {
   fetchData();
@@ -650,13 +660,13 @@ useEffect(() => {
 const handleClick = useCallback(() => {
   console.log('clicked');
 }, []); // 简单函数不需要 useCallback
-\`\`\`
+\\\`\\\`\\\`
 
 ## 性能优化
 
-- 使用 `React.memo` 优化纯组件
-- 使用 `useMemo` 缓存计算结果
-- 使用 `useCallback` 稳定函数引用
+- 使用 \\\`React.memo\\\` 优化纯组件
+- 使用 \\\`useMemo\\\` 缓存计算结果
+- 使用 \\\`useCallback\\\` 稳定函数引用
 - 避免在 render 中创建新对象/数组
 
 ## 可访问性
@@ -666,7 +676,7 @@ const handleClick = useCallback(() => {
 - 支持键盘导航
 - 提供 alt 文本
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 <button
   aria-label="Delete item"
   aria-pressed={isSelected}
@@ -674,14 +684,18 @@ const handleClick = useCallback(() => {
 >
   <TrashIcon />
 </button>
-\`\`\`
-EOF
-```
+\\\`\\\`\\\`
+EOF`}
+  client:load
+/>
 
 **API 设计规则：**
 
-```bash
-cat > .cursor/rules/api-design.mdc << 'EOF'
+<ExampleCode
+  title="REST API 设计规范 - api-design.mdc"
+  language="bash"
+  previewLines={10}
+  code={`cat > .cursor/rules/api-design.mdc << 'EOF'
 ---
 description: REST API 设计规范
 globs:
@@ -699,9 +713,9 @@ tags:
 
 ### 资源命名
 
-- 使用复数名词：`/users`, `/posts`
-- 使用小写字母和连字符：`/user-profiles`
-- 嵌套资源：`/users/:id/posts`
+- 使用复数名词：\\\`/users\\\`, \\\`/posts\\\`
+- 使用小写字母和连字符：\\\`/user-profiles\\\`
+- 嵌套资源：\\\`/users/:id/posts\\\`
 
 ### HTTP 方法
 
@@ -713,7 +727,7 @@ tags:
 
 ### 状态码
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ 正确使用状态码
 export const HTTP_STATUS = {
   OK: 200,
@@ -725,13 +739,13 @@ export const HTTP_STATUS = {
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
 } as const;
-\`\`\`
+\\\`\\\`\\\`
 
 ## 响应格式
 
 统一的 API 响应结构：
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // 成功响应
 interface SuccessResponse<T> {
   success: true;
@@ -754,11 +768,11 @@ interface ErrorResponse {
 }
 
 type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;
-\`\`\`
+\\\`\\\`\\\`
 
 ## 错误处理
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ 统一错误处理
 class ApiError extends Error {
   constructor(
@@ -791,13 +805,13 @@ app.use((err: Error, req: Request, res: Response) => {
     });
   }
 });
-\`\`\`
+\\\`\\\`\\\`
 
 ## 验证
 
 使用 Zod 进行请求验证：
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 import { z } from 'zod';
 
 const createUserSchema = z.object({
@@ -828,11 +842,11 @@ app.post('/users', async (req, res) => {
     data: user,
   });
 });
-\`\`\`
+\\\`\\\`\\\`
 
 ## 认证与授权
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // JWT 认证中间件
 const authenticate = async (req: Request, res: Response, next: Function) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
@@ -861,9 +875,10 @@ const authenticate = async (req: Request, res: Response, next: Function) => {
     });
   }
 };
-\`\`\`
-EOF
-```
+\\\`\\\`\\\`
+EOF`}
+  client:load
+/>
 
 ---
 
@@ -949,8 +964,11 @@ EOF
 
 ### 示例 1: Next.js + TypeScript 规则
 
-```markdown
----
+<ExampleCode
+  title="Next.js 13+ App Router 开发规范 - nextjs.mdc"
+  language="markdown"
+  previewLines={10}
+  code={`---
 description: Next.js 13+ App Router 开发规范
 globs:
   - "**/app/**/*.tsx"
@@ -973,15 +991,15 @@ tags:
 
 ### 特殊文件
 
-- `page.tsx` - 页面组件
-- `layout.tsx` - 布局组件
-- `loading.tsx` - 加载状态
-- `error.tsx` - 错误处理
-- `not-found.tsx` - 404 页面
+- \\\`page.tsx\\\` - 页面组件
+- \\\`layout.tsx\\\` - 布局组件
+- \\\`loading.tsx\\\` - 加载状态
+- \\\`error.tsx\\\` - 错误处理
+- \\\`not-found.tsx\\\` - 404 页面
 
 ### 路由结构
 
-\`\`\`
+\\\`\\\`\\\`
 app/
 ├── (auth)/
 │   ├── login/
@@ -994,7 +1012,7 @@ app/
 │   │       └── page.tsx
 │   └── layout.tsx
 └── layout.tsx
-\`\`\`
+\\\`\\\`\\\`
 
 ## Server Components 优先
 
@@ -1002,7 +1020,7 @@ app/
 
 ### ✅ Server Component
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // app/users/page.tsx
 async function UsersPage() {
   const users = await fetchUsers(); // 直接在组件中获取数据
@@ -1017,11 +1035,11 @@ async function UsersPage() {
 }
 
 export default UsersPage;
-\`\`\`
+\\\`\\\`\\\`
 
 ### ✅ Client Component (需要交互)
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 'use client'; // 明确标记为 Client Component
 
 import { useState } from 'react';
@@ -1035,13 +1053,13 @@ export function Counter() {
     </button>
   );
 }
-\`\`\`
+\\\`\\\`\\\`
 
 ## 数据获取
 
 ### Server-side 数据获取
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ 使用 fetch 并配置缓存
 async function getData() {
   const res = await fetch('https://api.example.com/data', {
@@ -1054,11 +1072,11 @@ async function getData() {
 
   return res.json();
 }
-\`\`\`
+\\\`\\\`\\\`
 
 ### Parallel 数据获取
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ 并行获取多个数据源
 async function Page() {
   const [users, posts] = await Promise.all([
@@ -1068,11 +1086,11 @@ async function Page() {
 
   return <Dashboard users={users} posts={posts} />;
 }
-\`\`\`
+\\\`\\\`\\\`
 
 ## Metadata
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 import type { Metadata } from 'next';
 
 // ✅ 静态 metadata
@@ -1090,16 +1108,16 @@ export async function generateMetadata({ params }): Promise<Metadata> {
     description: \`Profile of \${user.name}\`,
   };
 }
-\`\`\`
+\\\`\\\`\\\`
 
 ## 性能优化
 
-- 使用 `<Image>` 组件优化图片
-- 使用 `<Link>` 组件实现预加载
+- 使用 \\\`<Image>\\\` 组件优化图片
+- 使用 \\\`<Link>\\\` 组件实现预加载
 - 利用 Suspense 实现流式渲染
 - 合理使用缓存策略
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -1117,13 +1135,17 @@ export function UserCard({ user }) {
     </Link>
   );
 }
-\`\`\`
-```
+\\\`\\\`\\\``}
+  client:load
+/>
 
 ### 示例 2: 测试规范
 
-```markdown
----
+<ExampleCode
+  title="Jest + React Testing Library 测试规范 - testing.mdc"
+  language="markdown"
+  previewLines={10}
+  code={`---
 description: Jest + React Testing Library 测试规范
 globs:
   - "**/*.test.ts"
@@ -1146,7 +1168,7 @@ tags:
 
 ## 命名约定
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // 文件命名
 Component.test.tsx
 utils.test.ts
@@ -1160,7 +1182,7 @@ describe('ComponentName', () => {
     });
   });
 });
-\`\`\`
+\\\`\\\`\\\`
 
 ## React Testing Library 原则
 
@@ -1172,7 +1194,7 @@ describe('ComponentName', () => {
 4. **getByText** - 非交互元素
 5. **getByTestId** - 最后选择
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -1200,11 +1222,11 @@ describe('LoginForm', () => {
     });
   });
 });
-\`\`\`
+\\\`\\\`\\\`
 
 ### ❌ 避免实现细节测试
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ❌ 不要测试内部状态
 expect(component.state.count).toBe(1);
 
@@ -1214,11 +1236,11 @@ expect(element.className).toContain('active');
 // ✅ 测试用户可见的行为
 expect(screen.getByText('Count: 1')).toBeInTheDocument();
 expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'true');
-\`\`\`
+\\\`\\\`\\\`
 
 ## Hooks 测试
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 import { renderHook, waitFor } from '@testing-library/react';
 import { useAsync } from './useAsync';
 
@@ -1248,11 +1270,11 @@ describe('useAsync', () => {
     expect(mockFn).toHaveBeenCalledTimes(1);
   });
 });
-\`\`\`
+\\\`\\\`\\\`
 
 ## Mock 策略
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ Mock 外部依赖
 jest.mock('@/services/api', () => ({
   fetchUsers: jest.fn(),
@@ -1270,7 +1292,7 @@ jest.mock('next/navigation', () => ({
 afterEach(() => {
   jest.clearAllMocks();
 });
-\`\`\`
+\\\`\\\`\\\`
 
 ## 覆盖率目标
 
@@ -1281,16 +1303,20 @@ afterEach(() => {
 
 ## 测试性能
 
-- 使用 `screen.queryBy*` 检查元素不存在
-- 使用 `waitFor` 等待异步更新
-- 避免不必要的 `act()` 包装
-- 使用 `userEvent` 替代 `fireEvent`
-```
+- 使用 \\\`screen.queryBy*\\\` 检查元素不存在
+- 使用 \\\`waitFor\\\` 等待异步更新
+- 避免不必要的 \\\`act()\\\` 包装
+- 使用 \\\`userEvent\\\` 替代 \\\`fireEvent\\\``}
+  client:load
+/>
 
 ### 示例 3: 性能优化规则
 
-```markdown
----
+<ExampleCode
+  title="Web 性能优化最佳实践 - performance.mdc"
+  language="markdown"
+  previewLines={10}
+  code={`---
 description: Web 性能优化最佳实践
 alwaysApply: false
 tags:
@@ -1310,7 +1336,7 @@ tags:
 
 ### ✅ 使用 Next.js Image
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 import Image from 'next/image';
 
 // ✅ 响应式图片
@@ -1332,7 +1358,7 @@ import Image from 'next/image';
   sizes="(max-width: 768px) 100vw, 33vw"
   style={{ objectFit: 'cover' }}
 />
-\`\`\`
+\\\`\\\`\\\`
 
 ### 图片格式选择
 
@@ -1345,7 +1371,7 @@ import Image from 'next/image';
 
 ### ✅ 动态导入
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ 路由级别分割
 const AdminPanel = dynamic(() => import('@/components/AdminPanel'), {
   loading: () => <Skeleton />,
@@ -1366,13 +1392,13 @@ function Dashboard() {
     </div>
   );
 }
-\`\`\`
+\\\`\\\`\\\`
 
 ## React 性能
 
 ### ✅ Memoization
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ React.memo - 纯组件
 const UserCard = React.memo(({ user }) => {
   return <div>{user.name}</div>;
@@ -1389,33 +1415,33 @@ const sortedUsers = useMemo(() => {
 const handleClick = useCallback((id: string) => {
   onItemClick(id);
 }, [onItemClick]);
-\`\`\`
+\\\`\\\`\\\`
 
 ### ❌ 过度优化
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ❌ 简单计算不需要 useMemo
 const fullName = useMemo(() => \`\${first} \${last}\`, [first, last]);
 
 // ✅ 直接计算
 const fullName = \`\${first} \${last}\`;
-\`\`\`
+\\\`\\\`\\\`
 
 ## Bundle 优化
 
 ### 分析 Bundle 大小
 
-\`\`\`bash
+\\\`\\\`\\\`bash
 # 分析工具
 npm run build -- --analyze
 
 # 检查大型依赖
 npx webpack-bundle-analyzer .next/analyze/client.html
-\`\`\`
+\\\`\\\`\\\`
 
 ### Tree Shaking
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ 具名导入
 import { debounce } from 'lodash-es';
 
@@ -1424,13 +1450,13 @@ import _ from 'lodash';
 
 // ✅ 使用 ES Modules 版本
 import debounce from 'lodash-es/debounce';
-\`\`\`
+\\\`\\\`\\\`
 
 ## 网络优化
 
 ### ✅ Prefetch & Preload
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ 预加载关键资源
 <link rel="preload" href="/fonts/main.woff2" as="font" crossorigin />
 
@@ -1441,11 +1467,11 @@ import debounce from 'lodash-es/debounce';
 <Link href="/dashboard" prefetch={true}>
   Dashboard
 </Link>
-\`\`\`
+\\\`\\\`\\\`
 
 ### 数据获取优化
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ 并行请求
 const [users, posts] = await Promise.all([
   fetchUsers(),
@@ -1461,11 +1487,11 @@ function Profile() {
     dedupingInterval: 60000, // 60秒内去重
   });
 }
-\`\`\`
+\\\`\\\`\\\`
 
 ## 性能监控
 
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 // ✅ Web Vitals 监控
 import { getCLS, getFID, getLCP } from 'web-vitals';
 
@@ -1477,9 +1503,10 @@ getLCP(console.log);
 const start = performance.now();
 // ... 操作
 const duration = performance.now() - start;
-console.log(\`Operation took \${duration}ms\`);
-\`\`\`
-```
+console.log(\\\`Operation took \\\${duration}ms\\\`);
+\\\`\\\`\\\``}
+  client:load
+/>
 
 ---
 
@@ -1582,8 +1609,10 @@ console.log(\`Operation took \${duration}ms\`);
 
 ### 技巧 2: 使用标签组织
 
-```markdown
----
+<ExampleCode
+  title="使用 Tags 分类管理规则"
+  language="markdown"
+  code={`---
 description: React Hooks 规范
 tags:
   - react
@@ -1591,13 +1620,16 @@ tags:
   - frontend
   - level:intermediate
   - category:component
----
-```
+---`}
+  client:load
+/>
 
 ### 技巧 3: 规则版本管理
 
-```markdown
----
+<ExampleCode
+  title="规则版本管理示例"
+  language="markdown"
+  code={`---
 description: API 设计规范 v2.0
 tags:
   - api
@@ -1619,13 +1651,16 @@ tags:
 - ✅ 新增速率限制指南
 
 ### v1.0 (2025-01-01)
-- 初始版本
-```
+- 初始版本`}
+  client:load
+/>
 
 ### 技巧 4: 条件规则
 
-```markdown
----
+<ExampleCode
+  title="条件规则 - 排除特定文件"
+  language="markdown"
+  code={`---
 description: TypeScript 严格模式
 globs:
   - "**/*.ts"
@@ -1639,13 +1674,16 @@ alwaysApply: false
 
 仅在生产代码中应用严格类型检查。
 
-测试代码可以使用更宽松的类型规则。
-```
+测试代码可以使用更宽松的类型规则。`}
+  client:load
+/>
 
 ### 技巧 5: 规则引用
 
-```markdown
----
+<ExampleCode
+  title="规则引用和优先级"
+  language="markdown"
+  code={`---
 description: 完整的 React 规范
 ---
 
@@ -1653,10 +1691,10 @@ description: 完整的 React 规范
 
 本规范综合了以下规则：
 
-- 📋 **基础规范**: 参见 `base.mdc`
-- ⚛️ **React 规范**: 参见 `react.mdc`
-- 🧪 **测试规范**: 参见 `testing.mdc`
-- 🚀 **性能优化**: 参见 `performance.mdc`
+- 📋 **基础规范**: 参见 \\\`base.mdc\\\`
+- ⚛️ **React 规范**: 参见 \\\`react.mdc\\\`
+- 🧪 **测试规范**: 参见 \\\`testing.mdc\\\`
+- 🚀 **性能优化**: 参见 \\\`performance.mdc\\\`
 
 ## 规则优先级
 
@@ -1665,8 +1703,9 @@ description: 完整的 React 规范
 1. 性能优化规则 (最高)
 2. 安全规范
 3. 框架最佳实践
-4. 代码风格规则 (最低)
-```
+4. 代码风格规则 (最低)`}
+  client:load
+/>
 
 ---
 
@@ -1784,8 +1823,10 @@ description: 完整的 React 规范
 
 **.cursor/rules/README.md:**
 
-```markdown
-# 项目 Cursor Rules
+<ExampleCode
+  title="规则目录 README 模板"
+  language="markdown"
+  code={`# 项目 Cursor Rules
 
 ## 概览
 
@@ -1794,27 +1835,27 @@ description: 完整的 React 规范
 ## 规则列表
 
 ### 基础规则 (Always)
-- `base.mdc` - 项目基础规范，始终应用
+- \\\`base.mdc\\\` - 项目基础规范，始终应用
 
 ### 前端规则 (Auto Attached)
-- `frontend/react.mdc` - React 组件规范
-- `frontend/nextjs.mdc` - Next.js App Router 规范
-- `frontend/styling.mdc` - 样式规范
+- \\\`frontend/react.mdc\\\` - React 组件规范
+- \\\`frontend/nextjs.mdc\\\` - Next.js App Router 规范
+- \\\`frontend/styling.mdc\\\` - 样式规范
 
 ### 后端规则 (Auto Attached)
-- `backend/api-design.mdc` - REST API 设计规范
-- `backend/database.mdc` - 数据库操作规范
-- `backend/security.mdc` - 安全最佳实践
+- \\\`backend/api-design.mdc\\\` - REST API 设计规范
+- \\\`backend/database.mdc\\\` - 数据库操作规范
+- \\\`backend/security.mdc\\\` - 安全最佳实践
 
 ### 测试规则 (Auto Attached)
-- `testing/unit-tests.mdc` - 单元测试规范
-- `testing/e2e-tests.mdc` - E2E 测试规范
+- \\\`testing/unit-tests.mdc\\\` - 单元测试规范
+- \\\`testing/e2e-tests.mdc\\\` - E2E 测试规范
 
 ## 使用指南
 
 1. **Always 规则**: 自动应用于所有文件
 2. **Auto Attached**: 根据文件路径自动应用
-3. **手动附加**: 在 Composer 中使用 `@rules` 选择
+3. **手动附加**: 在 Composer 中使用 \\\`@rules\\\` 选择
 
 ## 更新规则
 
@@ -1833,8 +1874,9 @@ description: 完整的 React 规范
 
 ## 反馈
 
-如有问题或建议，请在 #ai-tools 频道讨论。
-```
+如有问题或建议，请在 #ai-tools 频道讨论。`}
+  client:load
+/>
 
 ---
 

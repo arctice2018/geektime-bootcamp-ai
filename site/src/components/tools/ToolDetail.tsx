@@ -11,7 +11,7 @@ interface ToolDetailProps {
 
 export default function ToolDetail({ tool }: ToolDetailProps) {
   return (
-    <div className="space-y-16">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-12)' }}>
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -42,9 +42,9 @@ export default function ToolDetail({ tool }: ToolDetailProps) {
 
       {/* Features */}
       <ScrollReveal>
-        <div className="bg-white rounded-2xl p-8 shadow-lg">
-          <h2 className="text-3xl font-bold text-primary mb-8">核心功能</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="md-card p-10">
+          <h2 className="text-h2 font-bold text-ink mb-10">核心功能</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {tool.features.map((feature, index) => (
               <motion.div
                 key={index}
@@ -70,8 +70,8 @@ export default function ToolDetail({ tool }: ToolDetailProps) {
       {/* Architecture */}
       {tool.architecture && (
         <ScrollReveal>
-          <div className="bg-white rounded-2xl p-8 shadow-lg">
-            <h2 className="text-3xl font-bold text-primary mb-8">技术架构</h2>
+          <div className="md-card p-10">
+            <h2 className="text-h2 font-bold text-ink mb-10">技术架构</h2>
             <AnimatedDiagram code={tool.architecture} client:load />
           </div>
         </ScrollReveal>
@@ -79,11 +79,11 @@ export default function ToolDetail({ tool }: ToolDetailProps) {
 
       {/* Usage in Course */}
       <ScrollReveal>
-        <div className="bg-white rounded-2xl p-8 shadow-lg">
-          <h2 className="text-3xl font-bold text-primary mb-8">
+        <div className="md-card p-10">
+          <h2 className="text-h2 font-bold text-ink mb-10">
             在课程中的应用
           </h2>
-          <div className="space-y-4">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
             {tool.usageInCourse.map((usage, index) => (
               <div
                 key={index}
@@ -116,47 +116,51 @@ export default function ToolDetail({ tool }: ToolDetailProps) {
       {/* Learning Materials */}
       {(tool.id === 'claude-code' || tool.id === 'notebooklm' || tool.id === 'cursor') && (
         <ScrollReveal>
-          <div className="bg-white rounded-2xl p-8 shadow-lg">
-            <h2 className="text-3xl font-bold text-primary mb-8">深度学习资料</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="md-card p-10">
+            <h2 className="text-h2 font-bold text-ink mb-10">深度学习资料</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {tool.id === 'claude-code' && (
                 <>
                   <a
                     href={getUrl('materials/claude-code-architecture')}
-                    className="p-4 bg-bg-secondary hover:bg-accent hover:text-white rounded-xl transition-all group"
+                    className="md-card md-card-interactive p-6 group"
+                    style={{ margin: 0 }}
                   >
-                    <div className="text-2xl mb-2">🏗️</div>
-                    <div className="font-semibold mb-1">架构深度分析</div>
-                    <div className="text-sm opacity-80">16个System Prompts完整解析</div>
+                    <div className="text-4xl mb-4">🏗️</div>
+                    <div className="font-bold text-body text-ink mb-2">架构深度分析</div>
+                    <div className="text-ui text-slate">16个System Prompts完整解析</div>
                   </a>
                   <a
                     href={getUrl('materials/claude-code-setup')}
-                    className="p-4 bg-bg-secondary hover:bg-accent hover:text-white rounded-xl transition-all group"
+                    className="md-card md-card-interactive p-6 group"
+                    style={{ margin: 0 }}
                   >
-                    <div className="text-2xl mb-2">⚙️</div>
-                    <div className="font-semibold mb-1">安装配置指南</div>
-                    <div className="text-sm opacity-80">快速上手完整教程</div>
+                    <div className="text-4xl mb-4">⚙️</div>
+                    <div className="font-bold text-body text-ink mb-2">安装配置指南</div>
+                    <div className="text-ui text-slate">快速上手完整教程</div>
                   </a>
                 </>
               )}
               {tool.id === 'notebooklm' && (
                 <a
                   href={getUrl('materials/notebooklm-guide')}
-                  className="p-4 bg-bg-secondary hover:bg-accent hover:text-white rounded-xl transition-all group"
+                  className="md-card md-card-interactive p-6 group"
+                  style={{ margin: 0 }}
                 >
-                  <div className="text-2xl mb-2">📚</div>
-                  <div className="font-semibold mb-1">NotebookLM 完全指南</div>
-                  <div className="text-sm opacity-80">1M上下文，全功能解析</div>
+                  <div className="text-4xl mb-4">📚</div>
+                  <div className="font-bold text-body text-ink mb-2">NotebookLM 完全指南</div>
+                  <div className="text-ui text-slate">1M上下文，全功能解析</div>
                 </a>
               )}
               {(tool.id === 'cursor' || tool.id === 'claude-code') && (
                 <a
                   href={getUrl('materials/ai-coding-tools-comparison')}
-                  className="p-4 bg-bg-secondary hover:bg-accent hover:text-white rounded-xl transition-all group"
+                  className="md-card md-card-interactive p-6 group"
+                  style={{ margin: 0 }}
                 >
-                  <div className="text-2xl mb-2">🔧</div>
-                  <div className="font-semibold mb-1">AI工具全景对比</div>
-                  <div className="text-sm opacity-80">Cursor vs Claude Code对比</div>
+                  <div className="text-4xl mb-4">🔧</div>
+                  <div className="font-bold text-body text-ink mb-2">AI工具全景对比</div>
+                  <div className="text-ui text-slate">Cursor vs Claude Code对比</div>
                 </a>
               )}
             </div>
@@ -166,12 +170,12 @@ export default function ToolDetail({ tool }: ToolDetailProps) {
 
       {/* Related Resources */}
       <ScrollReveal>
-        <div className="bg-gradient-to-r from-accent to-accent-purple rounded-2xl p-8 text-white">
-          <h2 className="text-3xl font-bold mb-4">准备好开始了吗？</h2>
-          <p className="text-lg mb-6 opacity-90">
+        <div className="md-card p-10 text-center" style={{ background: 'linear-gradient(135deg, var(--md-sky) 0%, var(--md-sky-strong) 100%)', color: 'var(--md-cloud)' }}>
+          <h2 className="text-h2 font-bold mb-6" style={{ color: 'var(--md-graphite)' }}>准备好开始了吗？</h2>
+          <p className="text-body mb-8 max-w-2xl mx-auto" style={{ color: 'var(--md-graphite)', lineHeight: '1.6', opacity: 0.9 }}>
             在课程中深入学习 {tool.name}，掌握最前沿的 AI 辅助编程技能
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="md-cta-stack justify-center">
             <a href={getUrl('curriculum')} className="md-btn md-btn-secondary">
               查看课程大纲
             </a>
@@ -179,7 +183,7 @@ export default function ToolDetail({ tool }: ToolDetailProps) {
               href={tool.officialWebsite}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 bg-white text-accent rounded-full font-medium hover:bg-opacity-90 transition-all"
+              className="md-btn"
             >
               访问 {tool.name} 官网
             </a>

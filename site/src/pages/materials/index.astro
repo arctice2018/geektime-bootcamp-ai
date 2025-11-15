@@ -31,13 +31,15 @@ const materials = [
       },
       {
         title: "Cursor 2.0 完全学习指南",
-        description: "架构设计深度剖析，Rules 和 Agent 实战指南，50+ Mermaid 图表",
+        description:
+          "架构设计深度剖析，Rules 和 Agent 实战指南，50+ Mermaid 图表",
         href: getUrl("materials/cursor-intro"),
         tags: ["Cursor", "架构", "Agent", "高级"],
       },
       {
         title: "Claude Code 完全学习指南",
-        description: "Anthropic 官方工具深度解析，Hooks/Commands/Agents 实战，15+ 架构图",
+        description:
+          "Anthropic 官方工具深度解析，Hooks/Commands/Agents 实战，15+ 架构图",
         href: getUrl("materials/claude-code-intro"),
         tags: ["Claude Code", "架构", "Hooks", "Agents"],
       },
@@ -57,7 +59,8 @@ const materials = [
     items: [
       {
         title: "SpecKit 完整学习指南",
-        description: "GitHub 规范驱动开发工具包，架构设计流程图解，从入门到精通",
+        description:
+          "GitHub 规范驱动开发工具包，架构设计流程图解，从入门到精通",
         href: getUrl("materials/speckit-intro"),
         tags: ["SpecKit", "规范驱动", "工作流", "架构"],
       },
@@ -85,26 +88,31 @@ const materials = [
     <a href={getUrl("curriculum")} class="md-btn md-btn-secondary">返回课程</a>
   </PageHeader>
 
-  <section id="materials" class="md-section">
+  <section
+    id="materials"
+    class="md-section"
+    style="background-color: var(--md-cream); padding-top: var(--space-12); padding-bottom: var(--space-12);"
+  >
     <div class="md-container">
       <ScrollReveal client:load>
-        <div class="text-center mb-space-9">
-          <h2 class="text-h2 font-bold text-ink mb-space-5">
-            精选学习资料
-          </h2>
-          <p class="max-w-2xl mx-auto text-body text-slate">
+        <div class="text-center mb-12">
+          <h2 class="text-h2 font-bold text-ink mb-6">精选学习资料</h2>
+          <p
+            class="max-w-2xl mx-auto text-body text-slate"
+            style="line-height: 1.6;"
+          >
             深度技术文章、架构分析、工具对比，助你全面掌握 AI 辅助编程
           </p>
         </div>
       </ScrollReveal>
 
-      <div class="space-y-section">
+      <div class="py-12">
         {
           materials.map((category, idx) => (
             <ScrollReveal delay={idx * 0.1} client:load>
               <div>
-                <div class="flex items-center gap-space-4 mb-space-6">
-                  <category.icon size={32} style={{ color: 'var(--md-sky)' }} />
+                <div class="flex items-center gap-4 mb-6">
+                  <category.icon size={32} style={{ color: "var(--md-sky)" }} />
                   <div>
                     <h3 class="text-h2 font-bold text-ink">
                       {category.category}
@@ -114,23 +122,21 @@ const materials = [
                 </div>
 
                 {category.items.length > 0 ? (
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-space-10">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                     {category.items.map((item) => (
                       <a
                         href={item.href}
-                        class="md-card md-card-interactive group p-space-6"
+                        class="md-card md-card-interactive group p-6"
                       >
-                        <h4 class="text-h3 font-bold mb-space-3 group-hover:text-sky transition-colors text-ink">
+                        <h4 class="text-h3 font-bold mb-3 group-hover:text-sky transition-colors text-ink">
                           {item.title}
                         </h4>
-                        <p class="mb-space-4 text-body text-slate">
+                        <p class="mb-4 text-body text-slate">
                           {item.description}
                         </p>
-                        <div class="flex flex-wrap gap-space-3">
+                        <div class="flex flex-wrap gap-3">
                           {item.tags.map((tag) => (
-                            <span class="md-badge text-eyebrow">
-                              {tag}
-                            </span>
+                            <span class="md-badge text-eyebrow">{tag}</span>
                           ))}
                         </div>
                       </a>
@@ -149,18 +155,24 @@ const materials = [
     </div>
   </section>
 
-  <section class="md-section md-section--sky">
+  <section
+    class="md-section"
+    style="background-color: var(--md-sky); padding-top: var(--space-12); padding-bottom: var(--space-12);"
+  >
     <div class="md-container text-center">
       <ScrollReveal client:load>
-        <h2 class="text-h2 font-bold text-ink mb-space-8">
-          学以致用
-        </h2>
-        <p class="text-h3 mb-space-8 max-w-2xl mx-auto text-body text-slate">
+        <h2 class="text-h2 font-bold text-graphite mb-10">学以致用</h2>
+        <p
+          class="text-h3 mb-10 max-w-2xl mx-auto text-body text-graphite"
+          style="line-height: 1.5;"
+        >
           理论结合实践，在课程和项目中应用所学知识
         </p>
         <div class="md-cta-stack justify-center">
           <a href={getUrl("curriculum")} class="md-btn"> 开始学习课程 </a>
-          <a href={getUrl("projects")} class="md-btn md-btn-secondary"> 查看实战项目 </a>
+          <a href={getUrl("projects")} class="md-btn md-btn-secondary">
+            查看实战项目
+          </a>
         </div>
       </ScrollReveal>
     </div>

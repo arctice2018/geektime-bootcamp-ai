@@ -45,7 +45,7 @@ export default function TagSelector({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="py-3">
       <Label className="text-[15px] font-medium text-[#1d1d1f]">标签</Label>
 
       {/* Selected Tags */}
@@ -61,7 +61,7 @@ export default function TagSelector({
             }}
           >
             <div
-              className="h-2 w-2 rounded-full flex-shrink-0"
+              className="flex-shrink-0 w-2 h-2 rounded-full"
               style={{ backgroundColor: tag.color }}
             />
             <span>{tag.name}</span>
@@ -69,7 +69,7 @@ export default function TagSelector({
               onClick={() => handleRemoveTag(tag.id)}
               className="ml-0.5 hover:opacity-70 transition-apple rounded-full p-0.5"
             >
-              <X className="h-3 w-3" />
+              <X className="w-3 h-3" />
             </button>
           </Badge>
         ))}
@@ -82,15 +82,15 @@ export default function TagSelector({
               size="sm"
               className="h-8 px-3 rounded-full border-black/10 text-[#0071e3] hover:text-[#0077ed] hover:bg-[#0071e3]/10 transition-apple"
             >
-              <Plus className="h-3 w-3 mr-1" />
+              <Plus className="mr-1 w-3 h-3" />
               添加标签
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-64 p-4 rounded-xl border-0 shadow-apple"
+            className="p-4 w-64 rounded-xl border-0 shadow-apple"
             align="start"
           >
-            <div className="space-y-3">
+            <div className="py-3">
               <Input
                 placeholder="搜索标签..."
                 value={searchQuery}
@@ -99,7 +99,7 @@ export default function TagSelector({
                 className="h-10 rounded-xl border-black/10 bg-[#f5f5f7] text-[15px] focus:bg-white focus:shadow-apple transition-apple"
               />
 
-              <div className="max-h-48 overflow-y-auto space-y-1">
+              <div className="overflow-y-auto py-1 max-h-48">
                 {availableTags.length > 0 ? (
                   availableTags.map((tag) => (
                     <button
@@ -111,7 +111,7 @@ export default function TagSelector({
                       className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-black/5 text-[15px] font-medium text-[#1d1d1f] transition-apple"
                     >
                       <div
-                        className="h-3 w-3 rounded-full flex-shrink-0"
+                        className="flex-shrink-0 w-3 h-3 rounded-full"
                         style={{ backgroundColor: tag.color }}
                       />
                       <span>{tag.name}</span>

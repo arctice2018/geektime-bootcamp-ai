@@ -72,6 +72,7 @@
   --font-weight-bold: 700;
 
   /* ===== 间距系统（基于 8px 网格） ===== */
+  --space-1: 4px;
   --space-xs: 4px;
   --space-2: 8px;
   --space-sm: 12px;

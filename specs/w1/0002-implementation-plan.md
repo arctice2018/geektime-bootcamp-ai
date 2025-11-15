@@ -1947,11 +1947,11 @@ export default function FilterSidebar() {
 
   return (
     <aside className="w-64 border-r bg-gray-50 p-4">
-      <div className="space-y-6">
+      <div className="py-6">
         {/* Status Filter */}
         <div>
           <h3 className="mb-3 font-semibold text-gray-700">状态</h3>
-          <div className="space-y-2">
+          <div className="py-2">
             <button
               onClick={() => setStatusFilter('all')}
               className={cn(
@@ -1994,7 +1994,7 @@ export default function FilterSidebar() {
         {/* Tags Filter */}
         <div>
           <h3 className="mb-3 font-semibold text-gray-700">标签</h3>
-          <div className="space-y-2">
+          <div className="py-2">
             {tags.map((tag) => (
               <button
                 key={tag.id}
@@ -2203,7 +2203,7 @@ export default function TicketCard({
           className="mt-1"
         />
 
-        <div className="flex-1 space-y-2">
+        <div className="flex-1 py-2">
           <div className="flex items-start justify-between gap-2">
             <h3
               className={cn(
@@ -2304,7 +2304,7 @@ export default function TicketList({ onEdit, onDelete }: TicketListProps) {
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="py-4">
         {[1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-32 w-full" />
         ))}
@@ -2333,7 +2333,7 @@ export default function TicketList({ onEdit, onDelete }: TicketListProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="py-4">
       {tickets.map((ticket) => (
         <TicketCard
           key={ticket.id}
@@ -2395,7 +2395,7 @@ export default function TagSelector({ selectedTagIds, onChange }: TagSelectorPro
   }
 
   return (
-    <div className="space-y-2">
+    <div className="py-2">
       <Label>标签</Label>
 
       {/* Selected Tags */}
@@ -2434,7 +2434,7 @@ export default function TagSelector({ selectedTagIds, onChange }: TagSelectorPro
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-64 p-3" align="start">
-            <div className="space-y-3">
+            <div className="py-3">
               <Input
                 placeholder="搜索标签..."
                 value={searchQuery}
@@ -2442,7 +2442,7 @@ export default function TagSelector({ selectedTagIds, onChange }: TagSelectorPro
                 autoFocus
               />
 
-              <div className="max-h-48 overflow-y-auto space-y-1">
+              <div className="max-h-48 overflow-y-auto py-1">
                 {availableTags.length > 0 ? (
                   availableTags.map((tag) => (
                     <button
@@ -2571,8 +2571,8 @@ export default function TicketForm({ open, onOpenChange, ticket }: TicketFormPro
           <DialogTitle>{ticket ? '编辑 Ticket' : '创建 Ticket'}</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
+        <form onSubmit={handleSubmit} className="py-4">
+          <div className="py-2">
             <Label htmlFor="title">标题 *</Label>
             <Input
               id="title"
@@ -2586,7 +2586,7 @@ export default function TicketForm({ open, onOpenChange, ticket }: TicketFormPro
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="py-2">
             <Label htmlFor="description">描述</Label>
             <Textarea
               id="description"

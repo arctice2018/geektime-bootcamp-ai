@@ -88,8 +88,8 @@ export default function TicketForm({
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6 px-8 pb-8">
-          <div className="space-y-3">
+        <form onSubmit={handleSubmit} className="py-6 px-8 pb-8">
+          <div className="py-3">
             <Label
               htmlFor="title"
               className="text-[15px] font-medium text-[#1d1d1f]"
@@ -109,7 +109,7 @@ export default function TicketForm({
             />
           </div>
 
-          <div className="space-y-3">
+          <div className="py-3">
             <Label
               htmlFor="description"
               className="text-[15px] font-medium text-[#1d1d1f]"
@@ -130,7 +130,7 @@ export default function TicketForm({
           </div>
 
           {!ticket && (
-            <div className="space-y-3">
+            <div className="py-3">
               <Label className="text-[15px] font-medium text-[#1d1d1f]">
                 标签
               </Label>

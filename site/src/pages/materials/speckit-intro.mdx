@@ -60,7 +60,7 @@ SpecKit 开发流程：**规范 → AI 执行 → 自动实现 → 持续演进*
 
     style A fill:#e1f5ff
     style B fill:#fff4e1
-    style C fill:#e1ffe1`} client:load />
+    style C fill:#e1ffe1`} client:only="react" />
 
 #### 1. Spec-First（规范优先）
 在开发之前编写详细的规范文档，用于指导 AI 辅助开发。
@@ -125,7 +125,7 @@ SpecKit 开发流程：**规范 → AI 执行 → 自动实现 → 持续演进*
     style SPEC fill:#4ecdc4
     style PLAN fill:#45b7d1
     style TASKS fill:#f7dc6f
-    style IMPL fill:#95e1d3`} client:load />
+    style IMPL fill:#95e1d3`} client:only="react" />
 
 ### 架构层次说明
 
@@ -196,7 +196,7 @@ SpecKit 开发流程：**规范 → AI 执行 → 自动实现 → 持续演进*
     style IMPL fill:#95e1d3
     style CLARIFY fill:#dda15e
     style ANALYZE fill:#dda15e
-    style CHECKLIST fill:#dda15e`} client:load />
+    style CHECKLIST fill:#dda15e`} client:only="react" />
 
 ### 1. 基础命令（CLI）
 
@@ -256,7 +256,7 @@ specify init my-app
 - Minimum 80% code coverage
 - Unit tests for all business logic
 - Integration tests for API endpoints`}
-  client:load
+  client:only="react"
 />
 
 ---
@@ -301,7 +301,7 @@ specify init my-app
 - [ ] User receives confirmation email
 - [ ] User can log in with correct credentials
 - [ ] Invalid credentials show clear error messages`}
-  client:load
+  client:only="react"
 />
 
 ---
@@ -342,8 +342,11 @@ AI: 已记录澄清内容到 specification.md
 - 第三方集成方案
 
 **示例**：
-```markdown
-# Technical Plan: User Authentication
+
+<ExampleCode
+  title="Technical Plan 示例 - 用户认证系统"
+  language="markdown"
+  code={`# Technical Plan: User Authentication
 
 ## Technology Stack
 - **Backend**: Node.js + Express.js
@@ -354,17 +357,17 @@ AI: 已记录澄清内容到 specification.md
 - **Password Hashing**: bcrypt
 
 ## System Architecture
-\`\`\`mermaid
+\\\`\\\`\\\`mermaid
 graph TB
     Client[Web Client] --> API[API Gateway]
     API --> Auth[Auth Service]
     Auth --> DB[(PostgreSQL)]
     Auth --> Cache[(Redis)]
     Auth --> Email[Email Service]
-\`\`\`
+\\\`\\\`\\\`
 
 ## Data Model
-\`\`\`sql
+\\\`\\\`\\\`sql
 CREATE TABLE users (
   id UUID PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
@@ -373,15 +376,16 @@ CREATE TABLE users (
   locked_until TIMESTAMP,
   created_at TIMESTAMP DEFAULT NOW()
 );
-\`\`\`
+\\\`\\\`\\\`
 
 ## API Endpoints
 - POST /auth/register - User registration
 - POST /auth/login - User login
 - POST /auth/logout - User logout
 - POST /auth/reset-password - Password reset request
-- POST /auth/verify-email - Email verification
-```
+- POST /auth/verify-email - Email verification`}
+  client:only="react"
+/>
 
 ---
 
@@ -395,40 +399,44 @@ CREATE TABLE users (
 - **并行标记**：使用 `[P]` 标记可并行执行的任务
 
 **示例**：
-```markdown
-# Implementation Tasks
+
+<ExampleCode
+  title="Implementation Tasks 示例 - 认证系统任务分解"
+  language="markdown"
+  code={`# Implementation Tasks
 
 ## Phase 1: Database Setup
 - [ ] Task 1.1: Create database schema migration
-  - File: `migrations/001_create_users_table.sql`
+  - File: \\\`migrations/001_create_users_table.sql\\\`
   - Test: Verify table structure with schema inspection
 
 - [ ] Task 1.2 [P]: Set up database connection pool
-  - File: `src/config/database.ts`
+  - File: \\\`src/config/database.ts\\\`
   - Test: Unit test connection acquisition/release
 
 ## Phase 2: Core Authentication Logic
 - [ ] Task 2.1: Implement password hashing utility
-  - File: `src/utils/password.ts`
-  - Test: `tests/utils/password.test.ts`
+  - File: \\\`src/utils/password.ts\\\`
+  - Test: \\\`tests/utils/password.test.ts\\\`
   - Dependencies: None [P]
 
 - [ ] Task 2.2: Create User model
-  - File: `src/models/User.ts`
-  - Test: `tests/models/User.test.ts`
+  - File: \\\`src/models/User.ts\\\`
+  - Test: \\\`tests/models/User.test.ts\\\`
   - Dependencies: Task 1.1
 
 - [ ] Task 2.3: Implement registration logic
-  - File: `src/services/AuthService.ts`
-  - Test: `tests/services/AuthService.test.ts`
+  - File: \\\`src/services/AuthService.ts\\\`
+  - Test: \\\`tests/services/AuthService.test.ts\\\`
   - Dependencies: Task 2.1, 2.2
 
 ## Phase 3: API Implementation
 - [ ] Task 3.1: Create registration endpoint
-  - File: `src/routes/auth.ts`
-  - Test: `tests/integration/auth.test.ts`
-  - Dependencies: Task 2.3
-```
+  - File: \\\`src/routes/auth.ts\\\`
+  - Test: \\\`tests/integration/auth.test.ts\\\`
+  - Dependencies: Task 2.3`}
+  client:only="react"
+/>
 
 ---
 
@@ -521,7 +529,7 @@ CREATE TABLE users (
     AI-->>Dev: 所有任务已完成
 
     Dev->>CLI: specify check
-    CLI-->>Dev: 质量检查报告`} client:load />
+    CLI-->>Dev: 质量检查报告`} client:only="react" />
 
 ### 阶段详解
 
@@ -535,7 +543,7 @@ CREATE TABLE users (
     style A fill:#e1f5ff
     style B fill:#ff6b6b
     style C fill:#4ecdc4
-    style D fill:#dda15e`} client:load />
+    style D fill:#dda15e`} client:only="react" />
 
 **目标**：建立清晰、无歧义的项目基础
 
@@ -556,7 +564,7 @@ CREATE TABLE users (
     style A fill:#45b7d1
     style B fill:#45b7d1
     style C fill:#45b7d1
-    style D fill:#45b7d1`} client:load />
+    style D fill:#45b7d1`} client:only="react" />
 
 **目标**：制定详细的技术实现方案
 
@@ -574,7 +582,7 @@ CREATE TABLE users (
     D --> E[标记并行任务]
     E --> F[生成任务清单]
 
-    style F fill:#f7dc6f`} client:load />
+    style F fill:#f7dc6f`} client:only="react" />
 
 **目标**：将大型功能分解为可管理的小任务
 
@@ -598,7 +606,7 @@ CREATE TABLE users (
     I -->|是| A
     I -->|否| J[完成实现]
 
-    style J fill:#95e1d3`} client:load />
+    style J fill:#95e1d3`} client:only="react" />
 
 **目标**：自动化代码生成和测试验证
 
@@ -636,7 +644,7 @@ CREATE TABLE users (
 
     style START fill:#e1f5ff
     style RELEASE fill:#95e1d3
-    style MAINTAIN fill:#dda15e`} client:load />
+    style MAINTAIN fill:#dda15e`} client:only="react" />
 
 ---
 
@@ -832,7 +840,7 @@ AI 会引导你定义项目原则，示例输入：
   - 404 Not Found
   - 500 Internal Server Error
 - Error responses follow RFC 7807`}
-  client:load
+  client:only="react"
 />
 
 #### Step 3: 编写功能规范
@@ -853,8 +861,11 @@ AI 会引导你定义项目原则，示例输入：
 ```
 
 生成的 `specification.md`:
-```markdown
-# Feature Specification: Todo CRUD API
+
+<ExampleCode
+  title="完整 Specification 示例 - specification.md"
+  language="markdown"
+  code={`# Feature Specification: Todo CRUD API
 
 ## Overview
 Build a RESTful API for managing personal todo items with authentication.
@@ -911,7 +922,7 @@ Build a RESTful API for managing personal todo items with authentication.
 ## Data Model
 
 ### Todo Entity
-\`\`\`typescript
+\\\`\\\`\\\`typescript
 interface Todo {
   id: string;           // UUID
   title: string;        // Max 200 chars
@@ -921,7 +932,7 @@ interface Todo {
   createdAt: Date;
   updatedAt: Date;
 }
-\`\`\`
+\\\`\\\`\\\`
 
 ## API Endpoints
 
@@ -929,15 +940,15 @@ interface Todo {
 Create new todo
 
 **Request**:
-\`\`\`json
+\\\`\\\`\\\`json
 {
   "title": "Buy groceries",
   "description": "Milk, eggs, bread"
 }
-```
+\\\`\\\`\\\`
 
 **Response (201)**:
-```json
+\\\`\\\`\\\`json
 {
   "id": "550e8400-e29b-41d4-a716-446655440000",
   "title": "Buy groceries",
@@ -947,18 +958,18 @@ Create new todo
   "createdAt": "2025-01-15T10:30:00Z",
   "updatedAt": "2025-01-15T10:30:00Z"
 }
-```
+\\\`\\\`\\\`
 
 ### GET /api/todos
 List todos with filtering and pagination
 
 **Query Parameters**:
-- `status` (optional): "pending" | "completed"
-- `page` (optional, default: 1): Page number
-- `limit` (optional, default: 20, max: 100): Items per page
+- \`status\` (optional): "pending" | "completed"
+- \`page\` (optional, default: 1): Page number
+- \`limit\` (optional, default: 20, max: 100): Items per page
 
 **Response (200)**:
-```json
+\\\`\\\`\\\`json
 {
   "data": [
     {
@@ -975,17 +986,17 @@ List todos with filtering and pagination
     "totalPages": 3
   }
 }
-```
+\\\`\\\`\\\`
 
 ### PATCH /api/todos/:id
 Update existing todo
 
 **Request**:
-```json
+\\\`\\\`\\\`json
 {
   "status": "completed"
 }
-```
+\\\`\\\`\\\`
 
 **Response (200)**: Updated todo object
 
@@ -1008,8 +1019,9 @@ Delete todo
 ### Reliability
 - 99.9% uptime
 - Graceful error handling
-- Database transaction support
-```
+- Database transaction support`}
+  client:only="react"
+/>
 
 #### Step 4: 澄清需求
 
@@ -1045,9 +1057,13 @@ AI 会将澄清内容追加到 `specification.md`。
 /speckit.plan
 ```
 
-生成的 `plan.md`:
-```markdown
-# Technical Implementation Plan: Todo CRUD API
+生成的 \`plan.md\`:
+
+<ExampleCode
+  title="完整 Technical Plan 示例 - Todo CRUD API"
+  language="markdown"
+  previewLines={15}
+  code={`# Technical Implementation Plan: Todo CRUD API
 
 ## Technology Stack
 
@@ -1078,7 +1094,7 @@ AI 会将澄清内容追加到 `specification.md`。
 
 ## System Architecture
 
-\`\`\`mermaid
+\\\`\\\`\\\`mermaid
 graph TB
     Client[Client Application] --> API[API Gateway<br/>Express Router]
     API --> Auth[Auth Middleware]
@@ -1095,10 +1111,10 @@ graph TB
     style API fill:#4ecdc4
     style TodoService fill:#45b7d1
     style DB fill:#f7dc6f
-\`\`\`
+\\\`\\\`\\\`
 
 ## Project Structure
-```
+\\\`\\\`\\\`
 todo-api/
 ├── src/
 │   ├── controllers/       # Request handlers
@@ -1133,11 +1149,11 @@ todo-api/
 ├── .env.example
 ├── package.json
 └── tsconfig.json
-```
+\\\`\\\`\\\`
 
 ## Database Schema
 
-```prisma
+\\\`\\\`\\\`prisma
 // prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
@@ -1175,12 +1191,12 @@ enum Status {
   PENDING
   COMPLETED
 }
-```
+\\\`\\\`\\\`
 
 ## API Implementation Plan
 
 ### Authentication Flow
-<Mermaid chart={`sequenceDiagram
+<Mermaid chart={\\\`sequenceDiagram
     Client->>API: POST /auth/login
     API->>AuthController: Handle request
     AuthController->>AuthService: Authenticate
@@ -1195,11 +1211,11 @@ enum Status {
     API->>AuthMiddleware: Verify token
     AuthMiddleware->>JWTService: Decode token
     JWTService-->>AuthMiddleware: User ID
-    AuthMiddleware->>TodoController: Pass request`} client:load />
+    AuthMiddleware->>TodoController: Pass request\\\`} client:only="react" />
 
 ### Error Handling Strategy
 All errors follow RFC 7807 (Problem Details):
-```typescript
+\\\`\\\`\\\`typescript
 {
   "type": "https://api.example.com/errors/validation-error",
   "title": "Validation Failed",
@@ -1213,7 +1229,7 @@ All errors follow RFC 7807 (Problem Details):
     }
   ]
 }
-```
+\\\`\\\`\\\`
 
 ## Development Workflow
 
@@ -1223,7 +1239,9 @@ All errors follow RFC 7807 (Problem Details):
 4. **Todo CRUD**: Implement todo endpoints
 5. **Testing**: Write tests alongside implementation (TDD)
 6. **Documentation**: Generate OpenAPI spec from code
-```
+\\\`\\\`\\\``}
+  client:only="react"
+/>
 
 #### Step 6: 分解任务
 
@@ -1232,40 +1250,45 @@ All errors follow RFC 7807 (Problem Details):
 /speckit.tasks
 ```
 
-生成的 `tasks.md`:
-```markdown
-# Implementation Tasks: Todo CRUD API
+生成的 \`tasks.md\`:
+
+<ExampleCode
+  title="完整 Implementation Tasks 示例 - Todo CRUD API"
+  language="markdown"
+  previewLines={15}
+  code={`# Implementation Tasks: Todo CRUD API
+
 
 ## Phase 1: Project Setup and Database
 
 ### Task 1.1: Initialize project structure [P]
 **Files**:
-- `package.json`
-- `tsconfig.json`
-- `.env.example`
-- `.eslintrc.js`
-- `.prettierrc`
+- package.json
+- tsconfig.json
+- .env.example
+- .eslintrc.js
+- .prettierrc
 
 **Description**: Set up Node.js project with TypeScript configuration
 
-**Test**: Verify `npm run build` compiles without errors
+**Test**: Verify npm run build compiles without errors
 
 ---
 
 ### Task 1.2: Configure Prisma and database [P]
 **Files**:
-- `prisma/schema.prisma`
-- `src/config/database.ts`
+- \`prisma/schema.prisma\`
+- \`src/config/database.ts\`
 
 **Description**: Create Prisma schema and database configuration
 
-**Test**: Run `npx prisma migrate dev` successfully
+**Test**: Run \`npx prisma migrate dev\` successfully
 
 ---
 
 ### Task 1.3: Create database migration
 **Files**:
-- `prisma/migrations/001_init.sql` (auto-generated)
+- \`prisma/migrations/001_init.sql\` (auto-generated)
 
 **Description**: Generate initial migration for User and Todo tables
 
@@ -1279,9 +1302,9 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 2.1: Implement error handling middleware
 **Files**:
-- `src/middlewares/error.middleware.ts`
-- `src/types/errors.ts`
-- `tests/unit/middlewares/error.middleware.test.ts`
+- \`src/middlewares/error.middleware.ts\`
+- \`src/types/errors.ts\`
+- \`tests/unit/middlewares/error.middleware.test.ts\`
 
 **Description**: Create centralized error handler following RFC 7807
 
@@ -1291,8 +1314,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 2.2: Create validation middleware [P]
 **Files**:
-- `src/middlewares/validation.middleware.ts`
-- `tests/unit/middlewares/validation.middleware.test.ts`
+- \`src/middlewares/validation.middleware.ts\`
+- \`tests/unit/middlewares/validation.middleware.test.ts\`
 
 **Description**: Zod-based request validation middleware
 
@@ -1302,8 +1325,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 2.3: Implement JWT service [P]
 **Files**:
-- `src/services/jwt.service.ts`
-- `tests/unit/services/jwt.service.test.ts`
+- \`src/services/jwt.service.ts\`
+- \`tests/unit/services/jwt.service.test.ts\`
 
 **Description**: Token generation, verification, and refresh logic
 
@@ -1320,8 +1343,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 3.1: Create User repository
 **Files**:
-- `src/repositories/user.repository.ts`
-- `tests/unit/repositories/user.repository.test.ts`
+- \`src/repositories/user.repository.ts\`
+- \`tests/unit/repositories/user.repository.test.ts\`
 
 **Dependencies**: Task 1.3
 
@@ -1336,8 +1359,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 3.2: Implement Auth service
 **Files**:
-- `src/services/auth.service.ts`
-- `tests/unit/services/auth.service.test.ts`
+- \`src/services/auth.service.ts\`
+- \`tests/unit/services/auth.service.test.ts\`
 
 **Dependencies**: Task 3.1, Task 2.3
 
@@ -1354,10 +1377,10 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 3.3: Create Auth controller and routes
 **Files**:
-- `src/controllers/auth.controller.ts`
-- `src/routes/auth.routes.ts`
-- `src/schemas/auth.schema.ts`
-- `tests/integration/auth.test.ts`
+- \`src/controllers/auth.controller.ts\`
+- \`src/routes/auth.routes.ts\`
+- \`src/schemas/auth.schema.ts\`
+- \`tests/integration/auth.test.ts\`
 
 **Dependencies**: Task 3.2, Task 2.2
 
@@ -1372,8 +1395,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 3.4: Implement authentication middleware
 **Files**:
-- `src/middlewares/auth.middleware.ts`
-- `tests/unit/middlewares/auth.middleware.test.ts`
+- \`src/middlewares/auth.middleware.ts\`
+- \`tests/unit/middlewares/auth.middleware.test.ts\`
 
 **Dependencies**: Task 2.3
 
@@ -1391,8 +1414,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 4.1: Create Todo repository
 **Files**:
-- `src/repositories/todo.repository.ts`
-- `tests/unit/repositories/todo.repository.test.ts`
+- \`src/repositories/todo.repository.ts\`
+- \`tests/unit/repositories/todo.repository.test.ts\`
 
 **Dependencies**: Task 1.3
 
@@ -1411,8 +1434,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 4.2: Implement Todo service
 **Files**:
-- `src/services/todo.service.ts`
-- `tests/unit/services/todo.service.test.ts`
+- \`src/services/todo.service.ts\`
+- \`tests/unit/services/todo.service.test.ts\`
 
 **Dependencies**: Task 4.1
 
@@ -1431,8 +1454,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 4.3: Create Todo validation schemas
 **Files**:
-- `src/schemas/todo.schema.ts`
-- `tests/unit/schemas/todo.schema.test.ts`
+- \`src/schemas/todo.schema.ts\`
+- \`tests/unit/schemas/todo.schema.test.ts\`
 
 **Dependencies**: None [P]
 
@@ -1449,8 +1472,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 4.4: Create Todo controller
 **Files**:
-- `src/controllers/todo.controller.ts`
-- `tests/unit/controllers/todo.controller.test.ts`
+- \`src/controllers/todo.controller.ts\`
+- \`tests/unit/controllers/todo.controller.test.ts\`
 
 **Dependencies**: Task 4.2
 
@@ -1468,8 +1491,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 4.5: Create Todo routes
 **Files**:
-- `src/routes/todo.routes.ts`
-- `tests/integration/todos.test.ts`
+- \`src/routes/todo.routes.ts\`
+- \`tests/integration/todos.test.ts\`
 
 **Dependencies**: Task 4.4, Task 4.3, Task 3.4
 
@@ -1495,8 +1518,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 5.1: Create Express application
 **Files**:
-- `src/app.ts`
-- `src/server.ts`
+- \`src/app.ts\`
+- \`src/server.ts\`
 
 **Dependencies**: All previous tasks
 
@@ -1508,8 +1531,8 @@ All errors follow RFC 7807 (Problem Details):
 
 ### Task 5.2: Add health check endpoint [P]
 **Files**:
-- `src/routes/health.routes.ts`
-- `tests/integration/health.test.ts`
+- \`src/routes/health.routes.ts\`
+- \`tests/integration/health.test.ts\`
 
 **Description**: Basic health check endpoint
 
@@ -1529,18 +1552,18 @@ All errors follow RFC 7807 (Problem Details):
 
 **Description**: Ensure all critical paths are tested
 
-**Test**: Run `npm run test:coverage` and verify ≥80%
+**Test**: Run \`npm run test:coverage\` and verify ≥80%
 
 ---
 
 ### Task 6.2: Generate OpenAPI documentation [P]
 **Files**:
-- `openapi.yaml`
-- `src/docs/swagger.ts`
+- \`openapi.yaml\`
+- \`src/docs/swagger.ts\`
 
 **Description**: Auto-generate API documentation
 
-**Test**: Swagger UI accessible at `/api-docs`
+**Test**: Swagger UI accessible at \`/api-docs\`
 
 ---
 
@@ -1557,7 +1580,9 @@ All errors follow RFC 7807 (Problem Details):
 1. Phase 1 → Phase 2-4
 2. Phase 2-4 → Phase 5
 3. Phase 5 → Phase 6
-```
+`}
+  client:only="react"
+/>
 
 #### Step 7: 执行实现
 
@@ -1630,8 +1655,9 @@ AI 会按照任务顺序逐个实现，示例输出：
 **Edge Cases**:
 - Email not found → Show generic success message (security)
 - Token expired → Show error with option to request new link
-- Token already used → Show error
-```
+- Token already used → Show error`}
+  client:only="react"
+/>
 
 #### ❌ 差的规范
 ```markdown
@@ -1652,12 +1678,15 @@ Send an email with a link.
 ### 2. 任务分解最佳实践
 
 #### ✅ 好的任务
-```markdown
-### Task 3.2: Implement password reset service
+
+<ExampleCode
+  title="好的任务示例 - 详细可执行"
+  language="markdown"
+  code={`### Task 3.2: Implement password reset service
 
 **Files**:
-- `src/services/password-reset.service.ts`
-- `tests/unit/services/password-reset.service.test.ts`
+- \\\`src/services/password-reset.service.ts\\\`
+- \\\`tests/unit/services/password-reset.service.test.ts\\\`
 
 **Dependencies**: Task 3.1 (User Repository), Task 2.3 (JWT Service)
 
@@ -1677,8 +1706,9 @@ Create service handling password reset flow:
 - ✓ Should reject already-used token
 - ✓ Should hash new password with bcrypt
 
-**Estimated Time**: 2 hours
-```
+**Estimated Time**: 2 hours`}
+  client:only="react"
+/>
 
 #### ❌ 差的任务
 ```markdown
@@ -1713,11 +1743,14 @@ Implement password reset functionality.
 
     style B fill:#ff6b6b
     style D fill:#95e1d3
-    style G fill:#4ecdc4`} client:load />
+    style G fill:#4ecdc4`} client:only="react" />
 
 **示例**：
-```typescript
-// 1. 先写测试 (RED)
+
+<ExampleCode
+  title="TDD 实现示例 - TodoService"
+  language="typescript"
+  code={`// 1. 先写测试 (RED)
 describe('TodoService', () => {
   it('should create todo for authenticated user', async () => {
     const userId = 'user123';
@@ -1749,8 +1782,9 @@ class TodoService {
 
 // 4. 运行测试，确认通过
 
-// 5. 重构（如有需要）
-```
+// 5. 重构（如有需要）`}
+  client:only="react"
+/>
 
 ---
 
@@ -1782,7 +1816,7 @@ class TodoService {
     AI->>Code: 更新测试
     AI-->>Dev: 实现完成
 
-    Note over Spec,Code: 规范保持最新<br/>代码自动生成`} client:load />
+    Note over Spec,Code: 规范保持最新<br/>代码自动生成`} client:only="react" />
 
 **优势**：
 - 规范始终是最新的
@@ -1796,19 +1830,21 @@ class TodoService {
 
 #### 规范审查流程
 
-```markdown
-# Pull Request: Add Todo Tags Feature
+<ExampleCode
+  title="Pull Request 审查示例 - 功能变更"
+  language="markdown"
+  code={`# Pull Request: Add Todo Tags Feature
 
 ## 变更摘要
 添加待办事项标签功能，允许用户为待办事项添加多个标签
 
 ## 规范变更
-- ✅ `specification.md`: 添加 US-5 标签管理用户故事
-- ✅ `plan.md`: 更新数据模型，添加 Tag 和 TodoTag 关系表
-- ✅ `tasks.md`: 新增 Phase 7 共 6 个任务
+- ✅ \\\`specification.md\\\`: 添加 US-5 标签管理用户故事
+- ✅ \\\`plan.md\\\`: 更新数据模型，添加 Tag 和 TodoTag 关系表
+- ✅ \\\`tasks.md\\\`: 新增 Phase 7 共 6 个任务
 
 ## 实现变更
-- ✅ 数据库迁移: `002_add_tags.sql`
+- ✅ 数据库迁移: \\\`002_add_tags.sql\\\`
 - ✅ 新增 TagService 和 TagRepository
 - ✅ 扩展 Todo API: POST/DELETE /api/todos/:id/tags
 - ✅ 测试覆盖率: 86.2% (+2.1%)
@@ -1817,8 +1853,9 @@ class TodoService {
 - [ ] 规范与实现一致性
 - [ ] 所有测试通过
 - [ ] API 文档已更新
-- [ ] 性能影响评估
-```
+- [ ] 性能影响评估`}
+  client:only="react"
+/>
 
 **审查重点**：
 1. 规范清晰度（其他人能理解吗？）
@@ -1913,9 +1950,12 @@ Plan: "使用 Redis 缓存热点数据，TTL 5分钟"
 ```
 
 #### Plan 片段
-```markdown
-## Saga Orchestration
-\`\`\`mermaid
+
+<ExampleCode
+  title="复杂场景 Plan 片段 - Saga 编排"
+  language="markdown"
+  code={`## Saga Orchestration
+\\\`\\\`\\\`mermaid
 sequenceDiagram
     participant Order
     participant Inventory
@@ -1926,7 +1966,7 @@ sequenceDiagram
     Order->>Inventory: Reserve items
     Inventory-->>Order: Reserved
     Order->>Pricing: Calculate total
-    Pricing-->>Order: $125.00
+    Pricing-->>Order: \\$125.00
     Order->>Payment: Process payment
     Payment-->>Order: Success
     Order->>Event: Publish OrderPlaced
@@ -1935,8 +1975,9 @@ sequenceDiagram
     Order->>Inventory: Release reservation
     Order->>Payment: Refund
     Order->>Event: Publish OrderFailed
-\`\`\`
-```
+\\\`\\\`\\\``}
+  client:only="react"
+/>
 
 ---
 
@@ -1945,8 +1986,11 @@ sequenceDiagram
 **场景**: 使用 React + TypeScript 构建仪表板
 
 #### Constitution 片段
-```markdown
-# Dashboard App Constitution
+
+<ExampleCode
+  title="前端应用 Constitution 片段"
+  language="markdown"
+  code={`# Dashboard App Constitution
 
 ## Frontend Standards
 - React 18 with functional components
@@ -1965,18 +2009,22 @@ sequenceDiagram
 - Code splitting with React.lazy
 - Image optimization with next/image
 - Virtual scrolling for large lists
-- Memoization for expensive computations
-```
+- Memoization for expensive computations`}
+  client:only="react"
+/>
 
 #### Tasks 片段
-```markdown
-## Phase 3: Dashboard Widgets
+
+<ExampleCode
+  title="前端应用 Tasks 片段"
+  language="markdown"
+  code={`## Phase 3: Dashboard Widgets
 
 ### Task 3.1: Create base Widget component
 **Files**:
-- `src/components/Widget/Widget.tsx`
-- `src/components/Widget/Widget.stories.tsx`
-- `tests/components/Widget.test.tsx`
+- \\\`src/components/Widget/Widget.tsx\\\`
+- \\\`src/components/Widget/Widget.stories.tsx\\\`
+- \\\`tests/components/Widget.test.tsx\\\`
 
 **Description**: Reusable widget container with loading/error states
 
@@ -1990,9 +2038,9 @@ sequenceDiagram
 
 ### Task 3.2: Implement Sales Chart widget [P]
 **Files**:
-- `src/features/dashboard/SalesChart.tsx`
-- `src/features/dashboard/useSalesData.ts`
-- `tests/features/dashboard/SalesChart.test.tsx`
+- \\\`src/features/dashboard/SalesChart.tsx\\\`
+- \\\`src/features/dashboard/useSalesData.ts\\\`
+- \\\`tests/features/dashboard/SalesChart.test.tsx\\\`
 
 **Dependencies**: Task 3.1
 
@@ -2002,8 +2050,9 @@ sequenceDiagram
 - ✓ Should fetch sales data on mount
 - ✓ Should render chart with correct data points
 - ✓ Should handle empty data gracefully
-- ✓ Should refetch on date range change
-```
+- ✓ Should refetch on date range change`}
+  client:only="react"
+/>
 
 ---
 
@@ -2012,8 +2061,11 @@ sequenceDiagram
 **场景**: 构建代码生成器 CLI
 
 #### Specification 片段
-```markdown
-# Feature: Component Generator
+
+<ExampleCode
+  title="CLI 工具 Specification 片段"
+  language="markdown"
+  code={`# Feature: Component Generator
 
 ## User Story
 **As a** React developer
@@ -2021,28 +2073,29 @@ sequenceDiagram
 **So that** I can quickly scaffold new components
 
 ## CLI Interface
-\`\`\`bash
-$ codegen component Button
+\\\`\\\`\\\`bash
+\\$ codegen component Button
 
 ✓ Created src/components/Button/Button.tsx
 ✓ Created src/components/Button/Button.test.tsx
 ✓ Created src/components/Button/Button.stories.tsx
 ✓ Created src/components/Button/index.ts
 
-$ codegen component Card --with-styles
+\\$ codegen component Card --with-styles
 
 ✓ Created src/components/Card/Card.tsx
 ✓ Created src/components/Card/Card.module.css
 ✓ Created src/components/Card/Card.test.tsx
 ✓ Created src/components/Card/index.ts
-\`\`\`
+\\\`\\\`\\\`
 
 ## Options
-- `--with-styles`: Include CSS module
-- `--type=[class|function]`: Component type (default: function)
-- `--stories`: Generate Storybook file
-- `--test`: Generate test file (default: true)
-```
+- \\\`--with-styles\\\`: Include CSS module
+- \\\`--type=[class|function]\\\`: Component type (default: function)
+- \\\`--stories\\\`: Generate Storybook file
+- \\\`--test\\\`: Generate test file (default: true)`}
+  client:only="react"
+/>
 
 ---
 
@@ -2067,7 +2120,7 @@ $ codegen component Card --with-styles
     持续演进
       规范保持更新
       代码自动同步
-      技术债可控`} client:load />
+      技术债可控`} client:only="react" />
 
 ### 适用场景
 
@@ -2111,7 +2164,7 @@ $ codegen component Card --with-styles
     Advanced --> A3[自定义模板和命令]
 
     style Start fill:#e1f5ff
-    style Master fill:#95e1d3`} client:load />
+    style Master fill:#95e1d3`} client:only="react" />
 
 ### 进一步学习资源
 

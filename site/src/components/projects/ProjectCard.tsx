@@ -33,13 +33,13 @@ export default function ProjectCard({
     >
       {/* Preview Image */}
       <div
-        className="overflow-hidden relative aspect-video mb-space-6"
+        className="overflow-hidden relative aspect-video mb-6"
         style={{
           background: 'linear-gradient(135deg, #6FC2FF 0%, #16AA98 100%)',
         }}
       >
         {previewImage ? (
-          <div className="flex justify-center items-center w-full h-full p-space-6">
+          <div className="flex justify-center items-center p-6 w-full h-full">
             <img
               src={previewImage}
               alt={title}
@@ -63,24 +63,24 @@ export default function ProjectCard({
         )}
 
         {/* 项目徽章 */}
-        <div className="absolute top-space-4 left-space-4 md-badge">
+        <div className="absolute top-4 left-space-4 md-badge">
           项目 {number}
         </div>
       </div>
 
       {/* Content */}
       <div>
-        <h3 className="font-bold transition-colors duration-200 text-h3 text-ink mb-space-3 group-hover:text-sky">
+        <h3 className="font-bold transition-colors duration-200 text-h3 text-ink mb-3 group-hover:text-sky">
           {title}
         </h3>
 
-        <p className="text-body text-slate mb-space-6" style={{ lineHeight: '1.6' }}>
+        <p className="text-body text-slate mb-6" style={{ lineHeight: '1.6' }}>
           {subtitle}
         </p>
 
         {/* Meta Info */}
-        <div className="flex flex-wrap text-ui text-slate gap-space-1 mb-space-6">
-          <div className="flex items-center gap-space-1">
+        <div className="flex flex-wrap text-ui text-slate gap-1 mb-6">
+          <div className="flex items-center gap-1">
             <span>难度:</span>
             <div className="flex gap-0.5">
               {[...Array(5)].map((_, i) => (
@@ -95,14 +95,14 @@ export default function ProjectCard({
               ))}
             </div>
           </div>
-          <div className="flex items-center gap-space-1">
+          <div className="flex items-center gap-1">
             <span>⏱</span>
             <span>{estimatedHours} 小时</span>
           </div>
         </div>
 
         {/* Tech Stack */}
-        <div className="flex flex-wrap gap-space-1 mb-space-6">
+        <div className="flex flex-wrap gap-1 mb-6">
           {techStack.map((tech) => (
             <span key={tech} className="md-badge text-eyebrow">
               {tech}
@@ -111,7 +111,7 @@ export default function ProjectCard({
         </div>
 
         {/* CTA */}
-        <div className="flex items-center font-bold transition-all duration-200 text-ui text-sky gap-space-1 group-hover:gap-space-3">
+        <div className="flex items-center font-bold transition-all duration-200 text-ui text-sky gap-1 group-hover:gap-3">
           <span>查看详情</span>
           <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
         </div>
